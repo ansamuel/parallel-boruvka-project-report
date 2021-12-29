@@ -17,5 +17,8 @@ jobs:
     - name: Install TeX Live
       run: sudo apt-get install texlive texlive-latex-extra
       
+    - name: Install Ghostscript
+      run: sudo apt-get install ghostscript
+      
     - name: Compile PDF
       run: make report
