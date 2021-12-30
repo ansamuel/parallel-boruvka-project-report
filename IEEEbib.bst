@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%  IEEE.bst  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Bibliography Syle file for articles according to IEEE instructions
+% Bibliography Style file for articles according to IEEE instructions
 % balemi@aut.ee.ethz.ch     <22-JUN-93>
 % modified from unsrt.bib. Contributions by Richard H. Roy
 
