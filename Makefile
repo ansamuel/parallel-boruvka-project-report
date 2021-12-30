@@ -1,25 +1,14 @@
-all: $(patsubst %.tex,%.pdf,$(wildcard *.tex))
+all: $(patsubst %.tex, %.pdf, $(wildcard *.tex))
 
-.PRECIOUS: %.pdf
-
-% : %.pdf
+%: %.pdf
 	@echo -n ""
 
-%.dvi: %.tex
-	latex $<
-	latex $<
-
-%.ps: %.dvi
-	dvips -t letter -Ppdf -G0 $< -o $@
-
-%.pdf: %.ps
-	ps2pdf $<
+%.pdf: %.tex
+	latexmk -pdf -pdflatex="pdflatex -interaction=nonstopmode" -use-make $<
 
 clean:
-	rm -rf *.bbl *.blg *.aux *.log *~ *.bak *.ps *.dvi *.log *.out *.tmp 
-
-cleanall:
-	rm -rf *.bbl *.blg *.aux *.log *~ *.bak *.ps *.dvi *.log *.pdf svnver.tex *.out *.tmp 
+	latexmk -CA
+	rm *.bbl *-eps-converted-to.pdf
 
 spell:
 	ispell -f ispell.words -t *.tex

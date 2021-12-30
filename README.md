@@ -4,5 +4,9 @@ TODO
 ---
 Compile as:
 ```
+make
+```
+or
+```
 make report
 ```
