@@ -18,13 +18,10 @@ jobs:
       run: sudo apt-get update
     
     - name: Install TeX Live
-      run: sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends texlive texlive-latex-extra latexmk
+      run: sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq texlive texlive-latex-extra texlive-font-utils latexmk
       
     - name: Install Ghostscript
-      run: sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends ghostscript
+      run: sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq ghostscript
 
-    - name: Install purifyeps
-      run: sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends purifyeps
-      
     - name: Compile PDF
       run: make report
