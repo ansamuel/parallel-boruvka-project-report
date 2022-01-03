@@ -5,6 +5,7 @@
 
 \documentclass[letterpaper]{article}
 \usepackage{spconf,amsmath,amssymb,graphicx}
+\usepackage{hyperref}
 
 % Example definitions.
 % --------------------
@@ -77,29 +78,58 @@ related work. For a report like this, anywhere between 2 and 8
 references. Briefly explain what they do. In the end contrast to what
 you do to make now precisely clear what your contribution is.
 
-\section{Background: Whatever the Background is}\label{sec:background}
+\section{Background}
+\label{sec:background}
+In this section we will introduce the MST problem itself, as well as Bor\r{u}vka's algorithm and different
+parallelization strategies used in our implementations.
 
-Give a short, self-contained summary of necessary
-background information. For example, assume you present an
-implementation of sorting algorithms. You could organize into sorting
-definition, algorithms considered, and asymptotic runtime statements. The goal of the
-background section is to make the paper self-contained for an audience
-as large as possible. As in every section
-you start with a very brief overview of the section. Here it could be as follows: In this section 
-we formally define the sorting problem we consider and introduce the algorithms we use
-including a cost analysis.
+\mypar{Spanning Tree/Forest}
+TODO
 
-\mypar{Sorting}
-Precisely define sorting problem you consider.
+\mypar{Minimum-Spanning-Tree Problem}
+TODO
 
-\mypar{Sorting algorithms}
-Explain the algorithm you use including their costs.
+\mypar{Bor\r{u}vka's Algorithm}
+TODO
 
-As an aside, don't talk about "the complexity of the algorithm.'' It's incorrect,
-problems have a complexity, not algorithms.
+\mypar{Union Find Datastructure}
+TODO
+
+\mypar{Pointer Jumping}
+TODO
+
+\mypar{Supervertex Pointer Jumping}
+TODO
+
+\mypar{MPI}
+TODO
+
+\mypar{Kronecker Graphs}
+% TODO Not sure if this is the original paper that introduced kronecker graphs (double check)
+TODO \cite{leskovec2010kronecker}
+
+% Give a short, self-contained summary of necessary
+% background information. For example, assume you present an
+% implementation of sorting algorithms. You could organize into sorting
+% definition, algorithms considered, and asymptotic runtime statements. The goal of the
+% background section is to make the paper self-contained for an audience
+% as large as possible. As in every section
+% you start with a very brief overview of the section. Here it could be as follows: In this section 
+% we formally define the sorting problem we consider and introduce the algorithms we use
+% including a cost analysis.
+%
+% \mypar{Sorting}
+% Precisely define sorting problem you consider.
+%
+% \mypar{Sorting algorithms}
+% Explain the algorithm you use including their costs.
+%
+% As an aside, don't talk about "the complexity of the algorithm.'' It's incorrect,
+% problems have a complexity, not algorithms.
 
 
-\section{Your Proposed Method}\label{sec:yourmethod}
+\section{Approach}
+\label{sec:approach}
 
 Now comes the ``beef'' of the report, where you explain what you
 did. Again, organize it in paragraphs with titles. As in every section
