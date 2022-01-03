@@ -51,32 +51,70 @@ self-contained and readable for a person in the general area. You
 should write the abstract last.
 \end{abstract}
 
-\section{Introduction}\label{sec:intro}
+\section{Introduction}
+\label{sec:intro}
+In this section we briefly introduce and explain what Minimum-Spanning-Tree algorithms can be used for. In addition, we
+will go into more detail about our contribution to the scientific comunity as well as present work related to ours.
 
-Do not start the introduction with the abstract or a slightly modified
-version. It follows a possible structure of the introduction. 
-Note that the structure can be modified, but the
-content should be the same. Introduction and abstract should fill at most the first page, better less.
+\mypar{Motivation}
+Minimum-Spanning-Tree (MST) algorithms are used to compute a spanning tree of a given graph with edge weights. The goal
+of the algorithm is to minimize the sum of all edge weights of the computed spanning tree.
 
-\mypar{Motivation} The first task is to motivate what you do.  You can
-start general and zoom in one the specific problem you consider.  In
-the process you should have explained to the reader: what you are doing,
-why you are doing, why it is important (order is usually reversed).
+At first glance, MST algorithms seem to only have a very limited applicability. However, they can often be used as part
+of other algorithms to compute intermediate results or in other scientific fields, such as medicine. Examples of
+problems that can be solved using MST algorithms include
+\begin{itemize}
+  \item \textbf{Networking} MST algorithms can be used to find efficient solutions for the Spanning Tree Protocol, which
+    is used to avoid looping of packages on the network layer.
+  % TODO fix overflow
+  \item \textbf{$\frac{3}{2}$-approximate metric TSP} By combining algorithms that solve the eulertour, minimum
+    matching and MST problem, one can develop a $\frac{3}{2}$-approximate algorithm solving the metric traveling
+    salesperson problem \cite{christofides1976worst}.
+  % TODO This sentance is copied from one of the cited abstracts. Is that ok?
+  \item \textbf{Molecular Epidemiology} Minimum-Spanning-Trees are used in molecular epidemiology research to estimate
+    relationships among individual strains or isolates \cite{spada2004use, salipante2011inadequacies}.
+  \item \textbf{Machine Learning} MSTs can be used in machine learning environments. For example, MSTs can be used to
+    reduce the fraction of incorrectly labeled samples when performing brain MRI tissue classification
+    \cite{cocosco2003fully}.
+\end{itemize}
+For most of these use cases, the speed of the MST algorithm is of utmost importance to e.g. get quick medical results
+and be able to treat the patient accordingly.
 
-For example, if my result is the fastest sorting implementation ever, one
-could roughly go as follows. First explain why sorting is important
-(used everywhere with a few examples) and why performance matters (large datasets,
-realtime). Then explain that fast implementations are very hard and
-expensive to get (memory hierarchy, vector, parallel). 
+\mypar{Contribution}
+In our research, we focussed on the MST algorithm proposed by Bor\r{u}vka
+\cite{boruuvka1926jistem,nevsetvril2001otakar}, which is one of the most prominent MST algorithms as of today. We
+implemented this algorithm using different implementation and work distribution strategies. Our implementations use the
+Message Passing Interface (MPI) protocol for work distribution and communication. To test the performance of our
+implementations, we use a seeded randomized Kronecker graph generator.
 
-Now you state what you do in this paper. In our example: 
-presenting a sorting implementation that is
-faster for some sizes as all the other ones.
+\mypar{Related Work}
+TODO
 
-\mypar{Related work} Next, you have to give a brief overview of
-related work. For a report like this, anywhere between 2 and 8
-references. Briefly explain what they do. In the end contrast to what
-you do to make now precisely clear what your contribution is.
+% TODO remove
+% Do not start the introduction with the abstract or a slightly modified
+% version. It follows a possible structure of the introduction. 
+% Note that the structure can be modified, but the
+% content should be the same. Introduction and abstract should fill at most the first page, better less.
+%
+% \mypar{Motivation} The first task is to motivate what you do.  You can
+% start general and zoom in one the specific problem you consider.  In
+% the process you should have explained to the reader: what you are doing,
+% why you are doing, why it is important (order is usually reversed).
+%
+% For example, if my result is the fastest sorting implementation ever, one
+% could roughly go as follows. First explain why sorting is important
+% (used everywhere with a few examples) and why performance matters (large datasets,
+% realtime). Then explain that fast implementations are very hard and
+% expensive to get (memory hierarchy, vector, parallel). 
+%
+% Now you state what you do in this paper. In our example: 
+% presenting a sorting implementation that is
+% faster for some sizes as all the other ones.
+%
+% \mypar{Related work} Next, you have to give a brief overview of
+% related work. For a report like this, anywhere between 2 and 8
+% references. Briefly explain what they do. In the end contrast to what
+% you do to make now precisely clear what your contribution is.
 
 \section{Background}
 \label{sec:background}
