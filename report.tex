@@ -82,14 +82,28 @@ For most of these use cases, the speed of the MST algorithm is of utmost importa
 and be able to treat the patient accordingly.
 
 \mypar{Contribution}
-In our research, we focussed on the MST algorithm proposed by Bor\r{u}vka
-\cite{boruuvka1926jistem,nevsetvril2001otakar}, which is one of the most prominent MST algorithms as of today. We
-implemented this algorithm using different implementation and work distribution strategies. Our implementations use the
-Message Passing Interface (MPI) protocol for work distribution and communication. To test the performance of our
-implementations, we use a seeded randomized Kronecker graph generator.
+In our research, we focused on the MST algorithm proposed by Bor\r{u}vka \cite{boruuvka1926jistem,
+nevsetvril2001otakar}, which is one of the most prominent MST algorithms as of today. We implemented this algorithm
+using different implementation and work distribution strategies. Our implementations use the Message Passing Interface
+(MPI) protocol for work distribution and communication. To test the performance of our implementations, we use a seeded
+randomized Kronecker graph generator.
+% TODO This is not good :(. All other research talkes about how the MST is constructed.
+As a limitation, our implementations don't compute the MST itself, but only the total weight of it.
 
 \mypar{Related Work}
-TODO
+% TODO maybe find more references for the first paragraph
+As the MST problem is very versitile and can be used in various scientific disciplines, there has already been some
+research into the parallelization capabilities of MST algorithms. One such paper \cite{chung1996parallel}, which is also
+the main inspriation of this research project, looks into how the performance of Bor\r{u}vka behaves when using
+different pointer jumping schemes. In addition, this paper introduces the randomized linear work Supervertex Pointer
+Jumping scheme.
+
+Other research focuses on the difference in performance with regards to the used computation model
+\cite{dehne1998practical} and there has also been research conducted on the parallelization capabilities of the MST
+problem using GPUs \cite{de2017parallel}.
+
+Our research is similar to that of Chung and Condon \cite{chung1996parallel}, but differs in that we also look at
+different work distribution strategies.
 
 % TODO remove
 % Do not start the introduction with the abstract or a slightly modified
