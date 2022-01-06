@@ -11,7 +11,9 @@
 % --------------------
 % nice symbols for real and complex numbers
 \newcommand{\R}[0]{\mathbb{R}}
+\newcommand{\N}[0]{\mathbb{N}}
 \newcommand{\C}[0]{\mathbb{C}}
+\newcommand{\bigoh}{\mathcal O}
 
 % bold paragraph titles
 \newcommand{\mypar}[1]{{\bf #1.}}
@@ -136,30 +138,61 @@ In this section we will introduce the MST problem itself, as well as Bor\r{u}vka
 parallelization strategies used in our implementations.
 
 \mypar{Spanning Tree/Forest}
-TODO
+A spanning tree/forest is an induced subgraph $T = (V_T, E_T)$ of an undirected graph $G = (V_G, E_G)$, where $V_T =
+V_G$ and $E_T \subseteq E_G$. In addition, it is necessary, that every edge $e \in E_G \setminus E_T$, i.e. every edge
+in $G$ but not in $T$, must create a cycle in $T$. It is very easy to see that a spanning tree for a graph $G$ is not
+necessarily unique, i.e. there can be more than one spanning tree of a graph. E.g. the fully connected graph $K_3$ has
+three spanning trees. We talk about a spanning tree, iff the graph $G$ is connected. Otherwise, we can only get a
+spanning forest. For simplicity, we will use the term spanning tree for both of them in this paper.
 
 \mypar{Minimum-Spanning-Tree Problem}
-TODO
+In the MST problem scenario, every edge in the input graph $G = (V, E)$ has an edge weight. I.e. there is a weight
+function $w : E \to \N$. The MST problem is to find a spanning tree with minimum edge weight sum, i.e. the edge weight
+of all other spanning trees is at least as large, as the one computed by a MST solver. Just like with a spanning tree, a
+MST must not necessarily be unique in the input graph $G$.
 
 \mypar{Bor\r{u}vka's Algorithm}
-TODO
+Bor\r{u}vka's algorithm \cite{boruuvka1926jistem, nevsetvril2001otakar} is an algorithmic solution to the MST problem.
+It solves the problem by selecting the minimum outgoing edge of every component (in the beginning each vertex is its own
+component) and combining the now connected components to a larger one. The algorithm terminates as soon as there are no
+more outgoing edges. Its theoretical sequential runtime is $\bigoh(m \log n)$, where $m = |E|$ and $n = |V|$ of the
+input graph $G = (V, E)$.
 
 \mypar{Union Find Datastructure}
 TODO
 
 \mypar{Pointer Jumping}
-TODO
+% TODO maybe add a tikz image for this
+Pointer jumping \cite{jeje1992introduction} (also called path doubling) is a design technique that allows an algorithm
+to follow a path using only logarithmic time with respect to the length of the longest path. It does this by redirecting
+the parent pointer that describes the path, to point to the parent of the parent for each node on the path
+simultaneously. This process is then repeated until every node points to the root of the path. This gives a $\bigoh(n
+\log n)$ runtime, where $n$ describes the amount of nodes on the path. This is better compared to simply iterating over
+the path for each node individually, which has a potential worst case runtime of $\bigoh(n^2)$.
 
 \mypar{Supervertex Pointer Jumping}
-TODO
+% TODO maybe add a tikz image for this
+% TODO I'm not yet fully happy with this paragraph, maybe we should just remove the description entirely and mention
+% that the reader should look it up in the other paper.
+Supervertex pointer jumping \cite{chung1996parallel} is an extension of pointer jumping that uses randomness to get a
+linear time algorithm in expectation. The technique is best explained in the aformentioned paper, but the high level
+idea is to select a set of nodes to be supervertices, perform pointer jumping on all non-supervertices, let each
+supervertex point to the next supervertex and repeat the process recursively but only with the supervertices. After the
+recursion it is only necessary to perform one more pointer jump for all non-supervertices for them to point to the root.
 
 \mypar{MPI}
-TODO
+The message passing interface \cite{clarke1994mpi} is a standard for developing applications on parallel computing
+architectures. The MPI standard defines library routines for inter core and inter system communication. Similar to the
+C++ standard, there is no reference implementation but multiple open source projects implementing the standard, such as
+% TODO I didn't find a paper for MPICH. Maybe we should remove the one for open mpi?
+MPICH and Open MPI \cite{gabriel2004open}. MPI is the de facto standard for modern large scale parallel application
+development.
 
 \mypar{Kronecker Graphs}
 % TODO Not sure if this is the original paper that introduced kronecker graphs (double check)
 TODO \cite{leskovec2010kronecker}
 
+% TODO remove
 % Give a short, self-contained summary of necessary
 % background information. For example, assume you present an
 % implementation of sorting algorithms. You could organize into sorting
