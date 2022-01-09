@@ -1,33 +1,9 @@
-% IEEE standard conference template; to be used with:
-%   spconf.sty  - LaTeX style file, and
-%   IEEEbib.bst - IEEE bibliography style file.
-% --------------------------------------------------------------------------
-
 \documentclass[letterpaper]{article}
 \usepackage{spconf,amsmath,amssymb,graphicx}
 \usepackage{hyperref}
 
-% Example definitions.
-% --------------------
-% nice symbols for real and complex numbers
-\newcommand{\R}[0]{\mathbb{R}}
-\newcommand{\C}[0]{\mathbb{C}}
-
-% bold paragraph titles
-\newcommand{\mypar}[1]{{\bf #1.}}
-
-% Title.
-% ------
 \title{Efficient Parallelization of Bor\r{u}vka's Minimum Spanning Tree Algorithm}
 
-% Single address.
-% ---------------
-%\name{Matteo Kamm, Hulda Lilja Hannesdóttir, Mike Marti, Samuel Anzalone, Simon Hrabec} 
-%\address{Computer Science Master, Computational Science Bachelor\\ ETH Z\"urich\\Z\"urich, Switzerland}
-
-
-% Five authors (custom command).
-% ----------------------------------------------------------
 \fiveauthors
   {Samuel Anzalone \\[-0.8ex] {\small BS Computational Science} \\[-0.8ex] {\small \texttt{ansamuel@ethz.ch}}}
   {Mike Marti \\[-0.8ex] {\small MS Computer Science} \\[-0.8ex] {\small \texttt{mikmarti@ethz.ch}}}
@@ -36,73 +12,62 @@
   {\v{S}imon Hrabec \\[-0.8ex] {\small MS Computer Science} \\[-0.8ex] {\small \texttt{shrabec@ethz.ch}}}
 
 \begin{document}
-%\ninept
-%
-\maketitle
-%
 
-The hard page limit is 6 pages in this style. Do not reduce font size
-or use other tricks to squeeze. This pdf is formatted in the American letter format, so the spacing may look a bit strange when printed out.
+\maketitle
 
 \begin{abstract}
-Describe in concise words what you do, why you do it (not necessarily
-in this order), and the main result.  The abstract has to be
-self-contained and readable for a person in the general area. You
-should write the abstract last.
+% Describe in concise words what you do, why you do it (not necessarily
+% in this order), and the main result.  The abstract has to be
+% self-contained and readable for a person in the general area. You
+% should write the abstract last.
 \end{abstract}
 
 \section{Introduction}
 \label{sec:intro}
-In this section we briefly introduce and explain what Minimum-Spanning-Tree algorithms can be used for. In addition, we
-will go into more detail about our contribution to the scientific comunity as well as present work related to ours.
+In this section we briefly introduce and explain what Minimum-Spanning-Tree algorithms are used for. In addition, we
+describe our contribution to the scientific comunity as well as work related to ours.
 
 \mypar{Motivation}
-Minimum-Spanning-Tree (MST) algorithms are used to compute a spanning tree of a given graph with edge weights. The goal
-of the algorithm is to minimize the sum of all edge weights of the computed spanning tree.
+Minimum-Spanning-Tree (MST) algorithms take weighted graphs as inputs and return spanning trees with minimal edge weight sums.
 
-The MST problem is one of the most studied problems in combinatorial optimization \cite{graham1985history}. Though its
-solution is rather simple, it can often be used as part of other algorithms to compute intermediate results and is also
-applicable in other scientific fields, such as medicine. Examples of problems that can be solved using MST algorithms
-include
+The MST problem is one of the most studied problems in combinatorial optimization \cite{graham1985history}. Although the
+problem is rather simple, its solutions are often used as part of other algorithms to compute intermediate results. 
+Other scientific fields, such as epidemiology or taxonomy, apply MST algorithms. Examples of problems that can be solved
+using MST algorithms include
 \begin{itemize}
-  \item \textbf{Networking} MST algorithms can be used to find efficient solutions for the Spanning Tree Protocol, which
-    is used to avoid looping of packages on the network layer.
-  \item \textbf{$\frac{3}{2}$-ap\-prox\-i\-mate metric TSP} By combining algorithms that solve the eulertour, minimum
-    matching and MST problem, one can develop a $\frac{3}{2}$-ap\-prox\-i\-mate algorithm solving the metric traveling
+  \item \textbf{Networking} MST algorithms find solutions for the Spanning Tree Protocol, which
+    is used to avoid bridge loops for Ethernet networks. % TODO: Does STP actually use MST?
+  \item \textbf{$\frac{3}{2}$-ap\-prox\-i\-mate metric TSP} By combining algorithms that find MSTs, matchings and
+    eulerian circuits, one can develop a $\frac{3}{2}$-ap\-prox\-i\-mation algorithm solving the metric traveling
     salesperson problem \cite{christofides1976worst}.
-  % TODO This sentance is copied from one of the cited abstracts. Is that ok?
   \item \textbf{Molecular Epidemiology} Minimum-Spanning-Trees are used in molecular epidemiology research to estimate
     relationships among individual strains or isolates \cite{spada2004use, salipante2011inadequacies}.
-  \item \textbf{Machine Learning} MSTs can be used in machine learning environments. For example, MSTs can be used to
-    reduce the fraction of incorrectly labeled samples when performing brain MRI tissue classification
-    \cite{cocosco2003fully}.
+  \item \textbf{Machine Learning} MSTs are used as part of machine learning algorithms. For example, MSTs reduce the
+    fraction of incorrectly labeled samples when performing brain MRI tissue classification \cite{cocosco2003fully}.
 \end{itemize}
-For most of these use cases, the speed of the MST algorithm is of utmost importance to e.g. get quick medical results
-and be able to treat the patient accordingly.
+For most of these use cases, the speed of the MST algorithm is of great importance e.g. to get quick medical results and
+be able to treat the patient accordingly.
 
 \mypar{Contribution}
 In our research, we focused on the MST algorithm proposed by Bor\r{u}vka \cite{boruuvka1926jistem,
 nevsetvril2001otakar}, which is one of the most prominent MST algorithms as of today. We implemented this algorithm
-using different implementation and work distribution strategies. Our implementations use the Message Passing Interface
-(MPI) protocol for work distribution and communication. To test the performance of our implementations, we use a seeded
-randomized Kronecker graph generator.
-% TODO This is not good :(. All other research talkes about how the MST is constructed.
-As a limitation, our implementations don't compute the MST itself, but only the total weight of it.
+using different work distribution strategies. Our implementations use the Message Passing Interface
+(MPI) for work distribution and communication. To evaluate the performance of our implementations, we use
+randomly generated Kronecker graphs.
 
 \mypar{Related Work}
 % TODO maybe find more references for the first paragraph
-As the MST problem is very versitile and can be used in various scientific disciplines, there has already been some
-research into the parallelization capabilities of MST algorithms. One such paper \cite{chung1996parallel}, which is also
-the main inspriation of this research project, looks into how the performance of Bor\r{u}vka behaves when using
-different pointer jumping schemes. In addition, this paper introduces the randomized linear work Supervertex Pointer
-Jumping scheme.
+As the MST problem is very versatile and can be used in various scientific disciplines, there already is some research
+on parallelizing MST algorithms. One such paper \cite{chung1996parallel}, which is also the main inspriation of this
+project, evaluates how the performance of Bor\r{u}vka behaves when using different pointer jumping schemes.
 
-Other research focuses on the difference in performance with regards to the used computation model
-\cite{dehne1998practical} and there has also been research conducted on the parallelization capabilities of the MST
-problem using GPUs \cite{de2017parallel}.
+Other research focuses on the difference in performance with regards to the computation model \cite{dehne1998practical}.
+Furthermore, other research focuses on the parallelization  of the MST algorithm using GPUs \cite{de2017parallel}.
 
 Our research is similar to that of Chung and Condon \cite{chung1996parallel}, but differs in that we also look at
-different work distribution strategies.
+different work distribution strategies. % TODO: Move this to the first paragraph of related work?
+
+% TODO: Mention this related work: https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.5.9759&rep=rep1&type=pdf
 
 % TODO remove
 % Do not start the introduction with the abstract or a slightly modified
@@ -287,11 +252,6 @@ from Matlab, you can export to eps.
 The format pdf is also fine for plots (you need pdflatex then), but only if the plot was never before in the format 
 jpeg, gif, bmp, tif.
 
-
-% References should be produced using the bibtex program from suitable
-% BiBTeX files (here: bibl_conf). The IEEEbib.bst bibliography
-% style file from IEEE produces unsorted bibliography list.
-% -------------------------------------------------------------------------
 \bibliographystyle{IEEEbib}
 \bibliography{bibl_conf}
 
