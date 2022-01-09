@@ -202,7 +202,16 @@ cannot be parallelized using this approach. This is because during the process o
 have to agree on a unique component identifier, which is a process performed on vertices, not edges.
 
 \mypar{Distribution by Vertices}
-TODO
+In this approach, we distribute the vertices of the input graph, including their incident edges, as evenly as possible
+among all available computation units. An image of how such a distribution would look like can be seen in figure ...
+% TODO
+A major disadvantage of this approach is that all edges have to be distributed twice, as it is not guaranteed that the
+neighboring vertex gets distributed to the same computation unit. As such, this strategy requires a lot more work to
+distribute the graph information. In addition, the work is not distributed as fair as it is using the edge distribution
+strategy, because a computation unit could end up with vertices that have a lot of incident edges, whilst another
+computation unit could end up with vertices that have almost no incident edges. As such, the computation of the minimum
+outgoing edge of every component is not as fair as it is in our other strategy. However, in this approach the merging of
+components can easily be parallelized.
 
 \mypar{Implementations}
 TODO
