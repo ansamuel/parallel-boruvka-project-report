@@ -30,6 +30,12 @@
 In this section we briefly introduce and explain what Minimum-Spanning-Tree algorithms are used for. In addition, we
 describe our contribution to the scientific comunity as well as work related to ours.
 
+% TODO: Maybe add this and remove from the motivation
+%  Formally, an MST of a given undirected connected Graph G = (V; E) with vertices V = f0
+% and weighted edges E, jEj = m, can be defined as an acyclic
+% subgraph of G which connects all vertices in V with the least
+% total weight
+
 \mypar{Motivation}
 Minimum-Spanning-Tree (MST) algorithms take weighted graphs as inputs and return spanning trees with minimal edge weight sums.
 
@@ -62,7 +68,8 @@ randomly generated Kronecker graphs.
 % TODO maybe find more references for the first paragraph
 As the MST problem is very versatile and can be used in various scientific disciplines, there already is some research
 on parallelizing MST algorithms. One such paper \cite{chung1996parallel}, which is also the main inspriation of this
-project, evaluates how the performance of Bor\r{u}vka behaves when using different pointer jumping schemes.
+project, evaluates how the performance of Bor\r{u}vka behaves when using different pointer jumping schemes. They also
+show that in principle a speedup proportional to the number of processors can be achieved.
 
 Other research focuses on the difference in performance with regards to the computation model \cite{dehne1998practical}.
 Furthermore, other research focuses on the parallelization  of the MST algorithm using GPUs \cite{de2017parallel}.
@@ -70,9 +77,6 @@ Furthermore, other research focuses on the parallelization  of the MST algorithm
 Our research is similar to that of Chung and Condon \cite{chung1996parallel}, but differs in that we also look at
 different work distribution strategies. % TODO: Move this to the first paragraph of related work?
 
-% TODO: Mention this related work: https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.5.9759&rep=rep1&type=pdf
-
-% TODO remove
 % Do not start the introduction with the abstract or a slightly modified
 % version. It follows a possible structure of the introduction. 
 % Note that the structure can be modified, but the
