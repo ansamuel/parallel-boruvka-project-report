@@ -186,7 +186,12 @@ This section contains information about the different implementations that we de
 details, such as distribution strategies, limitations and the benchmarking infrastructure.
 
 \mypar{Distributing the Work}
-TODO
+There are many ways as to how a graph can be distributed among multiple computation units. The two strategies that we
+looked into are distributing the work by edges, including their endpoint information, and distributing the work by
+vertices, including their incident edges. A combination of the two would also be possible, but was not considered in
+this project. As these two strategies have vastly different parallelization capabilities, we developed multiple
+implementations for both of these approaches. To get a better understanding of how they work, as well as their
+advantages and disadvantages, we describe them both in the following two paragraphs.
 
 \mypar{Distribution by Edges}
 TODO
