@@ -194,7 +194,12 @@ implementations for both of these approaches. To get a better understanding of h
 advantages and disadvantages, we describe them both in the following two paragraphs.
 
 \mypar{Distribution by Edges}
-TODO
+In this approach, we distribute the edges of the input graph as evenly as possible among all available computation
+units. An image of how such a distribution would look like can be seen in figure ... % TODO
+This strategy allows for a very fair work distribution, as every computation unit has approximately an equal amount of
+work during the selection of the minimum outgoing edge of every component. On the other hand, the merging of components
+cannot be parallelized using this approach. This is because during the process of merging all nodes inside a component
+have to agree on a unique component identifier, which is a process performed on vertices, not edges.
 
 \mypar{Distribution by Vertices}
 TODO
