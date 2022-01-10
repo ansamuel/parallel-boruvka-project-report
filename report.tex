@@ -200,7 +200,7 @@ TODO \cite{leskovec2010kronecker}
 This section contains information about the different implementations that we developed, as well as other technical
 details, such as distribution strategies, limitations and the benchmarking infrastructure.
 
-\mypar{Distributing the Work}
+\subsection{Distributing the Work}
 There are many ways as to how a graph can be distributed among multiple computation units. The two strategies that we
 looked into are distributing the work by edges, including their endpoint information, and distributing the work by
 vertices, including their incident edges. A combination of the two would also be possible, but was not considered in
@@ -296,7 +296,7 @@ that have a lot of incident edges, whilst another computation unit could end up 
 incident edges. As such, the computation of the minimum outgoing edge of every component is not as fair as it is in our
 other strategy. However, in this approach the merging of components can easily be parallelized.
 
-\mypar{Implementations}
+\subsection{Implementations}
 % TODO mention baseline
 % TODO mention the other implementations
 % TODO mention how mpi was used
@@ -309,7 +309,10 @@ computation units depending on whether it is an edge or vertex distributed algor
 both of these limitations would be quite easy to implement, we disregarded them as being low priority, as our focus lied
 on the difference between the various implementation strategies.
 
-\mypar{Benchmarking Infrastructure}
+\mypar{Correctness}
+TODO
+
+\subsection{Benchmarking Infrastructure}
 % TODO maybe move likwid description to background
 To make the experimentation process faster, we developed a small benchmarking infrastructure that allows us to more
 easily benchmark the various algorithms with different graph sizes. The measurements were performed using the
@@ -317,9 +320,6 @@ performance measurement tool LIKWID \cite{treibig2010likwid}. LIKWID uses hardwa
 be invoked by putting markers around the code that should be benchmarked. This allowed us to not only benchmark the
 entire execution, but also individual parts of the algorithms, which gave us more detailed information about which parts
 require the most amount of work.
-
-\mypar{Correctness}
-TODO
 
 \section{Experimental Results}\label{sec:exp}
 
