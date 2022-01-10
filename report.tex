@@ -26,6 +26,10 @@
 \end{abstract}
 
 \section{Introduction}
+% Do not start the introduction with the abstract or a slightly modified
+% version. It follows a possible structure of the introduction. 
+% Note that the structure can be modified, but the
+% content should be the same. Introduction and abstract should fill at most the first page, better less.
 \label{sec:intro}
 In this section we briefly introduce and explain what Minimum-Spanning-Tree algorithms are used for. In addition, we
 describe our contribution to the scientific comunity as well as work related to ours.
@@ -35,6 +39,20 @@ weighted edges $E \subseteq V \times V$, can be defined as an ayclic subgraph of
 $V$ with the least total weight.
 
 \mypar{Motivation}
+% The first task is to motivate what you do.  You can
+% start general and zoom in one the specific problem you consider.  In
+% the process you should have explained to the reader: what you are doing,
+% why you are doing, why it is important (order is usually reversed).
+%
+% For example, if my result is the fastest sorting implementation ever, one
+% could roughly go as follows. First explain why sorting is important
+% (used everywhere with a few examples) and why performance matters (large datasets,
+% realtime). Then explain that fast implementations are very hard and
+% expensive to get (memory hierarchy, vector, parallel). 
+%
+% Now you state what you do in this paper. In our example: 
+% presenting a sorting implementation that is
+% faster for some sizes as all the other ones.
 The MST problem is one of the most studied problems in combinatorial optimization \cite{graham1985history}. Although the
 problem is rather simple, its solutions are often used as part of other algorithms to compute intermediate results.
 Other scientific fields, such as epidemiology or taxonomy, apply MST algorithms. Examples of problems that can be solved
@@ -58,8 +76,13 @@ In our research, we focus on the MST algorithm proposed by Bor\r{u}vka \cite{bor
 which is one of the most prominent MST algorithms as of today. We implement this algorithm using different work
 distribution and merging strategies. Our implementations use the Message Passing Interface (MPI) for communication.
 Randomly generated Kronecker graphs are used to evaluate the performance of our implementation.
+% TODO: Mention how we perform compared to other implementations once we have results
 
 \mypar{Related Work}
+% Next, you have to give a brief overview of
+% related work. For a report like this, anywhere between 2 and 8
+% references. Briefly explain what they do. In the end contrast to what
+% you do to make now precisely clear what your contribution is.
 % TODO maybe find more references for the first paragraph
 As the MST problem is very versatile and can be used in various scientific disciplines, there already is some research
 on parallelizing MST algorithms. One such paper \cite{chung1996parallel}, which is also the main inspriation of this
@@ -74,31 +97,6 @@ Our research is similar to that of Chung and Condon \cite{chung1996parallel}, bu
 different work distribution strategies. % TODO: Move this to the first paragraph of related work?
 
 % TODO: Mention parallel boruvka using https://dl.acm.org/doi/10.1145/103418.103458
-
-% Do not start the introduction with the abstract or a slightly modified
-% version. It follows a possible structure of the introduction. 
-% Note that the structure can be modified, but the
-% content should be the same. Introduction and abstract should fill at most the first page, better less.
-%
-% \mypar{Motivation} The first task is to motivate what you do.  You can
-% start general and zoom in one the specific problem you consider.  In
-% the process you should have explained to the reader: what you are doing,
-% why you are doing, why it is important (order is usually reversed).
-%
-% For example, if my result is the fastest sorting implementation ever, one
-% could roughly go as follows. First explain why sorting is important
-% (used everywhere with a few examples) and why performance matters (large datasets,
-% realtime). Then explain that fast implementations are very hard and
-% expensive to get (memory hierarchy, vector, parallel). 
-%
-% Now you state what you do in this paper. In our example: 
-% presenting a sorting implementation that is
-% faster for some sizes as all the other ones.
-%
-% \mypar{Related work} Next, you have to give a brief overview of
-% related work. For a report like this, anywhere between 2 and 8
-% references. Briefly explain what they do. In the end contrast to what
-% you do to make now precisely clear what your contribution is.
 
 \section{Background}
 \label{sec:background}
