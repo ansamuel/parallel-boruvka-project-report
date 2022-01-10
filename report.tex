@@ -41,17 +41,17 @@ Minimum-Spanning-Tree (MST) algorithms take weighted graphs as inputs and return
 
 The MST problem is one of the most studied problems in combinatorial optimization \cite{graham1985history}. Although the
 problem is rather simple, its solutions are often used as part of other algorithms to compute intermediate results. 
-Other scientific fields, such as epidemiology or taxonomy, apply MST algorithms. Examples of problems that can be solved
-using MST algorithms include
+In addition, other scientific fields, such as epidemiology or taxonomy, apply MST algorithms to compute medical results.
+Examples of problems that can be solved using MST algorithms include
 \begin{itemize}
-  \item \textbf{Networking} MST algorithms find solutions for the Spanning Tree Protocol, which
-    is used to avoid bridge loops for Ethernet networks. % TODO: Does STP actually use MST?
+  \item \textbf{Networking} MST algorithms find efficient solutions for the Spanning Tree Protocol, which is used to
+    avoid bridge loops for Ethernet networks. % TODO: Does STP actually use MST?
   \item \textbf{$\frac{3}{2}$-ap\-prox\-i\-mate metric TSP} By combining algorithms that find MSTs, matchings and
     eulerian circuits, one can develop a $\frac{3}{2}$-ap\-prox\-i\-mation algorithm solving the metric traveling
     salesperson problem \cite{christofides1976worst}.
   \item \textbf{Molecular Epidemiology} Minimum-Spanning-Trees are used in molecular epidemiology research to estimate
     relationships among individual strains or isolates \cite{spada2004use, salipante2011inadequacies}.
-  \item \textbf{Machine Learning} MSTs are used as part of machine learning algorithms. For example, MSTs reduce the
+  \item \textbf{Machine Learning} MSTs are used as part of machine learning algorithms. For example, MSTs can reduce the
     fraction of incorrectly labeled samples when performing brain MRI tissue classification \cite{cocosco2003fully}.
 \end{itemize}
 For most of these use cases, the speed of the MST algorithm is of great importance e.g. to get quick medical results and
@@ -60,8 +60,8 @@ be able to treat the patient accordingly.
 \mypar{Contribution}
 In our research, we focused on the MST algorithm proposed by Bor\r{u}vka \cite{boruuvka1926jistem,
 nevsetvril2001otakar}, which is one of the most prominent MST algorithms as of today. We implemented this algorithm
-using different work distribution strategies. Our implementations use the Message Passing Interface
-(MPI) for work distribution and communication. To evaluate the performance of our implementations, we use
+using different component representation and work distribution strategies. Our implementations use the Message Passing
+Interface (MPI) for work distribution and communication. To evaluate the performance of our implementations, we use
 randomly generated Kronecker graphs.
 
 \mypar{Related Work}
