@@ -310,7 +310,13 @@ both of these limitations would be quite easy to implement, we disregarded them 
 on the difference between the various implementation strategies.
 
 \mypar{Correctness}
-The correctness of the implementation comes down to the fact that all implementations only terminate once no new edge is selected, by any computing unit, to the resulting MST. For that reason, the result is a spanning tree. The computed spanning tree is also a MST due to the greedy nature of how they're chosen. The same proof holds as for why the Bor\r{u}vka's algorithm is correct\cite{nevsetvril2012origins}. For verifying the correctness we use unit tests. We wrote multiple manual unit tests that cover different edge cased to ensure the correctness of our implementations. On top of that we also have unit tests with larger Kronocker Graphs(1024 vertices) where the result is compared to the one from the parallel Boost implementation.
+The correctness of the implementation comes down to the fact that all implementations only terminate once no new edge is
+selected, by any computing unit, to the resulting MST. For that reason, the result is a spanning tree. The computed
+spanning tree is also a MST due to the greedy nature of how they're chosen. The same proof holds as for why the
+Bor\r{u}vka's algorithm is correct\cite{nevsetvril2012origins}. For verifying the correctness we use unit tests. We
+wrote multiple manual unit tests that cover different edge cased to ensure the correctness of our implementations. On
+top of that we also have unit tests with larger Kronocker Graphs(1024 vertices) where the result is compared to the one
+from the parallel Boost implementation.
 
 \subsection{Benchmarking Infrastructure}
 % TODO maybe move likwid description to background
