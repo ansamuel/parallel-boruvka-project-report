@@ -152,17 +152,20 @@ soon as $T$ is a tree. In case the input graph is not connected, the termination
 arrive at a forest. The sequential runtime is $\bigoh(m \log n)$, where $m = |E|$ and $n = |V|$ of the input graph $G =
 (V, E)$.
 
-\begin{algorithm}
-\caption{Bor\r{u}vka's algorithm} \label{alg:boruvka}
-\begin{algorithmic}
-\State $T \gets \{ \}$
-\While{$\exists \text{ more than one connected component}$}
-\For{each component $c$ in $T$}
-\State $e \gets$ \Call{FindLightestOutgoingEdge}{$c$}
-\State $T \gets T \cup e$
-\EndFor
-\EndWhile
-\end{algorithmic}
+\begin{algorithm}[!t]
+  \caption{Bor\r{u}vka's algorithm}
+  \label{alg:boruvka}
+  \begin{algorithmic}
+    \State $T \gets \{ \}$
+    \While{$\exists$ more than one connected component}
+      \For{each component $c$ in $T$}
+        \State $e \gets$ \Call{FindLightestOutgoingEdge}{$c$}
+        \State $T \gets T \cup e$
+      \EndFor
+      \State \Call{MergeComponents}{}
+    \EndWhile
+    \State \Return $T$
+  \end{algorithmic}
 \end{algorithm}
 
 \mypar{Union Find Data structure}
