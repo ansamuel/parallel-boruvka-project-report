@@ -93,7 +93,7 @@ using different implementation and work distribution strategies. Our implementat
 (MPI) protocol for work distribution and communication. To test the performance of our implementations, we use a seeded
 randomized Kronecker graph generator.
 % TODO This is not good :(. All other research talkes about how the MST is constructed.
-As a limitation, our implementations doesn't store and return the MST itself, but only the total weight of it.
+As a limitation, our implementations don't store and return the MST itself, but only the total weight of it.
 
 \mypar{Related Work}
 % TODO maybe find more references for the first paragraph
@@ -303,15 +303,14 @@ other strategy. However, in this approach the merging of components can easily b
 TODO
 
 \mypar{Limitations}
-So far all implementations don't compute the actual MST, but only its edge weight sum. In addition, the work has to be
-distributed among all computation units evenly, i.e. the amount of edges or vertices must be divisible by the amount of
+So far all implementations don't compute the actual MST, but only its edge weight sum. All the heavy lifting is done anyway since in every iteration in our fastest implementation, all computation units know which edges were added to the MST. In addition, the work has to be distributed among all computation units evenly, i.e. the amount of edges or vertices must be divisible by the amount of
 computation units depending on whether it is an edge or vertex distributed algorithm. Though in most implementations
 both of these limitations would be quite easy to implement, we disregarded them as being low priority, as our focus lied
 on the difference between the various implementation strategies.
 
 \mypar{Correctness}
 The correctness of the implementation comes down to the fact that all implementations only terminate once no new edge is
-selected, by any computing unit, to the resulting MST. For that reason, the result is a spanning tree. The computed
+selected, by any computation unit, to the resulting MST. For that reason, the result is a spanning tree. The computed
 spanning tree is also a MST due to the greedy nature of how they're chosen. The same proof holds as for why the
 Bor\r{u}vka's algorithm is correct\cite{nevsetvril2012origins}. For verifying the correctness we use unit tests. We
 wrote multiple manual unit tests that cover different edge cases to ensure the correctness of our implementations. On
