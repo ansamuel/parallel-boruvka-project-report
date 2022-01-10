@@ -92,7 +92,7 @@ nevsetvril2001otakar}, which is one of the most prominent MST algorithms as of t
 using different implementation and work distribution strategies. Our implementations use the Message Passing Interface
 (MPI) protocol for work distribution and communication. To test the performance of our implementations, we use a seeded
 randomized Kronecker graph generator.
-% TODO This is not good :(. All other research talkes about how the MST is constructed.
+% TODO This is not good :(. All other research talkes about how the MST is constructed -> added something under limitations
 As a limitation, our implementations don't store and return the MST itself, but only the total weight of it.
 
 \mypar{Related Work}
@@ -343,7 +343,7 @@ parallel Boost implementation as a comparison. To get assurance during developme
 open pull requests, used continuous integration to build the application and execute the available unit tests.
 
 \subsection{Benchmarking Infrastructure}
-% TODO maybe move likwid description to background
+% TODO maybe move likwid description to background -> I think that's unessecary since it doesn't add to any understanding needed for the paper.
 To make the experimentation process faster, we developed a small benchmarking infrastructure that allows us to more
 easily benchmark the various algorithms with different graph sizes. The measurements were performed using the
 performance measurement tool LIKWID \cite{treibig2010likwid}. LIKWID uses hardware counters for its measurements and can
