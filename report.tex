@@ -7,6 +7,12 @@
 \usepackage{spconf,amsmath,amssymb,graphicx}
 \usepackage[hidelinks]{hyperref}
 
+\usepackage{subcaption}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{positioning}
+\usetikzlibrary{arrows}
+
 % Example definitions.
 % --------------------
 % nice symbols for real and complex numbers
@@ -192,6 +198,73 @@ vertices, including their incident edges. A combination of the two would also be
 this project. As these two strategies have vastly different parallelization capabilities, we developed multiple
 implementations for both of these approaches. To get a better understanding of how they work, as well as their
 advantages and disadvantages, we describe them both in the following two paragraphs.
+
+\begin{figure*}
+  \begin{subfigure}{0.33\textwidth}
+    \centering
+    \begin{tikzpicture}[every node/.style={circle,draw,align=center,font=\small,minimum size=1.5em},
+      node distance=3cm]
+      \node (v1) {};
+      \node[below right=3cm and .5cm of v1] (v2) {};
+      \node[below right=1.5cm and 2.5cm of v1] (v3) {};
+      \node[below right=2cm of v3] (v4) {};
+      \node[right=of v1] (v5) {};
+      \path[>={Stealth[black]}, every edge/.style={draw=black, thick}]
+        (v1) edge (v2)
+        (v1) edge (v3)
+        (v1) edge (v5)
+        (v2) edge (v3)
+        (v3) edge (v4);
+    \end{tikzpicture}
+    \caption{Original input graph.}
+    \label{fig:work_distribution_original_input_graph}
+  \end{subfigure}
+  \begin{subfigure}{0.33\textwidth}
+    \centering
+    \begin{tikzpicture}[every node/.style={circle,draw,align=center,font=\small,minimum size=1.5em},
+      node distance=3cm]
+      \node (v1) {};
+      \node[below right=3cm and .5cm of v1] (v2) {};
+      \node[below right=1.5cm and 2.5cm of v1] (v3) {};
+      \node[below right=2cm of v3] (v4) {};
+      \node[right=of v1] (v5) {};
+      \path[>={Stealth[black]}, every edge/.style={draw=black, thick}]
+        (v1) edge[cyan] (v2)
+        (v1) edge[cyan] (v3)
+        (v1) edge[red] (v5)
+        (v2) edge[cyan] (v3)
+        (v3) edge[red] (v4);
+    \end{tikzpicture}
+    \caption{Edge distributed input graph.}
+    \label{fig:work_distribution_edge_distributed_graph}
+  \end{subfigure}
+  \begin{subfigure}{0.33\textwidth}
+    \centering
+    \begin{tikzpicture}[every node/.style={circle,draw,align=center,font=\small,minimum size=1.5em},
+      node distance=3cm]
+      \node[cyan, fill=cyan] (v1) {};
+      \node[red, fill=red, below right=3cm and .5cm of v1] (v2) {};
+      \node[cyan, fill=cyan, below right=1.5cm and 2.5cm of v1] (v3) {};
+      \node[red, fill=red, below right=2cm of v3] (v4) {};
+      \node[cyan, fill=cyan, right=of v1] (v5) {};
+      \path[>={Stealth[black]}, every edge/.style={draw=black, thick}]
+        [->] [>={Stealth[cyan]}] (v1) edge[cyan, bend right=10] (v2)
+        [->] [>={Stealth[red]}] (v2) edge[red, bend right=10] (v1)
+        [->] [>={Stealth[cyan]}] (v1) edge[cyan, bend right=10] (v3)
+        [->] [>={Stealth[cyan]}] (v3) edge[cyan, bend right=10] (v1)
+        [->] [>={Stealth[cyan]}] (v1) edge[cyan, bend right=10] (v5)
+        [->] [>={Stealth[cyan]}] (v5) edge[cyan, bend right=10] (v1)
+        [->] [>={Stealth[red]}] (v2) edge[red, bend right=10] (v3)
+        [->] [>={Stealth[cyan]}] (v3) edge[cyan, bend right=10] (v2)
+        [->] [>={Stealth[cyan]}] (v3) edge[cyan, bend right=10] (v4)
+        [->] [>={Stealth[red]}] (v4) edge[red, bend right=10] (v3);
+    \end{tikzpicture}
+    \caption{Vertex distributed input graph.}
+    \label{fig:work_distribution_vertex_distributed_graph}
+  \end{subfigure}
+  \caption{Work distribution example.}
+  \label{fig:work_distribution}
+\end{figure*}
 
 \mypar{Distribution by Edges}
 In this approach, we distribute the edges of the input graph as evenly as possible among all available computation
