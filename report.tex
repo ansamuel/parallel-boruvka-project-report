@@ -310,7 +310,13 @@ both of these limitations would be quite easy to implement, we disregarded them 
 on the difference between the various implementation strategies.
 
 \mypar{Benchmarking Infrastructure}
-TODO
+% TODO maybe move likwid description to background
+To make the experimentation process faster, we developed a small benchmarking infrastructure that allows us to more
+easily benchmark the various algorithms with different graph sizes. The measurements were performed using the
+performance measurement tool LIKWID \cite{treibig2010likwid}. LIKWID uses hardware counters for its measurements and can
+be invoked by putting markers around the code that should be benchmarked. This allowed us to not only benchmark the
+entire execution, but also individual parts of the algorithms, which gave us more detailed information about which parts
+require the most amount of work.
 
 \mypar{Correctness}
 TODO
