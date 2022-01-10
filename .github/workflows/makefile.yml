@@ -18,7 +18,7 @@ jobs:
       run: sudo apt-get update
     
     - name: Install TeX Live
-      run: sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq texlive texlive-latex-extra texlive-font-utils latexmk
+      run: sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq texlive texlive-latex-extra texlive-font-utils texlive-science latexmk
       
     - name: Install Ghostscript
       run: sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq ghostscript
