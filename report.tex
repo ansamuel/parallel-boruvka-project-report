@@ -165,8 +165,15 @@ arrive at a forest. The sequential runtime is $\bigoh(m \log n)$, where $m = |E|
 \end{algorithmic}
 \end{algorithm}
 
-\mypar{Union Find Datastructure}
-% TODO
+\mypar{Union Find Data structure}
+A union-find data structure stores a partition of a set into disjoint subsets in such a way, that finding the
+corresponding set of an element and merging two sets takes $\bigoh(\alpha(n))$ time \cite{efficiency_union_find}. These
+operations can be used to describe the connected components in the algorithm \ref{alg:boruvka}. Note that the runtime
+achieved here is not an a per-operation basis. Single operations can take longer but the data structure adjusts itself
+so that successive operations are faster.
+
+We use the so-called path compression strategy when performing \verb|find()| operations and we merge sets by rank during
+\verb|union()| calls \cite{intro_to_algos}.
 
 \mypar{Pointer Jumping}
 % TODO maybe add a tikz image or algorithm description for this
@@ -192,8 +199,10 @@ C++ standard, there is no reference implementation but multiple open source proj
 MPICH and Open MPI \cite{gabriel2004open}.
 
 \mypar{Kronecker Graphs}
-% TODO Not sure if this is the original paper that introduced kronecker graphs (double check)
-% TODO \cite{leskovec2010kronecker}
+Kronecker graphs are a class of graphs constructed from a small base graph by iteratively applying the Kronecker product 
+\cite{leskovec2010kronecker}. The Graph500, a rating of supercomputer systems focusing on graph algorithms, uses a
+variation of this graph construction for their benchmarks \cite{graph500}. We use this graph generation method in our
+benchmarks by fixing a random seed to attain reproducible results.
 
 \section{Approach}
 \label{sec:approach}
