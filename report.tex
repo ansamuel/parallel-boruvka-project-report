@@ -93,7 +93,7 @@ using different implementation and work distribution strategies. Our implementat
 (MPI) protocol for work distribution and communication. To test the performance of our implementations, we use a seeded
 randomized Kronecker graph generator.
 % TODO This is not good :(. All other research talkes about how the MST is constructed.
-As a limitation, our implementations don't compute the MST itself, but only the total weight of it.
+As a limitation, our implementations doesn't store and return the MST itself, but only the total weight of it.
 
 \mypar{Related Work}
 % TODO maybe find more references for the first paragraph
@@ -282,7 +282,7 @@ among all available computation units. An example of how such a distribution wou
 \ref{fig:work_distribution_vertex_distributed_graph}. A major disadvantage of this approach is that all edges have to be
 distributed twice, as it is not guaranteed that the neighboring vertex gets distributed to the same computation unit. As
 such, this strategy requires a lot more work to distribute the graph information. In addition, the work is not
-distributed as fair as it is using the edge distribution strategy, because a computation unit could end up with vertices
+distributed as fair as when using the edge distribution strategy, because a computation unit could end up with vertices
 that have a lot of incident edges, whilst another computation unit could end up with vertices that have almost no
 incident edges. As such, the computation of the minimum outgoing edge of every component is not as fair as it is in our
 other strategy. However, in this approach the merging of components can easily be parallelized.
@@ -297,7 +297,7 @@ TODO
 TODO
 
 \mypar{Correctness}
-TODO
+The correctness of the implementation comes down to the fact that all implementations only terminate once no new edge is selected, by any computing unit, to the resulting MST. For that reason, the result is a spanning tree. The computed spanning tree is also a MST due to the greedy nature of how they're chosen. The same proof holds as for why the Bor\r{u}vka's algorithm is correct\cite{nevsetvril2012origins}. For verifying the correctness we use unit tests. We wrote multiple manual unit tests that cover different edge cased to ensure the correctness of our implementations. On top of that we also have unit tests with larger Kronocker Graphs where the result is compared to the one from the Boost implementation.
 
 % TODO remmove
 % Now comes the ``beef'' of the report, where you explain what you
