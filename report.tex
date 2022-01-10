@@ -199,6 +199,7 @@ this project. As these two strategies have vastly different parallelization capa
 implementations for both of these approaches. To get a better understanding of how they work, as well as their
 advantages and disadvantages, we describe them both in the following two paragraphs.
 
+% TODO maybe move the original input graph into the middle to clearly separate the edge dist. and vertex dist. images
 \begin{figure*}
   \begin{subfigure}{0.33\textwidth}
     \centering
@@ -268,23 +269,23 @@ advantages and disadvantages, we describe them both in the following two paragra
 
 \mypar{Distribution by Edges}
 In this approach, we distribute the edges of the input graph as evenly as possible among all available computation
-units. An image of how such a distribution would look like can be seen in figure ... % TODO
-This strategy allows for a very fair work distribution, as every computation unit has approximately an equal amount of
-work during the selection of the minimum outgoing edge of every component. On the other hand, the merging of components
-cannot be parallelized using this approach. This is because during the process of merging all nodes inside a component
-have to agree on a unique component identifier, which is a process performed on vertices, not edges.
+units. An example of how such a distribution would look like can be seen in Fig.
+\ref{fig:work_distribution_edge_distributed_graph}. This strategy allows for a very fair work distribution, as every
+computation unit has approximately an equal amount of work during the selection of the minimum outgoing edge of every
+component. On the other hand, the merging of components cannot be parallelized using this approach. This is because
+during the process of merging all nodes inside a component have to agree on a unique component identifier, which is a
+process performed on vertices, not edges.
 
 \mypar{Distribution by Vertices}
 In this approach, we distribute the vertices of the input graph, including their incident edges, as evenly as possible
-among all available computation units. An image of how such a distribution would look like can be seen in figure ...
-% TODO
-A major disadvantage of this approach is that all edges have to be distributed twice, as it is not guaranteed that the
-neighboring vertex gets distributed to the same computation unit. As such, this strategy requires a lot more work to
-distribute the graph information. In addition, the work is not distributed as fair as it is using the edge distribution
-strategy, because a computation unit could end up with vertices that have a lot of incident edges, whilst another
-computation unit could end up with vertices that have almost no incident edges. As such, the computation of the minimum
-outgoing edge of every component is not as fair as it is in our other strategy. However, in this approach the merging of
-components can easily be parallelized.
+among all available computation units. An example of how such a distribution would look like can be seen in Fig.
+\ref{fig:work_distribution_vertex_distributed_graph}. A major disadvantage of this approach is that all edges have to be
+distributed twice, as it is not guaranteed that the neighboring vertex gets distributed to the same computation unit. As
+such, this strategy requires a lot more work to distribute the graph information. In addition, the work is not
+distributed as fair as it is using the edge distribution strategy, because a computation unit could end up with vertices
+that have a lot of incident edges, whilst another computation unit could end up with vertices that have almost no
+incident edges. As such, the computation of the minimum outgoing edge of every component is not as fair as it is in our
+other strategy. However, in this approach the merging of components can easily be parallelized.
 
 \mypar{Implementations}
 TODO
