@@ -166,26 +166,24 @@ arrive at a forest. The sequential runtime is $\bigoh(m \log n)$, where $m = |E|
 \end{algorithm}
 
 \mypar{Union Find Datastructure}
-TODO
+% TODO
 
 \mypar{Pointer Jumping}
-% TODO maybe add a tikz image for this
-Pointer jumping \cite{jeje1992introduction} (also called path doubling) is a design technique that allows an algorithm
-to follow a path using only logarithmic time with respect to the length of the longest path. It does this by redirecting
-the parent pointer that describes the path, to point to the parent of the parent for each node on the path
+% TODO maybe add a tikz image or algorithm description for this
+Pointer jumping \cite{jeje1992introduction} (also referred to as path doubling) is a design technique that allows an
+algorithm to follow a path using only logarithmic time with respect to the length of the longest path. It does this by
+redirecting the parent pointers that describe the path, to point to the parent of the parent for each node on the path
 simultaneously. This process is then repeated until every node points to the root of the path. This gives a $\bigoh(n
-\log n)$ runtime, where $n$ describes the amount of nodes on the path. This is better compared to simply iterating over
-the path for each node individually, which has a potential worst case runtime of $\bigoh(n^2)$.
+\log n)$ runtime, where $n$ describes the amount of nodes on the path. This is superior to simply iteratively fixing
+each node individually, which has a potential worst case runtime of $\bigoh(n^2)$.
 
 \mypar{Supervertex Pointer Jumping}
 % TODO maybe add a tikz image for this
-% TODO I'm not yet fully happy with this paragraph, maybe we should just remove the description entirely and mention
-% that the reader should look it up in the other paper.
-Supervertex pointer jumping \cite{chung1996parallel} is an extension of pointer jumping that uses randomness to get a
-linear time algorithm in expectation. The technique is best explained in the aformentioned paper, but the high level
-idea is to select a set of nodes to be supervertices, perform pointer jumping on all non-supervertices, let each
-supervertex point to the next supervertex and repeat the process recursively but only with the supervertices. After the
-recursion it is only necessary to perform one more pointer jump for all non-supervertices for them to point to the root.
+Supervertex pointer jumping \cite{chung1996parallel} is an extension of pointer jumping that uses randomness to get
+achieve an expected linear time algorithm. The technique is best explained in the aformentioned paper, but the high
+level idea is to select a set of nodes to be supervertices, perform pointer jumping on all non-supervertices, let each
+supervertex point to the next supervertex and repeat the process recursively on the supervertices. After the recursion,
+it is sufficient to perform only one more pointer jump for all non-supervertices.
 
 \mypar{MPI}
 The message passing interface \cite{clarke1994mpi} is a standard for developing applications on parallel computing
@@ -195,7 +193,7 @@ MPICH and Open MPI \cite{gabriel2004open}.
 
 \mypar{Kronecker Graphs}
 % TODO Not sure if this is the original paper that introduced kronecker graphs (double check)
-TODO \cite{leskovec2010kronecker}
+% TODO \cite{leskovec2010kronecker}
 
 \section{Approach}
 \label{sec:approach}
