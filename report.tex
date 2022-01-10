@@ -297,10 +297,33 @@ incident edges. As such, the computation of the minimum outgoing edge of every c
 other strategy. However, in this approach the merging of components can easily be parallelized.
 
 \subsection{Implementations}
-% TODO mention baseline
-% TODO mention the other implementations
+We developed various implementations using C++17, combining different merging approaches with the two aformentioned
+distribution strategies. Here is a list of all the combinations that we developed:
+\begin{itemize}
+  \item ... % TODO
+\end{itemize}
+As one can see, this list does not contain every possible combination. This is because after some intermediate
+benchmarking we focussed on the strategies that were the most promissing, namely union find and edge distribution.
+% TODO explain edge removal implementation
+We also implemented sequential versions for some of the merging strategies, to get a better understanding of them.
+However, these sequential algorithms did not serve any additional purpose beyond that, i.e. they were not used to get
+any measurements.
+
+\mypar{Baseline Implementation}
+To get an idea of how well our implementations perform, we decided to use parallel Boost as our baseline. This shows us
+how well our implementations hold up against current industry standard code. The reason why we chose parallel Boost is
+because it is considered to be the de facto standard when it comes to parallel graph libraries for C++.
+
+\mypar{Kronecker Graph Generator}
+We first experimented with different graph types and even implemented some generators for them, but ultimately decided
+to only use kronecker graphs, as ... % TODO reason why kronecker graphs are used for such tests
+The generator implementation that we used is the official graph500 open source version available on
+GitHub\footnote{\url{https://github.com/graph500/graph500/tree/newreference/generator}}, which we copied into our
+project and call directly from the source. To get fair and comparable benchmarking results, we seeded the graph
+generator, such that it always generated the same random graph, no matter the algorithm that gets executed.
+
+\mypar{Communication}
 % TODO mention how mpi was used
-TODO
 
 \mypar{Limitations}
 So far all implementations don't compute the actual MST, but only its edge weight sum. In addition, the work has to be
@@ -308,6 +331,7 @@ distributed among all computation units evenly, i.e. the amount of edges or vert
 computation units depending on whether it is an edge or vertex distributed algorithm. Though in most implementations
 both of these limitations would be quite easy to implement, we disregarded them as being low priority, as our focus lied
 on the difference between the various implementation strategies.
+% TODO maybe add that it only works with ints so far
 
 \mypar{Correctness}
 The correctness of the implementation comes down to the fact that all implementations only terminate once no new edge is
