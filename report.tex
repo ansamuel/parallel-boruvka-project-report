@@ -188,10 +188,19 @@ TODO \cite{leskovec2010kronecker}
 
 \section{Approach}
 \label{sec:approach}
+% Now comes the ``beef'' of the report, where you explain what you
+% did. Again, organize it in paragraphs with titles. As in every section
+% you start with a very brief overview of the section.
+
+% In this section, structure is very important so one can follow the technical content.
+
+% Mention and cite any external resources that you used including libraries or other code.
+
+% TODO if the space allows for it, use subsections instead of only paragraphs
 This section contains information about the different implementations that we developed, as well as other technical
 details, such as distribution strategies, limitations and the benchmarking infrastructure.
 
-\mypar{Distributing the Work}
+\subsection{Distributing the Work}
 There are many ways as to how a graph can be distributed among multiple computation units. The two strategies that we
 looked into are distributing the work by edges, including their endpoint information, and distributing the work by
 vertices, including their incident edges. A combination of the two would also be possible, but was not considered in
@@ -287,26 +296,30 @@ that have a lot of incident edges, whilst another computation unit could end up 
 incident edges. As such, the computation of the minimum outgoing edge of every component is not as fair as it is in our
 other strategy. However, in this approach the merging of components can easily be parallelized.
 
-\mypar{Implementations}
+\subsection{Implementations}
+% TODO mention baseline
+% TODO mention the other implementations
+% TODO mention how mpi was used
 TODO
 
 \mypar{Limitations}
-TODO
-
-\mypar{Benchmarking Infrastructure}
-TODO
+So far all implementations don't compute the actual MST, but only its edge weight sum. In addition, the work has to be
+distributed among all computation units evenly, i.e. the amount of edges or vertices must be divisible by the amount of
+computation units depending on whether it is an edge or vertex distributed algorithm. Though in most implementations
+both of these limitations would be quite easy to implement, we disregarded them as being low priority, as our focus lied
+on the difference between the various implementation strategies.
 
 \mypar{Correctness}
 The correctness of the implementation comes down to the fact that all implementations only terminate once no new edge is selected, by any computing unit, to the resulting MST. For that reason, the result is a spanning tree. The computed spanning tree is also a MST due to the greedy nature of how they're chosen. The same proof holds as for why the Bor\r{u}vka's algorithm is correct\cite{nevsetvril2012origins}. For verifying the correctness we use unit tests. We wrote multiple manual unit tests that cover different edge cased to ensure the correctness of our implementations. On top of that we also have unit tests with larger Kronocker Graphs(1024 vertices) where the result is compared to the one from the Boost implementation.
 
-% TODO remmove
-% Now comes the ``beef'' of the report, where you explain what you
-% did. Again, organize it in paragraphs with titles. As in every section
-% you start with a very brief overview of the section.
-
-% In this section, structure is very important so one can follow the technical content.
-
-% Mention and cite any external resources that you used including libraries or other code.
+\subsection{Benchmarking Infrastructure}
+% TODO maybe move likwid description to background
+To make the experimentation process faster, we developed a small benchmarking infrastructure that allows us to more
+easily benchmark the various algorithms with different graph sizes. The measurements were performed using the
+performance measurement tool LIKWID \cite{treibig2010likwid}. LIKWID uses hardware counters for its measurements and can
+be invoked by putting markers around the code that should be benchmarked. This allowed us to not only benchmark the
+entire execution, but also individual parts of the algorithms, which gave us more detailed information about which parts
+require the most amount of work.
 
 \section{Experimental Results}\label{sec:exp}
 
