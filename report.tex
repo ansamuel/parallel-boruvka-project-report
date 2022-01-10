@@ -83,20 +83,23 @@ Randomly generated Kronecker graphs are used to evaluate the performance of our 
 % related work. For a report like this, anywhere between 2 and 8
 % references. Briefly explain what they do. In the end contrast to what
 % you do to make now precisely clear what your contribution is.
-% TODO maybe find more references for the first paragraph
 As the MST problem is very versatile and can be used in various scientific disciplines, there already is some research
 on parallelizing MST algorithms. One such paper \cite{chung1996parallel}, which is also the main inspriation of this
 project, evaluates how the performance of Bor\r{u}vka behaves when using different pointer jumping schemes. They also
 show that in principle a speedup proportional to the number of processors can be achieved.
 
-% TODO: This first sentence needs more explanation. It's not really the computation model that's different
-Other research focuses on the difference in performance with regards to the computation model \cite{dehne1998practical}.
-Furthermore, other research focuses on the parallelization of the MST algorithm using GPUs \cite{de2017parallel}.
+Other research limits itself on sufficiently dense graphs and presents an algorithm for the bulk synchronous parallel
+(BSP) model \cite{dehne1998practical}. Furthermore, a parallelization of the MST algorithm using GPUs is presented in
+\cite{de2017parallel}.
 
-Our research is similar to that of Chung and Condon \cite{chung1996parallel}, but differs in that we also look at
-different work distribution strategies. % TODO: Move this to the first paragraph of related work?
+Some implementations that can be found make use of wait-free Union-Find data structures \cite{wfuf}. Such data
+structures speed-up the merge step of the Vor\r{u}vka algorithm. However, they do not aid in distributing the work over
+multiple computing nodes.
 
-% TODO: Mention parallel boruvka using https://dl.acm.org/doi/10.1145/103418.103458
+Our research is similar to that of Chung and Condon \cite{chung1996parallel}, but differs in the work distribution
+strategies applied. Moreover, we also evaluate local merging strategies using Union Find data structures instead of the
+pointer jumping schemes. We do not, however, use the wait-free implementations of those data structures as described in
+\cite{wfuf}.
 
 \section{Background}
 \label{sec:background}
