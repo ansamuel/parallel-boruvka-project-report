@@ -30,22 +30,18 @@
 In this section we briefly introduce and explain what Minimum-Spanning-Tree algorithms are used for. In addition, we
 describe our contribution to the scientific comunity as well as work related to ours.
 
-% TODO: Maybe add this and remove from the motivation
-%  Formally, an MST of a given undirected connected Graph G = (V; E) with vertices V = f0
-% and weighted edges E, jEj = m, can be defined as an acyclic
-% subgraph of G which connects all vertices in V with the least
-% total weight
+Formally, an MST of a given undirected connected graph $G = (V, E)$ with vertices $V = \{ 0, \dotsc, n - 1 \}$ and
+weighted edges $E \subseteq V \times V$, can be defined as an ayclic subgraph of $G$ which connnects all vertices in
+$V$ with the least total weight.
 
 \mypar{Motivation}
-Minimum-Spanning-Tree (MST) algorithms take weighted graphs as inputs and return spanning trees with minimal edge weight sums.
-
 The MST problem is one of the most studied problems in combinatorial optimization \cite{graham1985history}. Although the
 problem is rather simple, its solutions are often used as part of other algorithms to compute intermediate results.
 Other scientific fields, such as epidemiology or taxonomy, apply MST algorithms. Examples of problems that can be solved
 using MST algorithms include
 \begin{itemize}
-  \item \textbf{Networking} MST algorithms find efficient solutions for the Spanning Tree Protocol, which is used to
-    avoid bridge loops for Ethernet networks. % TODO: Does STP actually use MST?
+  \item \textbf{Networking} MST algorithms find trees in computer networks that can be used for broadcasting without
+    loops. % TODO: Maybe cite https://dl.acm.org/doi/10.1145/359657.359665
   \item \textbf{$\frac{3}{2}$-ap\-prox\-i\-mate metric TSP} By combining algorithms that find MSTs, matchings and
     eulerian circuits, one can develop a $\frac{3}{2}$-ap\-prox\-i\-mation algorithm solving the metric traveling
     salesperson problem \cite{christofides1976worst}.
