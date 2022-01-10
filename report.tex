@@ -129,8 +129,8 @@ in \cite{wfuf}.
 % As an aside, don't talk about "the complexity of the algorithm.'' It's incorrect,
 % problems have a complexity, not algorithms.
 \label{sec:background}
-In this section we introduce the MST problem formally, as well as Bor\r{u}vka's algorithm and different
-parallelization strategies used in our implementations.
+In this section we formally introduce the MST problem, as well as Bor\r{u}vka's algorithm and different parallelization
+strategies used in our implementations.
 
 \mypar{Spanning Tree/Forest}
 A spanning tree (forest) is an acyclic (disconnected) subgraph $T = (V_T, E_T)$ of an undirected graph $G = (V_G, E_G)$,
@@ -169,7 +169,7 @@ arrive at a forest. The sequential runtime is $\bigoh(m \log n)$, where $m = |E|
 A union-find data structure stores a partition of a set into disjoint subsets in such a way, that finding the
 corresponding set of an element and merging two sets takes $\bigoh(\alpha(n))$ time \cite{efficiency_union_find}. These
 operations can be used to describe the connected components in the algorithm \ref{alg:boruvka}. Note that the runtime
-achieved here is not an a per-operation basis. Single operations can take longer but the data structure adjusts itself
+achieved here is not on a per-operation basis. Single operations can take longer but the data structure adjusts itself
 so that successive operations are faster.
 
 We use the so-called path compression strategy when performing \verb|find()| operations and we merge sets by rank during
@@ -199,7 +199,7 @@ C++ standard, there is no reference implementation but multiple open source proj
 MPICH and Open MPI \cite{gabriel2004open}.
 
 \mypar{Kronecker Graphs}
-Kronecker graphs are a class of graphs constructed from a small base graph by iteratively applying the Kronecker product 
+Kronecker graphs are a class of graphs constructed from a small base graph by iteratively applying the Kronecker product
 \cite{leskovec2010kronecker}. The Graph500, a rating of supercomputer systems focusing on graph algorithms, uses a
 variation of this graph construction for their benchmarks \cite{graph500}. We use this graph generation method in our
 benchmarks by fixing a random seed to attain reproducible results.
