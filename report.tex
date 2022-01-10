@@ -297,13 +297,13 @@ incident edges. As such, the computation of the minimum outgoing edge of every c
 other strategy. However, in this approach the merging of components can easily be parallelized.
 
 \subsection{Implementations}
-We developed various implementations using C++17, combining different merging approaches with the two aformentioned
+We developed various implementations using C++17, combining different merging approaches with the two aforementioned
 distribution strategies. Here is a list of all the combinations that we developed:
 \begin{itemize}
   \item ... % TODO
 \end{itemize}
 As one can see, this list does not contain every possible combination. This is because after some intermediate
-benchmarking we focussed on the strategies that were the most promissing, namely union find and edge distribution.
+benchmarking we focused on the strategies that were the most promising, namely union find and edge distribution.
 % TODO explain edge removal implementation
 We also implemented sequential versions for some of the merging strategies, to get a better understanding of them.
 However, these sequential algorithms did not serve any additional purpose beyond that, i.e. they were not used to get
@@ -324,6 +324,8 @@ generator, such that it always generated the same random graph, no matter the al
 
 \mypar{Communication}
 % TODO mention how mpi was used
+% edge-dist: MPI_Scatter for distributing edges and MPI_Allreduce with custom reduce function to reduce to smallest weight edge for each component, and with custom edge_type containing three ints.
+% vertice-dist: MPI_Allreduce similarly as for edge dist and MPI_Allgather for combinging roots array during merging.
 
 \mypar{Limitations}
 So far all implementations don't compute the actual MST, but only its edge weight sum. All the heavy lifting is done anyway since in every iteration in our fastest implementation, all computation units know which edges were added to the MST. In addition, the work has to be distributed among all computation units evenly, i.e. the amount of edges or vertices must be divisible by the amount of
