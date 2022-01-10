@@ -2,6 +2,9 @@
 \usepackage{spconf,amsmath,amssymb,graphicx}
 \usepackage{hyperref}
 
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
 \newcommand{\R}[0]{\mathbb{R}}
 \newcommand{\N}[0]{\mathbb{N}}
 \newcommand{\C}[0]{\mathbb{C}}
@@ -107,30 +110,60 @@ the pointer jumping schemes. We do not, however, use the wait-free implementatio
 in \cite{wfuf}.
 
 \section{Background}
+% Give a short, self-contained summary of necessary
+% background information. For example, assume you present an
+% implementation of sorting algorithms. You could organize into sorting
+% definition, algorithms considered, and asymptotic runtime statements. The goal of the
+% background section is to make the paper self-contained for an audience
+% as large as possible. As in every section
+% you start with a very brief overview of the section. Here it could be as follows: In this section 
+% we formally define the sorting problem we consider and introduce the algorithms we use
+% including a cost analysis.
+%
+% \mypar{Sorting}
+% Precisely define sorting problem you consider.
+%
+% \mypar{Sorting algorithms}
+% Explain the algorithm you use including their costs.
+%
+% As an aside, don't talk about "the complexity of the algorithm.'' It's incorrect,
+% problems have a complexity, not algorithms.
 \label{sec:background}
-In this section we will introduce the MST problem itself, as well as Bor\r{u}vka's algorithm and different
+In this section we introduce the MST problem formally, as well as Bor\r{u}vka's algorithm and different
 parallelization strategies used in our implementations.
 
 \mypar{Spanning Tree/Forest}
-A spanning tree/forest is an induced subgraph $T = (V_T, E_T)$ of an undirected graph $G = (V_G, E_G)$, where $V_T =
-V_G$ and $E_T \subseteq E_G$. In addition, it is necessary, that every edge $e \in E_G \setminus E_T$, i.e. every edge
-in $G$ but not in $T$, must create a cycle in $T$. It is very easy to see that a spanning tree for a graph $G$ is not
-necessarily unique, i.e. there can be more than one spanning tree of a graph. E.g. the fully connected graph $K_3$ has
-three spanning trees. We talk about a spanning tree, iff the graph $G$ is connected. Otherwise, we can only get a
-spanning forest. For simplicity, we will use the term spanning tree for both of them in this paper.
+A spanning tree (forest) is an acyclic (disconnected) subgraph $T = (V_T, E_T)$ of an undirected graph $G = (V_G, E_G)$,
+where $V_T = V_G$ and $E_T \subseteq E_G$. It is easy to see, that a spanning tree for a graph $G$ is not necessarily
+unique, i.e. there can be more than one spanning tree of a graph. For instance, the fully connected graph $K_3$ has
+three spanning trees. For simplicity, we will use the term spanning tree throughout this report even though we might be
+working with spanning forests in case $G$ is not connected.
 
 \mypar{Minimum-Spanning-Tree Problem}
-In the MST problem scenario, every edge in the input graph $G = (V, E)$ has an edge weight. I.e. there is a weight
-function $w : E \to \N$. The MST problem is to find a spanning tree with minimum edge weight sum, i.e. the edge weight
-of all other spanning trees is at least as large, as the one computed by a MST solver. Just like with a spanning tree, a
-MST must not necessarily be unique in the input graph $G$.
+In the MST problem, every edge $e$ of the input graph $G = (V, E)$ has an assoicated weight. Formally, there is a weight
+function $w : E \to \N$ that is given as input. The goal is to find a spanning tree with a minimum edge weight sum, i.e.
+the edge weight of all other spanning trees is at least as large. Just like with a spanning tree, a MST must not
+necessarily be unique for a given graph $G$.
 
 \mypar{Bor\r{u}vka's Algorithm}
-Bor\r{u}vka's algorithm \cite{boruuvka1926jistem, nevsetvril2001otakar} is an algorithmic solution to the MST problem.
-It solves the problem by selecting the minimum outgoing edge of every component (in the beginning each vertex is its own
-component) and combining the now connected components to a larger one. The algorithm terminates as soon as there are no
-more outgoing edges. Its theoretical sequential runtime is $\bigoh(m \log n)$, where $m = |E|$ and $n = |V|$ of the
-input graph $G = (V, E)$.
+Bor\r{u}vka's algorithm \cite{boruuvka1926jistem, nevsetvril2001otakar} solves the MST problem as described above.
+Algorithm \ref{alg:boruvka} contains a high-level overview of how the algorithm operates. The algorithm terminates as
+soon as $T$ is a tree. In case the input graph is not connected, the termination condition has to be slightly adapted to
+arrive at a forest. The sequential runtime is $\bigoh(m \log n)$, where $m = |E|$ and $n = |V|$ of the input graph $G =
+(V, E)$.
+
+\begin{algorithm}
+\caption{Bor\r{u}vka's algorithm} \label{alg:boruvka}
+\begin{algorithmic}
+\State $T \gets \{ \}$
+\While{$\exists \text{ more than one connected component}$}
+\For{each component $c$ in $T$}
+\State $e \gets$ \Call{FindLightestOutgoingEdge}{$c$}
+\State $T \gets T \cup e$
+\EndFor
+\EndWhile
+\end{algorithmic}
+\end{algorithm}
 
 \mypar{Union Find Datastructure}
 TODO
@@ -165,27 +198,6 @@ development.
 \mypar{Kronecker Graphs}
 % TODO Not sure if this is the original paper that introduced kronecker graphs (double check)
 TODO \cite{leskovec2010kronecker}
-
-% TODO remove
-% Give a short, self-contained summary of necessary
-% background information. For example, assume you present an
-% implementation of sorting algorithms. You could organize into sorting
-% definition, algorithms considered, and asymptotic runtime statements. The goal of the
-% background section is to make the paper self-contained for an audience
-% as large as possible. As in every section
-% you start with a very brief overview of the section. Here it could be as follows: In this section 
-% we formally define the sorting problem we consider and introduce the algorithms we use
-% including a cost analysis.
-%
-% \mypar{Sorting}
-% Precisely define sorting problem you consider.
-%
-% \mypar{Sorting algorithms}
-% Explain the algorithm you use including their costs.
-%
-% As an aside, don't talk about "the complexity of the algorithm.'' It's incorrect,
-% problems have a complexity, not algorithms.
-
 
 \section{Approach}
 \label{sec:approach}
