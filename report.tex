@@ -154,7 +154,7 @@ necessarily be unique for a given graph $G$.
 \mypar{Bor\r{u}vka's Algorithm}
 Bor\r{u}vka's algorithm \cite{boruuvka1926jistem, nevsetvril2001otakar} solves the MST problem as described above.
 Algorithm \ref{alg:boruvka} contains a high-level overview of how the algorithm operates. The algorithm terminates as
-soon as $T$ is a tree. In case the input graph is not connected, the termination condition has to be slightly adapted to
+soon as $T$ is a spanning tree. In case the input graph is not connected, the termination condition has to be slightly adapted to
 arrive at a forest. The sequential runtime is $\bigoh(m \log n)$, where $m = |E|$ and $n = |V|$ of the input graph $G =
 (V, E)$.
 
@@ -188,16 +188,16 @@ We use the so-called path compression strategy when performing \verb|find()| ope
 % TODO maybe add a tikz image or algorithm description for this
 Pointer jumping \cite{jeje1992introduction} (also referred to as path doubling) is a design technique that allows an
 algorithm to follow a path using only logarithmic time with respect to the length of the longest path. It does this by
-redirecting the parent pointers that describe the path, to point to the parent of the parent for each node on the path
-simultaneously. This process is then repeated until every node points to the root of the path. This gives a $\bigoh(n
-\log n)$ runtime, where $n$ describes the amount of nodes on the path. This is superior to simply iteratively fixing
-each node individually, which has a potential worst case runtime of $\bigoh(n^2)$.
+redirecting the parent pointers that describe the path, to point to the parent of the parent for each vertex on the path
+simultaneously. This process is then repeated until every vertex points to the root of the path. This gives a $\bigoh(n
+\log n)$ runtime, where $n$ describes the amount of vertices on the path. This is superior to simply iteratively fixing
+each vertex individually, which has a potential worst case runtime of $\bigoh(n^2)$.
 
 \mypar{Supervertex Pointer Jumping}
 % TODO maybe add a tikz image for this
 Supervertex pointer jumping \cite{chung1996parallel} is an extension of pointer jumping that uses randomness to get
 achieve an expected linear time algorithm. The technique is best explained in the aformentioned paper, but the high
-level idea is to select a set of nodes to be supervertices, perform pointer jumping on all non-supervertices, let each
+level idea is to select a set of vertices to be supervertices, perform pointer jumping on all non-supervertices, let each
 supervertex point to the next supervertex and repeat the process recursively on the supervertices. After the recursion,
 it is sufficient to perform only one more pointer jump for all non-supervertices.
 
@@ -221,8 +221,6 @@ variation of this graph construction for their benchmarks \cite{graph500}.
 % In this section, structure is very important so one can follow the technical content.
 
 % Mention and cite any external resources that you used including libraries or other code.
-
-% TODO if the space allows for it, use subsections instead of only paragraphs
 This section contains information about the different implementations that we developed, as well as other technical
 details, such as distribution strategies, limitations and the benchmarking infrastructure.
 
@@ -306,9 +304,9 @@ advantages and disadvantages, we describe them both in the following two paragra
 In this approach, we distribute the edges of the input graph as evenly as possible among all available computation
 units. An example of how such a distribution would look like can be seen in Fig.
 \ref{fig:work_distribution_edge_distributed_graph}. This strategy allows for a very fair work distribution, as every
-computation unit has approximately an equal amount of work during the selection of the minimum outgoing edge of every
+computation unit starts with approximately an equal amount of work during the selection of the minimum outgoing edge of every
 component. On the other hand, the merging of components cannot be parallelized using this approach. This is because
-during the process of merging all nodes inside a component have to agree on a unique component identifier, which is a
+during the process of merging all vertices inside a component, they have to agree on a unique component identifier, which is a
 process performed on vertices, not edges.
 
 \mypar{Distribution by Vertices}
@@ -326,16 +324,27 @@ other strategy. However, in this approach the merging of components can easily b
 We developed various implementations using C++17, combining different merging approaches with the two aforementioned
 distribution strategies. Here is a list of all the combinations that we developed:
 \begin{itemize}
-  \item Edge distribution with Union Find
-  \item Edge distribution with Union Find and Reduced Edges
-  \item Vertex distribution with Simple Root Iteration
-  \item Vertex distribution with Pointer Jumping
-  \item Vertex distribution with Supervertex Pointer Jumping
-  \item Vertex distribution with Union Find
+  \item Edge distribution using union find data structure
+  \item Edge distribution using union find data structure with edge reduction
+  \item Edge distribution using pointer jumping
+  \item Vertex distribution using union find data structure
+  \item Vertex distribution using iterative vertex fixing
+  \item Vertex distribution using pointer jumping
+  \item Vertex distribution using supervertex pointer jumping
 \end{itemize}
 As one can see, this list does not contain every possible combination. This is because after some intermediate
 benchmarking we focused on the strategies that were the most promising, namely union find and edge distribution.
-% TODO explain edge removal implementation
+
+We are not going to give a detailed description for all of these implementations, as their rough idea should be clear
+with the information given in section \ref{sec:background}. The ones that might not be clear are ``edge distribution
+using union find data structure with edge reduction'' and ``vertex distribution using iterative vertex fixing''. The first
+uses an additional optimization, where edges with endpoints inside the same component get removed once they are
+detected. As this removal costs additional runtime, we try to figure out if it is worth the time saved in future
+iterations. The second uses an iterative fixing of the vertices, briefly mentioned in the pointer jumping paragraph in
+section \ref{sec:background}. This approach has a higher theoretical runtime, but uses far less communication compared
+to the pointer jumping strategy. The question was, whether the lower runtime guarantee is worth the additional
+communication.
+
 We also implemented sequential versions for some of the merging strategies, to get a better understanding of them.
 However, these sequential algorithms did not serve any additional purpose beyond that, i.e. they were not used to get
 any measurements.
@@ -355,9 +364,10 @@ project and call directly from the source. To get fair and comparable benchmarki
 executions, we seeded the graph generator, such that it always generates the same random graph.
 
 \mypar{Communication}
-% TODO mention how mpi was used
-% edge-dist: MPI_Scatter for distributing edges and MPI_Allreduce with custom reduce function to reduce to smallest weight edge for each component, and with custom edge_type containing three ints.
-% vertice-dist: MPI_Allreduce similarly as for edge dist and MPI_Allgather for combinging roots array during merging.
+All implementations use MPI as a communication protocol. Besides send and receive routines used to distribute the
+graph, we also use scatter, gather and reduction functionalities in our implementations. To reduce the cost of
+communication as far as possible, we kept the amount of MPI subroutine calls to a minimum, by first locally preparing
+the data and then sending everything at once.
 
 \mypar{Limitations}
 So far all implementations don't compute the actual MST, but only its edge weight sum. In addition, the work has to be
@@ -370,13 +380,13 @@ focus lied on the difference between the various implementation strategies.
 
 \mypar{Correctness}
 The correctness of the implementation comes down to the fact that all implementations only terminate once no new edge is
-selected, by any computation unit, to the resulting MST. For that reason, the result is a spanning tree or a forest for a non-connected initial graph. The computed
+selected, by any computation unit, to the resulting MST. For that reason, the result is a spanning tree. The computed
 spanning tree is also a MST due to the greedy nature of how the edges are chosen. The same proof holds as for why the
 Bor\r{u}vka's algorithm is correct\cite{nevsetvril2012origins}. For verifying the correctness we use unit tests. We
 wrote multiple manual unit tests that cover different edge cases to ensure the correctness of our implementations. On
 top of that we also use differential testing with larger Kronocker Graphs (1024 vertices), using the result of the
 parallel Boost implementation as a comparison. To get assurance during development and be able to more quickly merge
-open pull requests, used continuous integration to build the application and execute the available unit tests.
+open pull requests, we used continuous integration to build the application and execute the available unit tests.
 
 \subsection{Benchmarking Infrastructure}
 % TODO maybe move likwid description to background -> I think that's unessecary since it doesn't add to any understanding needed for the paper.
