@@ -197,7 +197,7 @@ each vertex individually, which has a potential worst case runtime of $\bigoh(n^
 % TODO maybe add a tikz image for this
 Supervertex pointer jumping \cite{chung1996parallel} is an extension of pointer jumping that uses randomness to get
 achieve an expected linear time algorithm. The technique is best explained in the aformentioned paper, but the high
-level idea is to select a set of vertices to be supervertices, perform pointer jumping on all non-supervertices, let each
+level idea is to select a set of vertices to be supervertices, perform pointer jumping on all non-supervertices, until they reach a superverex or a root, let each
 supervertex point to the next supervertex and repeat the process recursively on the supervertices. After the recursion,
 it is sufficient to perform only one more pointer jump for all non-supervertices.
 
@@ -409,11 +409,45 @@ very short summary of the section. The typical structure follows.
 %
 %Then explain what kind of benchmarks you ran. The idea is to give enough information so the experiments are reproducible by somebody else on his or her code.
 %For sorting you would talk about the input sizes. For a tool that performs NUMA optimization, you would specify the programs you ran.
-
+The benchmarking were run on the Raclette cluster, setup and maintained by a group of students from ETH.
+% TODO write the details of the setup, like no. of computing units and nodes
 
 \mypar{Results}
 % TODO compare to results from Chung and Condon
-Next divide the experiments into classes, one paragraph for each. In each class of experiments you typically pursue one questions that then is answered by a suitable plot or plots. For example, first you may want to investigate the performance behavior with changing input size, then how your code compares to external benchmarks.
+%Next divide the experiments into classes, one paragraph for each. In each class of experiments you typically pursue one questions that then is answered by a suitable plot or plots. For example, first you may want to investigate the performance behavior with changing input size, then how your code compares to external benchmarks.
+Like mentioned in Approach %TODO add reference
+the benchmarking was done on Kronecker Graphs of different size but the number of edges is always 16 times the number of vertices. The baseline which the results are compared against is the parallel version of Boost.
+
+\mypar{Strong scaling}
+The first question is how well do our algorithms scale with increasing number of computing units when the input is a Kronecker graph with number of vertices being $2^{19}$ and number of edges being $2^{19}*16$.
+
+$<Insert Ploth>$
+%strongscaling, full algos, size 19 -> line plot
+
+Like can be seen in the plot %TODO add reference
+all our implementation exceed the performance of the parallel boost implementation. The best performing one being the algorithm using Edge Distribution with edge reduction and Union Find running on 64 computing units. %TODO add how much better 
+Reducing the edges did reduce the runtime but only marginally, since the benefits only kick in from 3rd iterations on but the first iterations are the most expensive ones. Vertex distribution did not seem to pay off for this kind of input graph. The supervertex Pointer Jumping method did not pay off either, probably because of a lot of synchronization needed within each recursion.
+For the edge distribution Union Find, since the ratio between the number of edges and vertices is 16:1 there are diminishing returns around 16 computing units. This is because when the edges are divided between 16 computing units the work needed to find the lightest adjacent edge becomes linear in the number of nodes. The union find, which is done locally and also runs linearly in the number of nodes, slowly becomes the bottleneck. Past 64 computing units the time actually starts to increase since at that point the overhead of distributing the work to more computing units stops paying off.
+
+\mypar{Weakscaling}
+How well do our algorithms scale with increasing graph sizes?
+
+$<Insert Ploth>$
+%Weakscaling, full algos, sizes 11-19, line plot
+% TODO if not written like that in plot, make it clear that size X means vertex number being 2^10
+
+%TODO add some analyziz of the plot results
+
+\mypar{Profiling}
+Which part of the algorithms are taking up most of the time ?
+
+$<Insert Plot>$
+%Comparison, segments, size 19 -> bar chart
+
+For the edge distribution we can see that the merging part or the Union Find takes up around half of the time??, becoming one of the bottleneck along with the synchronization in the finding the lightest adjacent edge part.
+For the vertex distribution it seems that expensive pre-processing for distributing edges takes up a big chunk of the total runtime. Additionally, the fact that even though initially computing units containing all edges for their respective vertices, as vertices are merged, reduction is needed to find the lightest adjacent edge for a connected component.
+% TODO do we want to mention that the edges could have been sent a long to the computing unit responsible for a given root vertex. Not trivial if that would pay off or not.
+
 
 For some tips on benchmarking including how to create a decent viewgraph see pages 22--27 in \cite{Pueschel:10}.
 
@@ -446,54 +480,54 @@ approach to .... Even though we only considered x, the
 .... technique should be applicable ....) You can also formulate next
 steps if you want. Be brief. After the conclusions there are only the references.
 
-\section{Further comments}
-
-Here we provide some further tips.
-
-\mypar{Further general guidelines}
-
-\begin{itemize}
-\item For short papers, to save space, I use paragraph titles instead of
-subsections, as shown in the introduction.
-
-\item It is generally a good idea to break sections into such smaller
-units for readability and since it helps you to (visually) structure the story.
-
-\item The above section titles should be adapted to more precisely
-reflect what you do.
-
-\item Each section should be started with a very
-short summary of what the reader can expect in this section. Nothing
-more awkward as when the story starts and one does not know what the
-direction is or the goal.
-
-\item Make sure you define every acronym you use, no matter how
-convinced you are the reader knows it.
-
-\item Always spell-check before you submit (to us in this case).
-
-\item Be picky. When writing a paper you should always strive for very
-high quality. Many people may read it and the quality makes a big difference.
-In this class, the quality is part of the grade.
-
-\item Books helping you to write better: \cite{Higham:98} and \cite{Strunk:00}.
-
-\item Conversion to pdf (latex users only): 
-
-dvips -o conference.ps -t letter -Ppdf -G0 conference.dvi
-
-and then
-
-ps2pdf conference.ps
-\end{itemize}
-
-\mypar{Graphics} For plots that are not images {\em never} generate the bitmap formats
-jpeg, gif, bmp, tif. Use eps, which means encapsulate postscript. It is
-scalable since it is a vector graphic description of your graph. E.g.,
-from Matlab, you can export to eps.
-
-The format pdf is also fine for plots (you need pdflatex then), but only if the plot was never before in the format 
-jpeg, gif, bmp, tif.
+%\section{Further comments}
+%
+%Here we provide some further tips.
+%
+%\mypar{Further general guidelines}
+%
+%\begin{itemize}
+%\item For short papers, to save space, I use paragraph titles instead of
+%subsections, as shown in the introduction.
+%
+%\item It is generally a good idea to break sections into such smaller
+%units for readability and since it helps you to (visually) structure the story.
+%
+%\item The above section titles should be adapted to more precisely
+%reflect what you do.
+%
+%\item Each section should be started with a very
+%short summary of what the reader can expect in this section. Nothing
+%more awkward as when the story starts and one does not know what the
+%direction is or the goal.
+%
+%\item Make sure you define every acronym you use, no matter how
+%convinced you are the reader knows it.
+%
+%\item Always spell-check before you submit (to us in this case).
+%
+%\item Be picky. When writing a paper you should always strive for very
+%high quality. Many people may read it and the quality makes a big difference.
+%In this class, the quality is part of the grade.
+%
+%\item Books helping you to write better: \cite{Higham:98} and \cite{Strunk:00}.
+%
+%\item Conversion to pdf (latex users only): 
+%
+%dvips -o conference.ps -t letter -Ppdf -G0 conference.dvi
+%
+%and then
+%
+%ps2pdf conference.ps
+%\end{itemize}
+%
+%\mypar{Graphics} For plots that are not images {\em never} generate the bitmap formats
+%jpeg, gif, bmp, tif. Use eps, which means encapsulate postscript. It is
+%scalable since it is a vector graphic description of your graph. E.g.,
+%from Matlab, you can export to eps.
+%
+%The format pdf is also fine for plots (you need pdflatex then), but only if the plot was never before in the format 
+%jpeg, gif, bmp, tif.
 
 \bibliographystyle{IEEEbib}
 \bibliography{bibl_conf}
