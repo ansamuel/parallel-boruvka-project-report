@@ -326,11 +326,27 @@ other strategy. However, in this approach the merging of components can easily b
 We developed various implementations using C++17, combining different merging approaches with the two aforementioned
 distribution strategies. Here is a list of all the combinations that we developed:
 \begin{itemize}
-  \item ... % TODO
+  \item Edge distribution using union find data structure
+  \item Edge distribution using union find data structure with edge reduction
+  \item Edge distribution using pointer jumping
+  \item Vertex distribution using union find data structure
+  \item Vertex distribution using iterative node fixing
+  \item Vertex distribution using pointer jumping
+  \item Vertex distribution using supervertex pointer jumping
 \end{itemize}
 As one can see, this list does not contain every possible combination. This is because after some intermediate
 benchmarking we focused on the strategies that were the most promising, namely union find and edge distribution.
-% TODO explain edge removal implementation
+
+We are not going to give a detailed description for all of these implementations, as their rough idea should be clear
+with the information given in section \ref{sec:background}. The ones that might not be clear are ``edge distribution
+using union find data structure with edge reduction'' and ``vertex distribution using iterative node fixing''. The first
+uses an additional optimization, where edges with endpoints inside the same component get removed once they are
+detected. As this removal costs additional runtime, we try to figure out if it is worth the time saved in future
+iterations. The second uses an iterative fixing of the nodes, briefly mentioned in the pointer jumping paragraph in
+section \ref{sec:background}. This approach has a higher theoretical runtime, but uses far less communication compared
+to the pointer jumping strategy. The question was, whether the lower runtime guarantee is worth the additional
+communication.
+
 We also implemented sequential versions for some of the merging strategies, to get a better understanding of them.
 However, these sequential algorithms did not serve any additional purpose beyond that, i.e. they were not used to get
 any measurements.
