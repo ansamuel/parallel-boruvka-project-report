@@ -326,7 +326,12 @@ other strategy. However, in this approach the merging of components can easily b
 We developed various implementations using C++17, combining different merging approaches with the two aforementioned
 distribution strategies. Here is a list of all the combinations that we developed:
 \begin{itemize}
-  \item ... % TODO
+  \item Edge distribution with Union Find
+  \item Edge distribution with Union Find and Reduced Edges
+  \item Vertex distribution with Simple Root Iteration
+  \item Vertex distribution with Pointer Jumping
+  \item Vertex distribution with Supervertex Pointer Jumping
+  \item Vertex distribution with Union Find
 \end{itemize}
 As one can see, this list does not contain every possible combination. This is because after some intermediate
 benchmarking we focused on the strategies that were the most promising, namely union find and edge distribution.
@@ -365,8 +370,8 @@ focus lied on the difference between the various implementation strategies.
 
 \mypar{Correctness}
 The correctness of the implementation comes down to the fact that all implementations only terminate once no new edge is
-selected, by any computation unit, to the resulting MST. For that reason, the result is a spanning tree. The computed
-spanning tree is also a MST due to the greedy nature of how they're chosen. The same proof holds as for why the
+selected, by any computation unit, to the resulting MST. For that reason, the result is a spanning tree or a forest for a non-connected initial graph. The computed
+spanning tree is also a MST due to the greedy nature of how the edges are chosen. The same proof holds as for why the
 Bor\r{u}vka's algorithm is correct\cite{nevsetvril2012origins}. For verifying the correctness we use unit tests. We
 wrote multiple manual unit tests that cover different edge cases to ensure the correctness of our implementations. On
 top of that we also use differential testing with larger Kronocker Graphs (1024 vertices), using the result of the
