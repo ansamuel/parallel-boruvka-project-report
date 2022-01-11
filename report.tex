@@ -154,7 +154,7 @@ necessarily be unique for a given graph $G$.
 \mypar{Bor\r{u}vka's Algorithm}
 Bor\r{u}vka's algorithm \cite{boruuvka1926jistem, nevsetvril2001otakar} solves the MST problem as described above.
 Algorithm \ref{alg:boruvka} contains a high-level overview of how the algorithm operates. The algorithm terminates as
-soon as $T$ is a tree. In case the input graph is not connected, the termination condition has to be slightly adapted to
+soon as $T$ is a spanning tree. In case the input graph is not connected, the termination condition has to be slightly adapted to
 arrive at a forest. The sequential runtime is $\bigoh(m \log n)$, where $m = |E|$ and $n = |V|$ of the input graph $G =
 (V, E)$.
 
@@ -188,16 +188,16 @@ We use the so-called path compression strategy when performing \verb|find()| ope
 % TODO maybe add a tikz image or algorithm description for this
 Pointer jumping \cite{jeje1992introduction} (also referred to as path doubling) is a design technique that allows an
 algorithm to follow a path using only logarithmic time with respect to the length of the longest path. It does this by
-redirecting the parent pointers that describe the path, to point to the parent of the parent for each node on the path
-simultaneously. This process is then repeated until every node points to the root of the path. This gives a $\bigoh(n
-\log n)$ runtime, where $n$ describes the amount of nodes on the path. This is superior to simply iteratively fixing
-each node individually, which has a potential worst case runtime of $\bigoh(n^2)$.
+redirecting the parent pointers that describe the path, to point to the parent of the parent for each vertex on the path
+simultaneously. This process is then repeated until every vertex points to the root of the path. This gives a $\bigoh(n
+\log n)$ runtime, where $n$ describes the amount of vertices on the path. This is superior to simply iteratively fixing
+each vertex individually, which has a potential worst case runtime of $\bigoh(n^2)$.
 
 \mypar{Supervertex Pointer Jumping}
 % TODO maybe add a tikz image for this
 Supervertex pointer jumping \cite{chung1996parallel} is an extension of pointer jumping that uses randomness to get
 achieve an expected linear time algorithm. The technique is best explained in the aformentioned paper, but the high
-level idea is to select a set of nodes to be supervertices, perform pointer jumping on all non-supervertices, let each
+level idea is to select a set of vertices to be supervertices, perform pointer jumping on all non-supervertices, let each
 supervertex point to the next supervertex and repeat the process recursively on the supervertices. After the recursion,
 it is sufficient to perform only one more pointer jump for all non-supervertices.
 
@@ -300,12 +300,12 @@ compare, the following two paragraphs describe them both.
 \end{figure*}
 
 \mypar{Distribution by Edges}
-In this approach, the edges of the input graph are distributed as evenly as possible among computation units. An
-illustration of such a distribution can be seen in Fig. \ref{fig:work_distribution_edge_distributed_graph}. This
-strategy allows for a uniform workload distribution, as every computation unit has the same amount of edges to process when
-selecting the minimum weight outgoing edges. On the other hand, the merging of components cannot be parallelized using
-this approach. This is because during the merging step, all vertices of a component have to unanimously agree on a new
-leader. But since a vertex is not owned by a computation unit, this cannot be accomplished without additional effort.
+In this approach, the edges of the input graph are distributed evenly among computation units. An illustration of such a
+distribution can be seen in Fig. \ref{fig:work_distribution_edge_distributed_graph}. This strategy allows for a uniform
+workload distribution, as every computation unit has the same amount of edges to process when selecting the minimum
+weight outgoing edges. On the other hand, the merging of components cannot be parallelized using this approach. This is
+because during the merging step, all vertices of a component have to unanimously agree on a new leader. But since a
+vertex is not owned by a computation unit, this cannot be accomplished without additional effort.
 
 \mypar{Distribution by Vertices}
 In this approach, the vertices of the input graph are distrbuted (including their incident edges) among computation
@@ -326,7 +326,7 @@ distribution strategies. Here is a list of all the combinations that we develope
   \item Edge distribution using union find data structure with edge reduction
   \item Edge distribution using pointer jumping
   \item Vertex distribution using union find data structure
-  \item Vertex distribution using iterative node fixing
+  \item Vertex distribution using iterative vertex fixing
   \item Vertex distribution using pointer jumping
   \item Vertex distribution using supervertex pointer jumping
 \end{itemize}
@@ -335,10 +335,10 @@ benchmarking we focused on the strategies that were the most promising, namely u
 
 We are not going to give a detailed description for all of these implementations, as their rough idea should be clear
 with the information given in section \ref{sec:background}. The ones that might not be clear are ``edge distribution
-using union find data structure with edge reduction'' and ``vertex distribution using iterative node fixing''. The first
+using union find data structure with edge reduction'' and ``vertex distribution using iterative vertex fixing''. The first
 uses an additional optimization, where edges with endpoints inside the same component get removed once they are
 detected. As this removal costs additional runtime, we try to figure out if it is worth the time saved in future
-iterations. The second uses an iterative fixing of the nodes, briefly mentioned in the pointer jumping paragraph in
+iterations. The second uses an iterative fixing of the vertices, briefly mentioned in the pointer jumping paragraph in
 section \ref{sec:background}. This approach has a higher theoretical runtime, but uses far less communication compared
 to the pointer jumping strategy. The question was, whether the lower runtime guarantee is worth the additional
 communication.
