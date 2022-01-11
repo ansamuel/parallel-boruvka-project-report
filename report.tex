@@ -364,9 +364,10 @@ project and call directly from the source. To get fair and comparable benchmarki
 executions, we seeded the graph generator, such that it always generates the same random graph.
 
 \mypar{Communication}
-% TODO mention how mpi was used
-% edge-dist: MPI_Scatter for distributing edges and MPI_Allreduce with custom reduce function to reduce to smallest weight edge for each component, and with custom edge_type containing three ints.
-% vertice-dist: MPI_Allreduce similarly as for edge dist and MPI_Allgather for combinging roots array during merging.
+All implementations use MPI as a communication protocol. Besides send and receive routines used to distribute the
+graph, we also use scatter, gather and reduction functionalities in our implementations. To reduce the cost of
+communication as far as possible, we kept the amount of MPI subroutine calls to a minimum, by first locally preparing
+the data and then sending everything at once.
 
 \mypar{Limitations}
 So far all implementations don't compute the actual MST, but only its edge weight sum. In addition, the work has to be
