@@ -2,6 +2,14 @@
 \usepackage{spconf,amsmath,amssymb,graphicx}
 \usepackage{hyperref}
 
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\newcommand{\R}[0]{\mathbb{R}}
+\newcommand{\N}[0]{\mathbb{N}}
+\newcommand{\C}[0]{\mathbb{C}}
+\newcommand{\bigoh}{\mathcal O}
+
 \newcommand{\mypar}[1]{{\bf #1.}}
 
 % TODO: Maybe remove the work efficient and change tree to forest?
@@ -102,35 +110,6 @@ the pointer jumping schemes. We do not, however, use the wait-free implementatio
 in \cite{wfuf}.
 
 \section{Background}
-\label{sec:background}
-In this section we will introduce the MST problem itself, as well as Bor\r{u}vka's algorithm and different
-parallelization strategies used in our implementations.
-
-\mypar{Spanning Tree/Forest}
-TODO
-
-\mypar{Minimum-Spanning-Tree Problem}
-TODO
-
-\mypar{Bor\r{u}vka's Algorithm}
-TODO
-
-\mypar{Union Find Datastructure}
-TODO
-
-\mypar{Pointer Jumping}
-TODO
-
-\mypar{Supervertex Pointer Jumping}
-TODO
-
-\mypar{MPI}
-TODO
-
-\mypar{Kronecker Graphs}
-% TODO Not sure if this is the original paper that introduced kronecker graphs (double check)
-TODO \cite{leskovec2010kronecker}
-
 % Give a short, self-contained summary of necessary
 % background information. For example, assume you present an
 % implementation of sorting algorithms. You could organize into sorting
@@ -149,7 +128,83 @@ TODO \cite{leskovec2010kronecker}
 %
 % As an aside, don't talk about "the complexity of the algorithm.'' It's incorrect,
 % problems have a complexity, not algorithms.
+\label{sec:background}
+In this section we formally introduce the MST problem, as well as Bor\r{u}vka's algorithm and different parallelization
+strategies used in our implementations.
 
+\mypar{Spanning Tree/Forest}
+A spanning tree (forest) is an acyclic (disconnected) subgraph $T = (V_T, E_T)$ of an undirected graph $G = (V_G, E_G)$,
+where $V_T = V_G$ and $E_T \subseteq E_G$. It is easy to see, that a spanning tree for a graph $G$ is not necessarily
+unique, i.e. there can be more than one spanning tree of a graph. For instance, the fully connected graph $K_3$ has
+three spanning trees. For simplicity, we will use the term spanning tree throughout this report even though we might be
+working with spanning forests in case $G$ is not connected.
+
+\mypar{Minimum-Spanning-Tree Problem}
+In the MST problem, every edge $e$ of the input graph $G = (V, E)$ has an assoicated weight. Formally, there is a weight
+function $w : E \to \N$ that is given as input. The goal is to find a spanning tree with a minimum edge weight sum, i.e.
+the edge weight of all other spanning trees is at least as large. Just like with a spanning tree, a MST must not
+necessarily be unique for a given graph $G$.
+
+\mypar{Bor\r{u}vka's Algorithm}
+Bor\r{u}vka's algorithm \cite{boruuvka1926jistem, nevsetvril2001otakar} solves the MST problem as described above.
+Algorithm \ref{alg:boruvka} contains a high-level overview of how the algorithm operates. The algorithm terminates as
+soon as $T$ is a tree. In case the input graph is not connected, the termination condition has to be slightly adapted to
+arrive at a forest. The sequential runtime is $\bigoh(m \log n)$, where $m = |E|$ and $n = |V|$ of the input graph $G =
+(V, E)$.
+
+\begin{algorithm}[!t]
+  \caption{Bor\r{u}vka's algorithm}
+  \label{alg:boruvka}
+  \begin{algorithmic}
+    \State $T \gets \{ \}$
+    \While{$\exists$ more than one connected component}
+      \For{each component $c$ in $T$}
+        \State $e \gets$ \Call{FindLightestOutgoingEdge}{$c$}
+        \State $T \gets T \cup e$
+      \EndFor
+      \State \Call{MergeComponents}{}
+    \EndWhile
+    \State \Return $T$
+  \end{algorithmic}
+\end{algorithm}
+
+\mypar{Union Find Data structure}
+A union-find data structure stores a partition of a set into disjoint subsets in such a way, that finding the
+corresponding set of an element and merging two sets takes $\bigoh(\alpha(n))$ time \cite{efficiency_union_find}. These
+operations can be used to describe the connected components in the algorithm \ref{alg:boruvka}. Note that the runtime
+achieved here is not on a per-operation basis. Single operations can take longer but the data structure adjusts itself
+so that successive operations are faster.
+
+We use the so-called path compression strategy when performing \verb|find()| operations and we merge sets by rank during
+\verb|union()| calls \cite{intro_to_algos}.
+
+\mypar{Pointer Jumping}
+% TODO maybe add a tikz image or algorithm description for this
+Pointer jumping \cite{jeje1992introduction} (also referred to as path doubling) is a design technique that allows an
+algorithm to follow a path using only logarithmic time with respect to the length of the longest path. It does this by
+redirecting the parent pointers that describe the path, to point to the parent of the parent for each node on the path
+simultaneously. This process is then repeated until every node points to the root of the path. This gives a $\bigoh(n
+\log n)$ runtime, where $n$ describes the amount of nodes on the path. This is superior to simply iteratively fixing
+each node individually, which has a potential worst case runtime of $\bigoh(n^2)$.
+
+\mypar{Supervertex Pointer Jumping}
+% TODO maybe add a tikz image for this
+Supervertex pointer jumping \cite{chung1996parallel} is an extension of pointer jumping that uses randomness to get
+achieve an expected linear time algorithm. The technique is best explained in the aformentioned paper, but the high
+level idea is to select a set of nodes to be supervertices, perform pointer jumping on all non-supervertices, let each
+supervertex point to the next supervertex and repeat the process recursively on the supervertices. After the recursion,
+it is sufficient to perform only one more pointer jump for all non-supervertices.
+
+\mypar{MPI}
+The message passing interface \cite{clarke1994mpi} is a standard for developing applications on parallel computing
+architectures. It defines library routines for inter-core and inter-system communication. Similar to the
+C++ standard, there is no reference implementation but multiple open source projects implementing the standard, such as
+MPICH and Open MPI \cite{gabriel2004open}.
+
+\mypar{Kronecker Graphs}
+Kronecker graphs are a class of graphs constructed from a small base graph by iteratively applying the Kronecker product
+\cite{leskovec2010kronecker}. The Graph500, a rating of supercomputer systems focusing on graph algorithms, uses a
+variation of this graph construction for their benchmarks \cite{graph500}.
 
 \section{Approach}
 \label{sec:approach}
