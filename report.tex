@@ -342,11 +342,12 @@ because it is considered to be the de facto standard when it comes to parallel g
 
 \mypar{Kronecker Graph Generator}
 We first experimented with different graph types and even implemented some generators for them, but ultimately decided
-to only use kronecker graphs, as ... % TODO reason why kronecker graphs are used for such tests
-The generator implementation that we used is the official graph500 open source version available on
+to only use Kronecker graphs, as they are part of the Graph500 benchmark toolkit to rate supercomputer systems. Compared
+to custom generated graphs, the results we get by using Kronecker graphs will be the most unbiased. The generator
+implementation that we used is the official Graph500 open source version available on
 GitHub\footnote{\url{https://github.com/graph500/graph500/tree/newreference/generator}}, which we copied into our
-project and call directly from the source. To get fair and comparable benchmarking results, we seeded the graph
-generator, such that it always generated the same random graph, no matter the algorithm that gets executed.
+project and call directly from the source. To get fair and comparable benchmarking results across all algorithm
+executions, we seeded the graph generator, such that it always generates the same random graph.
 
 \mypar{Communication}
 % TODO mention how mpi was used
