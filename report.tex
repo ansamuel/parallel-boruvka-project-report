@@ -354,10 +354,12 @@ generator, such that it always generated the same random graph, no matter the al
 % vertice-dist: MPI_Allreduce similarly as for edge dist and MPI_Allgather for combinging roots array during merging.
 
 \mypar{Limitations}
-So far all implementations don't compute the actual MST, but only its edge weight sum. All the heavy lifting is done anyway since in every iteration in our fastest implementation, all computation units know which edges were added to the MST. In addition, the work has to be distributed among all computation units evenly, i.e. the amount of edges or vertices must be divisible by the amount of
-computation units depending on whether it is an edge or vertex distributed algorithm. Though in most implementations
-both of these limitations would be quite easy to implement, we disregarded them as being low priority, as our focus lied
-on the difference between the various implementation strategies.
+So far all implementations don't compute the actual MST, but only its edge weight sum. In addition, the work has to be
+distributed among all computation units evenly, i.e. the amount of edges or vertices must be divisible by the amount of
+computation units depending on whether it is an edge or vertex distributed algorithm. For most implementations both of
+these limitations would be quite easy to solve. This is especially true for the MST tree computation, as the lightest
+edges are distributed among the computation units anyway. However, we disregarded them as being low priority, as our
+focus lied on the difference between the various implementation strategies.
 % TODO maybe add that it only works with ints so far
 
 \mypar{Correctness}
