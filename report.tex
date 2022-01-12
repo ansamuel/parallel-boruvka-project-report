@@ -395,12 +395,9 @@ open pull requests, we used continuous integration to build the application and 
 
 \subsection{Benchmarking Infrastructure}
 % TODO maybe move likwid description to background -> I think that's unessecary since it doesn't add to any understanding needed for the paper.
-To make the experimentation process faster, we developed a small benchmarking infrastructure that allows us to more
-easily benchmark the various algorithms with different graph sizes. The measurements were performed using the
-performance measurement tool LIKWID \cite{treibig2010likwid}. LIKWID uses hardware counters for its measurements and can
-be invoked by putting markers around the code that should be benchmarked. This allowed us to not only benchmark the
-entire execution, but also individual parts of the algorithms, which gave us more detailed information about which parts
-require the most amount of work.
+The measurements are obtained using the performance measurement tool LIKWID \cite{treibig2010likwid}. LIKWID uses
+hardware counters for its measurements and can be invoked by simply marking the code to be benchmarked. This allows us
+to benchmark parts of the algorithms and obtain detailed information to further improve certain functionality.
 
 \section{Experimental Results}\label{sec:exp}
 
