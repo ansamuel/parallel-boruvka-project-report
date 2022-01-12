@@ -146,7 +146,7 @@ three spanning trees. For simplicity, we will use the term spanning tree through
 working with spanning forests in case $G$ is not connected.
 
 \mypar{Minimum-Spanning-Tree Problem}
-In the MST problem, every edge $e$ of the input graph $G = (V, E)$ has an assoicated weight. Formally, there is a weight
+In the MST problem, every edge $e$ of the input graph $G = (V, E)$ has an associated weight. Formally, there is a weight
 function $w : E \to \N$ that is given as input. The goal is to find a spanning tree with a minimum edge weight sum, i.e.
 the edge weight of all other spanning trees is at least as large. Just like with a spanning tree, a MST must not
 necessarily be unique for a given graph $G$.
@@ -195,9 +195,9 @@ each vertex individually, which has a potential worst case runtime of $\bigoh(n^
 
 \mypar{Supervertex Pointer Jumping}
 % TODO maybe add a tikz image for this
-Supervertex pointer jumping \cite{chung1996parallel} is an extension of pointer jumping that uses randomness to get
-achieve an expected linear time algorithm. The technique is best explained in the aformentioned paper, but the high
-level idea is to select a set of vertices to be supervertices, perform pointer jumping on all non-supervertices, let each
+Supervertex pointer jumping \cite{chung1996parallel} is an extension of pointer jumping that uses randomness to achieve
+an expected linear time algorithm. The technique is best explained in the aformentioned paper, but the high level idea
+is to select a set of vertices to be supervertices, perform pointer jumping on all non-supervertices, let each
 supervertex point to the next supervertex and repeat the process recursively on the supervertices. After the recursion,
 it is sufficient to perform only one more pointer jump for all non-supervertices.
 
@@ -308,7 +308,7 @@ because during the merging step, all vertices of a component have to unanimously
 vertex is not owned by a computation unit, this cannot be accomplished without additional effort.
 
 \mypar{Distribution by Vertices}
-In this approach, the vertices of the input graph are distrbuted (including their incident edges) among computation
+In this approach, the vertices of the input graph are distributed (including their incident edges) among computation
 units. An example of such a distribution can be seen in Fig. \ref{fig:work_distribution_vertex_distributed_graph}. One
 major disadvantage of this approach is that each edge gets distributed twice because it is not guaranteed that
 neighboring vertices are assigned to the same computation unit. Consequently, this strategy requires more time to
@@ -380,7 +380,7 @@ individually, only one send operation containing all edges is performed for each
 % TODO: Leave this out since they actually calculate the graph but don't return it
 So far all implementations don't compute the actual MST, but only its edge weight sum. Moreover, the work has to be
 distributed among all computation units evenly, i.e. the amount of edges or vertices must be divisible by the amount of
-computation units depending on the distribution strategy. For most implementations both of these limitations are
+computation units depending on the distribution strategy. For most implementations, both of these limitations are
 straightforward to resolve. This is especially true for the MST tree computation, as the lightest edges are distributed
 among the computation units anyway.
 % TODO: maybe add that it only works with ints so far
