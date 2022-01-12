@@ -344,22 +344,23 @@ We are not going to give detailed descriptions for all implementations, as their
 information given in section \ref{sec:background}. The ones that might not be self-explanatory are ``edge distribution
 using union find with edge reduction'' and ``vertex distribution using iterative vertex fixing''. The first one uses an
 additional optimization where edges with both endpoints in the same component get skipped over. As this removal costs
-additional runtime, we have to be cautious about the impact on runtime. The second one uses an iterative fixing of the
-vertices, briefly mentioned in the pointer jumping paragraph in section \ref{sec:background}. This approach has a
-greater theoretical runtime, but uses far less communication compared to the pointer jumping strategy. % TODO: Which pointer jumping strategy
-The open question here is, whether the lower runtime guarantee is worth the additional communication. %TODO: Has this been answered?
+additional runtime, we have to be cautious about the impact on performance. The second one uses an iterative fixing of
+the vertices, briefly mentioned in the pointer jumping paragraph in section \ref{sec:background}. This approach has a
+greater theoretical runtime, but uses far less communication compared to the vertex distributed pointer jumping
+implementation. The open question here is, whether the lower runtime guarantee is worth the additional communication.
+More on this in section \ref{sec:exp}. % TODO maybe update reference to a more specific one later on
 
 Sequential versions of some merging strategies were also implemented to get a better understanding of how they operate.
 However, these sequential algorithms did not serve any additional purpose beyond that.
 
 \mypar{Baseline Implementation}
-To get an idea of how well our implementations perform, we decided to use the Parallel Boost Graph Library (BGL) \cite{bgl} as
-our baseline. We considered other baseline implementations but came to the conclusion that the Parallel BGL is the most
-optimized and well-known library. One promising implementation uses OpenMP which might have lead to uncomparable results
-since we use MPI \cite{15418}. % TODO: Maybe leave this out since its a project by other students
+To get an idea of how well our implementations perform, we decided to use the Parallel Boost Graph Library (BGL)
+\cite{bgl} as our baseline. We considered other baseline implementations but came to the conclusion that the Parallel
+BGL is the most optimized and well-known library. One promising implementation uses OpenMP which might have lead to
+uncomparable results since we use MPI \cite{15418}. % TODO: Maybe leave this out since its a project by other students
 
 \mypar{Kronecker Graph Generator}
-Initially, we experimented with different kinds of graphs and implemented some generators for them. But ultimately
+Initially, we experimented with different kinds of graphs and implemented some generators for them, but ultimately
 decided to only use Kronecker graphs to benchmark our implementations. Self-written generators can be error-prone and it
 is difficult to efficiently generate large graphs. Therefore, we use the reference implementation of the Graph500
 specification that is available on
@@ -368,10 +369,12 @@ Erdös-Renyi graph generator that is part of the Parallel BGL \cite{bgl}. To get
 all algorithm executions, we seeded the graph generator, so that it always generates the same random graph.
 
 \mypar{Communication}
-All implementations use an MPI implementation to communicate. Besides send and receive routines used to distribute the
-graph, we also use scatter, gather and reduction functionalities. % TODO: Should we use verbatim here?
+All implementations use MPI as a communication protocol. Besides send and receive routines used to distribute the graph,
+we also use scatter, gather and reduction functionalities. % TODO: Should we use verbatim here?
 To minimize the cost of communication as much as possible, we keep the amount of MPI subroutine calls to a minimum. We
-achieve this by first locally preparing the data and then sending everything at once. % TODO: Where does this actually happen?
+achieve this by first locally preparing the data and then sending everything at once. This was used to e.g. more
+efficiently distribute the incident edges in all vertex distributed implementations. Instead of sending each edge
+individually, only one send operation containing all edges is performed for each computation unit.
 
 \mypar{Limitations}
 % TODO: Leave this out since they actually calculate the graph but don't return it
