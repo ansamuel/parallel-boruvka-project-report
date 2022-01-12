@@ -359,13 +359,13 @@ optimized and well-known library. One promising implementation uses OpenMP which
 since we use MPI \cite{15418}. % TODO: Maybe leave this out since its a project by other students
 
 \mypar{Kronecker Graph Generator}
-We first experimented with different graph types and even implemented some generators for them, but ultimately decided
-to only use Kronecker graphs, as they are part of the Graph500 benchmark toolkit to rate supercomputer systems. Compared
-to custom generated graphs, the results we get by using Kronecker graphs will be the most unbiased. The generator
-implementation that we used is the official Graph500 open source version available on
-GitHub\footnote{\url{https://github.com/graph500/graph500/tree/newreference/generator}}, which we copied into our
-project and call directly from the source. To get fair and comparable benchmarking results across all algorithm
-executions, we seeded the graph generator, such that it always generates the same random graph.
+Initially, we experimented with different kinds of graphs and implemented some generators for them. But ultimately
+decided to only use Kronecker graphs to benchmark our implementations. Self-written generators can be error-prone and it
+is difficult to efficiently generate large graphs. Therefore, we use the reference implementation of the Graph500
+specification that is available on
+GitHub\footnote{\url{https://github.com/graph500/graph500/tree/newreference/generator}}. An alternative to this is the
+Erdös-Renyi graph generator that is part of the Parallel BGL \cite{bgl}. To get reproducible benchmark results across
+all algorithm executions, we seeded the graph generator, so that it always generates the same random graph.
 
 \mypar{Communication}
 All implementations use an MPI implementation to communicate. Besides send and receive routines used to distribute the
