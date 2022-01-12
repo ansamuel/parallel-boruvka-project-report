@@ -393,7 +393,8 @@ during development, we use continuous integration that executes the tests and re
 
 \subsection{Benchmarking Infrastructure}
 % TODO maybe move likwid description to background -> I think that's unessecary since it doesn't add to any understanding needed for the paper.
-The measurements are obtained using the performance measurement tool LIKWID \cite{treibig2010likwid}. LIKWID uses
+To ease the benchmarking process, we developed an infrastructure that allows us to parameterize the different
+algorithms. The results are obtained using the performance measurement tool LIKWID \cite{treibig2010likwid}. LIKWID uses
 hardware counters for its measurements and can be invoked by simply marking the code to be benchmarked. This allows us
 to benchmark parts of the algorithms and obtain detailed information to further improve certain functionality.
 
