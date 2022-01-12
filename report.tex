@@ -374,13 +374,14 @@ To minimize the cost of communication as much as possible, we keep the amount of
 achieve this by first locally preparing the data and then sending everything at once. % TODO: Where does this actually happen?
 
 \mypar{Limitations}
-So far all implementations don't compute the actual MST, but only its edge weight sum. In addition, the work has to be
+% TODO: Leave this out since they actually calculate the graph but don't return it
+So far all implementations don't compute the actual MST, but only its edge weight sum. Moreover, the work has to be
 distributed among all computation units evenly, i.e. the amount of edges or vertices must be divisible by the amount of
-computation units depending on whether it is an edge or vertex distributed algorithm. For most implementations both of
-these limitations would be quite easy to solve. This is especially true for the MST tree computation, as the lightest
-edges are distributed among the computation units anyway. However, we disregarded them as being low priority, as our
-focus lied on the difference between the various implementation strategies.
-% TODO maybe add that it only works with ints so far
+computation units depending on the distribution strategy. For most implementations both of these limitations are
+straightforward to resolve. This is especially true for the MST tree computation, as the lightest edges are distributed
+among the computation units anyway.
+% TODO: maybe add that it only works with ints so far
+% TODO: Add more limitations?
 
 \mypar{Correctness}
 The correctness of the implementation comes down to the fact that all implementations only terminate once no new edge is
