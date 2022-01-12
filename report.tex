@@ -319,33 +319,39 @@ computation units whilst others are idle. However, with this approach the mergin
 % TODO: Maybe the last sentence needs more explanation
 
 \subsection{Implementations}
-We developed various implementations using C++17, combining different merging approaches with the two aforementioned
-distribution strategies. Here is a list of all the combinations that we developed:
+For this project we developed various C++ implementations, combining different merging approaches with the two
+aforementioned distribution strategies. The following list contains all the combinations realized:
 \begin{itemize}
-  \item Edge distribution using union find data structure
-  \item Edge distribution using union find data structure with edge reduction
-  \item Edge distribution using pointer jumping
-  \item Vertex distribution using union find data structure
-  \item Vertex distribution using iterative vertex fixing
-  \item Vertex distribution using pointer jumping
-  \item Vertex distribution using supervertex pointer jumping
+  \item Edge Distribution, merging via
+  \begin{itemize}
+     \item Union find 
+     \item Union find and ignoring superfluous edges
+     \item Pointer jumping
+  \end{itemize}
+  \item Vertex Distribution, merging via
+  \begin{itemize}
+     \item Union find 
+     \item Iterative vertex fixing
+     \item Pointer jumping
+     \item Superverex pointer jumping
+  \end{itemize}
 \end{itemize}
-As one can see, this list does not contain every possible combination. This is because after some intermediate
-benchmarking we focused on the strategies that were the most promising, namely union find and edge distribution.
+Clearly, this list does not contain every possible combination. Intermediate benchmarking showed that some strategies
+were not promising enough to be pursued further.
 
-We are not going to give a detailed description for all of these implementations, as their rough idea should be clear
-with the information given in section \ref{sec:background}. The ones that might not be clear are ``edge distribution
-using union find data structure with edge reduction'' and ``vertex distribution using iterative vertex fixing''. The first
-uses an additional optimization, where edges with endpoints inside the same component get removed once they are
-detected. As this removal costs additional runtime, we try to figure out if it is worth the time saved in future
-iterations. The second uses an iterative fixing of the vertices, briefly mentioned in the pointer jumping paragraph in
-section \ref{sec:background}. This approach has a higher theoretical runtime, but uses far less communication compared
-to the pointer jumping strategy. The question was, whether the lower runtime guarantee is worth the additional
-communication.
 
-We also implemented sequential versions for some of the merging strategies, to get a better understanding of them.
-However, these sequential algorithms did not serve any additional purpose beyond that, i.e. they were not used to get
-any measurements.
+% TODO: Shouldn't we explain the implementations in more detail? It seems a bit meager
+We are not going to give detailed descriptions for all implementations, as their rough idea should be clear with the
+information given in section \ref{sec:background}. The ones that might not be self-explanatory are ``edge distribution
+using union find with edge reduction'' and ``vertex distribution using iterative vertex fixing''. The first one uses an
+additional optimization where edges with both endpoints in the same component get skipped over. As this removal costs
+additional runtime, we have to be cautious about the impact on runtime. The second one uses an iterative fixing of the
+vertices, briefly mentioned in the pointer jumping paragraph in section \ref{sec:background}. This approach has a
+greater theoretical runtime, but uses far less communication compared to the pointer jumping strategy. % TODO: Which pointer jumping strategy
+The open question here is, whether the lower runtime guarantee is worth the additional communication. %TODO: Has this been answered?
+
+Sequential versions of some merging strategies were also implemented to get a better understanding of how they operate.
+However, these sequential algorithms did not serve any additional purpose beyond that.
 
 \mypar{Baseline Implementation}
 To get an idea of how well our implementations perform, we decided to use parallel Boost as our baseline. This shows us
