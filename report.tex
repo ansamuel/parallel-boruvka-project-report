@@ -1,6 +1,12 @@
 \documentclass[letterpaper]{article}
 \usepackage{spconf,amsmath,amssymb,graphicx}
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
+
+\usepackage{subcaption}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{positioning}
+\usetikzlibrary{arrows}
 
 \usepackage{algorithm}
 \usepackage{algpseudocode}
@@ -148,7 +154,7 @@ necessarily be unique for a given graph $G$.
 \mypar{Bor\r{u}vka's Algorithm}
 Bor\r{u}vka's algorithm \cite{boruuvka1926jistem, nevsetvril2001otakar} solves the MST problem as described above.
 Algorithm \ref{alg:boruvka} contains a high-level overview of how the algorithm operates. The algorithm terminates as
-soon as $T$ is a tree. In case the input graph is not connected, the termination condition has to be slightly adapted to
+soon as $T$ is a spanning tree. In case the input graph is not connected, the termination condition has to be slightly adapted to
 arrive at a forest. The sequential runtime is $\bigoh(m \log n)$, where $m = |E|$ and $n = |V|$ of the input graph $G =
 (V, E)$.
 
@@ -182,16 +188,16 @@ We use the so-called path compression strategy when performing \verb|find()| ope
 % TODO maybe add a tikz image or algorithm description for this
 Pointer jumping \cite{jeje1992introduction} (also referred to as path doubling) is a design technique that allows an
 algorithm to follow a path using only logarithmic time with respect to the length of the longest path. It does this by
-redirecting the parent pointers that describe the path, to point to the parent of the parent for each node on the path
-simultaneously. This process is then repeated until every node points to the root of the path. This gives a $\bigoh(n
-\log n)$ runtime, where $n$ describes the amount of nodes on the path. This is superior to simply iteratively fixing
-each node individually, which has a potential worst case runtime of $\bigoh(n^2)$.
+redirecting the parent pointers that describe the path, to point to the parent of the parent for each vertex on the path
+simultaneously. This process is then repeated until every vertex points to the root of the path. This gives a $\bigoh(n
+\log n)$ runtime, where $n$ describes the amount of vertices on the path. This is superior to simply iteratively fixing
+each vertex individually, which has a potential worst case runtime of $\bigoh(n^2)$.
 
 \mypar{Supervertex Pointer Jumping}
 % TODO maybe add a tikz image for this
 Supervertex pointer jumping \cite{chung1996parallel} is an extension of pointer jumping that uses randomness to get
 achieve an expected linear time algorithm. The technique is best explained in the aformentioned paper, but the high
-level idea is to select a set of nodes to be supervertices, perform pointer jumping on all non-supervertices, let each
+level idea is to select a set of vertices to be supervertices, perform pointer jumping on all non-supervertices, let each
 supervertex point to the next supervertex and repeat the process recursively on the supervertices. After the recursion,
 it is sufficient to perform only one more pointer jump for all non-supervertices.
 
@@ -208,14 +214,189 @@ variation of this graph construction for their benchmarks \cite{graph500}.
 
 \section{Approach}
 \label{sec:approach}
+% Now comes the ``beef'' of the report, where you explain what you
+% did. Again, organize it in paragraphs with titles. As in every section
+% you start with a very brief overview of the section.
 
-Now comes the ``beef'' of the report, where you explain what you
-did. Again, organize it in paragraphs with titles. As in every section
-you start with a very brief overview of the section.
+% In this section, structure is very important so one can follow the technical content.
 
-In this section, structure is very important so one can follow the technical content.
+% Mention and cite any external resources that you used including libraries or other code.
+This section contains information about the different implementations devloped, as well as other technical
+details, such as distribution strategies, limitations and the benchmarking infrastructure.
 
-Mention and cite any external resources that you used including libraries or other code.
+\subsection{Distributing the Work}
+There are many ways how a graph can be distributed among multiple computation units. The two strategies that we
+considered are distributing the edges and distributing the vertices. A combination of the two would also be conceivable,
+but was not considered in this project. As these two strategies have different parallelization capabilities, multiple
+implementations for both of these approaches were developed. To get a better understanding of how they operate and how
+they compare, the following two paragraphs describe them both.
+
+% TODO maybe move the original input graph into the middle to clearly separate the edge dist. and vertex dist. images
+\begin{figure*}
+  \begin{subfigure}{0.33\textwidth}
+    \centering
+    \begin{tikzpicture}[every node/.style={circle,draw,align=center,font=\small,minimum size=1.5em},
+      node distance=3cm]
+      \node (v1) {};
+      \node[below right=3cm and .5cm of v1] (v2) {};
+      \node[below right=1.5cm and 2.5cm of v1] (v3) {};
+      \node[below right=2cm of v3] (v4) {};
+      \node[right=of v1] (v5) {};
+      \path[>={Stealth[black]}, every edge/.style={draw=black, thick}]
+        (v1) edge (v2)
+        (v1) edge (v3)
+        (v1) edge (v5)
+        (v2) edge (v3)
+        (v3) edge (v4);
+    \end{tikzpicture}
+    \caption{Original input graph}
+    \label{fig:work_distribution_original_input_graph}
+  \end{subfigure}
+  \begin{subfigure}{0.33\textwidth}
+    \centering
+    \begin{tikzpicture}[every node/.style={circle,draw,align=center,font=\small,minimum size=1.5em},
+      node distance=3cm]
+      \node (v1) {};
+      \node[below right=3cm and .5cm of v1] (v2) {};
+      \node[below right=1.5cm and 2.5cm of v1] (v3) {};
+      \node[below right=2cm of v3] (v4) {};
+      \node[right=of v1] (v5) {};
+      \path[>={Stealth[black]}, every edge/.style={draw=black, thick}]
+        (v1) edge[cyan] (v2)
+        (v1) edge[cyan] (v3)
+        (v1) edge[red] (v5)
+        (v2) edge[cyan] (v3)
+        (v3) edge[red] (v4);
+    \end{tikzpicture}
+    \caption{Edge distributed input graph}
+    \label{fig:work_distribution_edge_distributed_graph}
+  \end{subfigure}
+  \begin{subfigure}{0.33\textwidth}
+    \centering
+    \begin{tikzpicture}[every node/.style={circle,draw,align=center,font=\small,minimum size=1.5em},
+      node distance=3cm]
+      \node[cyan, fill=cyan] (v1) {};
+      \node[red, fill=red, below right=3cm and .5cm of v1] (v2) {};
+      \node[cyan, fill=cyan, below right=1.5cm and 2.5cm of v1] (v3) {};
+      \node[red, fill=red, below right=2cm of v3] (v4) {};
+      \node[cyan, fill=cyan, right=of v1] (v5) {};
+      \path[>={Stealth[black]}, every edge/.style={draw=black, thick}]
+        [->] [>={Stealth[cyan]}] (v1) edge[cyan, bend right=10] (v2)
+        [->] [>={Stealth[red]}] (v2) edge[red, bend right=10] (v1)
+        [->] [>={Stealth[cyan]}] (v1) edge[cyan, bend right=10] (v3)
+        [->] [>={Stealth[cyan]}] (v3) edge[cyan, bend right=10] (v1)
+        [->] [>={Stealth[cyan]}] (v1) edge[cyan, bend right=10] (v5)
+        [->] [>={Stealth[cyan]}] (v5) edge[cyan, bend right=10] (v1)
+        [->] [>={Stealth[red]}] (v2) edge[red, bend right=10] (v3)
+        [->] [>={Stealth[cyan]}] (v3) edge[cyan, bend right=10] (v2)
+        [->] [>={Stealth[cyan]}] (v3) edge[cyan, bend right=10] (v4)
+        [->] [>={Stealth[red]}] (v4) edge[red, bend right=10] (v3);
+    \end{tikzpicture}
+    \caption{Vertex distributed input graph}
+    \label{fig:work_distribution_vertex_distributed_graph}
+  \end{subfigure}
+  \caption{Graph distribution example}
+  \label{fig:work_distribution}
+\end{figure*}
+
+\mypar{Distribution by Edges}
+In this approach, the edges of the input graph are distributed evenly among computation units. An illustration of such a
+distribution can be seen in Fig. \ref{fig:work_distribution_edge_distributed_graph}. This strategy allows for a uniform
+workload distribution, as every computation unit has the same amount of edges to process when selecting the minimum
+weight outgoing edges. On the other hand, the merging of components cannot be parallelized using this approach. This is
+because during the merging step, all vertices of a component have to unanimously agree on a new leader. But since a
+vertex is not owned by a computation unit, this cannot be accomplished without additional effort.
+
+\mypar{Distribution by Vertices}
+In this approach, the vertices of the input graph are distrbuted (including their incident edges) among computation
+units. An example of such a distribution can be seen in Fig. \ref{fig:work_distribution_vertex_distributed_graph}. One
+major disadvantage of this approach is that each edge gets distributed twice because it is not guaranteed that
+neighboring vertices are assigned to the same computation unit. Consequently, this strategy requires more time to
+distribute the graph. Moreover, the workload of each computation unit is unevenly distributed compared to the edge
+distribution strategy. Imagine a scenario, where certain vertices have a higher degree (amount of incident edges) than
+others. In that case the computation of the minimum weight outgoing edge of each component takes longer for some
+computation units whilst others are idle. However, with this approach the merging of components can be parallelized. 
+% TODO: Maybe the last sentence needs more explanation
+
+\subsection{Implementations}
+For this project we developed various C++ implementations, combining different merging approaches with the two
+aforementioned distribution strategies. The following list contains all the combinations realized:
+\begin{itemize}
+  \item Edge Distribution, merging via
+  \begin{itemize}
+     \item Union find 
+     \item Union find and ignoring superfluous edges
+     \item Pointer jumping
+  \end{itemize}
+  \item Vertex Distribution, merging via
+  \begin{itemize}
+     \item Union find 
+     \item Iterative vertex fixing
+     \item Pointer jumping
+     \item Superverex pointer jumping
+  \end{itemize}
+\end{itemize}
+Clearly, this list does not contain every possible combination. Intermediate benchmarking showed that some strategies
+were not promising enough to be pursued further.
+
+% TODO: Shouldn't we explain the implementations in more detail? It seems a bit meager
+We are not going to give detailed descriptions for all implementations, as their rough idea should be clear with the
+information given in section \ref{sec:background}. The ones that might not be self-explanatory are ``edge distribution
+using union find with edge reduction'' and ``vertex distribution using iterative vertex fixing''. The first one uses an
+additional optimization where edges with both endpoints in the same component get skipped over. As this removal costs
+additional runtime, we have to be cautious about the impact on performance. The second one uses an iterative fixing of
+the vertices, briefly mentioned in the pointer jumping paragraph in section \ref{sec:background}. This approach has a
+greater theoretical runtime, but uses far less communication compared to the vertex distributed pointer jumping
+implementation. The open question here is, whether the lower runtime guarantee is worth the additional communication.
+More on this in section \ref{sec:exp}. % TODO maybe update reference to a more specific one later on
+
+Sequential versions of some merging strategies were also implemented to get a better understanding of how they operate.
+However, these sequential algorithms did not serve any additional purpose beyond that.
+
+\mypar{Baseline Implementation}
+To get an idea of how well our implementations perform, we decided to use the Parallel Boost Graph Library (BGL)
+\cite{bgl} as our baseline. We considered other baseline implementations but came to the conclusion that the Parallel
+BGL is the most optimized and well-known library. One promising implementation uses OpenMP which might have lead to
+uncomparable results since we use MPI \cite{15418}. % TODO: Maybe leave this out since its a project by other students
+
+\mypar{Kronecker Graph Generator}
+Initially, we experimented with different kinds of graphs and implemented some generators for them, but ultimately
+decided to only use Kronecker graphs to benchmark our implementations. Self-written generators can be error-prone and it
+is difficult to efficiently generate large graphs. Therefore, we use the reference implementation of the Graph500
+specification that is available on
+GitHub\footnote{\url{https://github.com/graph500/graph500/tree/newreference/generator}}. An alternative to this is the
+Erdös-Renyi graph generator that is part of the Parallel BGL \cite{bgl}. To get reproducible benchmark results across
+all algorithm executions, we seeded the graph generator, so that it always generates the same random graph.
+
+\mypar{Communication}
+All implementations use MPI as a communication protocol. Besides send and receive routines used to distribute the graph,
+we also use scatter, gather and reduction functionalities. % TODO: Should we use verbatim here?
+To minimize the cost of communication as much as possible, we keep the amount of MPI subroutine calls to a minimum. We
+achieve this by first locally preparing the data and then sending everything at once. This was used to e.g. more
+efficiently distribute the incident edges in all vertex distributed implementations. Instead of sending each edge
+individually, only one send operation containing all edges is performed for each computation unit.
+
+\mypar{Limitations}
+% TODO: Leave this out since they actually calculate the graph but don't return it
+So far all implementations don't compute the actual MST, but only its edge weight sum. Moreover, the work has to be
+distributed among all computation units evenly, i.e. the amount of edges or vertices must be divisible by the amount of
+computation units depending on the distribution strategy. For most implementations both of these limitations are
+straightforward to resolve. This is especially true for the MST tree computation, as the lightest edges are distributed
+among the computation units anyway.
+% TODO: maybe add that it only works with ints so far
+% TODO: Add more limitations?
+
+\mypar{Correctness}
+To verify the correctness of our algorithms, we perform unit tests using Catch2. On top of that, we perform differential
+tests with large Kronecker graphs that compare our implementations to the baseline (parallel BGL). To get assurance
+during development, we use continuous integration that executes the tests and reports potential failure.
+
+\subsection{Benchmarking Infrastructure}
+% TODO maybe move likwid description to background -> I think that's unessecary since it doesn't add to any understanding needed for the paper.
+To ease the benchmarking process, we developed an infrastructure that allows us to parameterize the different
+algorithms. The results are obtained using the performance measurement tool LIKWID \cite{treibig2010likwid}. LIKWID uses
+hardware counters for its measurements and can be invoked by simply marking the code to be benchmarked. This allows us
+to benchmark parts of the algorithms and obtain detailed information to further improve certain functionality.
 
 \section{Experimental Results}\label{sec:exp}
 
