@@ -321,6 +321,7 @@ incident edges. As such, the computation of the minimum outgoing edge of every c
 other strategy. However, in this approach the merging of components can easily be parallelized.
 
 \subsection{Implementations}
+\label{sec:implementations}
 We developed various implementations using C++17, combining different merging approaches with the two aforementioned
 distribution strategies. Here is a list of all the combinations that we developed:
 \begin{itemize}
@@ -409,32 +410,31 @@ very short summary of the section. The typical structure follows.
 %
 %Then explain what kind of benchmarks you ran. The idea is to give enough information so the experiments are reproducible by somebody else on his or her code.
 %For sorting you would talk about the input sizes. For a tool that performs NUMA optimization, you would specify the programs you ran.
-The benchmarking were run on the Raclette cluster, setup and maintained by a group of students from ETH.
+The benchmarking was run on the Raclette cluster which is set up and maintained by a group of students from ETH.
 % TODO write the details of the setup, like no. of computing units and nodes
 
 \mypar{Results}
 % TODO compare to results from Chung and Condon
 %Next divide the experiments into classes, one paragraph for each. In each class of experiments you typically pursue one questions that then is answered by a suitable plot or plots. For example, first you may want to investigate the performance behavior with changing input size, then how your code compares to external benchmarks.
-Like mentioned in Approach %TODO add reference
-the benchmarking was done on Kronecker Graphs of different size but the number of edges is always 16 times the number of vertices. The baseline which the results are compared against is the parallel version of Boost.
+Like mentioned in \ref{sec:implementations}, the benchmarking was done on Kronecker Graphs of different sizes but the number of edges is always 16 times the number of vertices. The baseline which the results are compared against is the parallel version of Boost. %TODO mention the CI
 
 \mypar{Strong scaling}
-The first question is how well do our algorithms scale with increasing number of computing units when the input is a Kronecker graph with number of vertices being $2^{19}$ and number of edges being $2^{19}*16$.
+The first question is how well do our algorithms scale with increasing number of computing units when the input is a Kronecker graph with number of vertices being $2^{19}$ and number of edges being $2^{19}*16$ and how does it compare against the baseline.
 
 $<Insert Ploth>$
 %strongscaling, full algos, size 19 -> line plot
+% TODO write important information not mentioned in plot, like number of vertives in graph being 2^19
 
 Like can be seen in the plot %TODO add reference
-all our implementation exceed the performance of the parallel boost implementation. The best performing one being the algorithm using Edge Distribution with edge reduction and Union Find running on 64 computing units. %TODO add how much better 
-Reducing the edges did reduce the runtime but only marginally, since the benefits only kick in from 3rd iterations on but the first iterations are the most expensive ones. Vertex distribution did not seem to pay off for this kind of input graph. The supervertex Pointer Jumping method did not pay off either, probably because of a lot of synchronization needed within each recursion.
-For the edge distribution Union Find, since the ratio between the number of edges and vertices is 16:1 there are diminishing returns around 16 computing units. This is because when the edges are divided between 16 computing units the work needed to find the lightest adjacent edge becomes linear in the number of nodes. The union find, which is done locally and also runs linearly in the number of nodes, slowly becomes the bottleneck. Past 64 computing units the time actually starts to increase since at that point the overhead of distributing the work to more computing units stops paying off.
+all our implementation exceed the performance of the parallel boost implementation when work is distributed on less than X computing units. The best performing one being the algorithm using Edge Distribution with edge reduction and Union Find running on 64 computing units. %TODO add how much better 
+Reducing the edges did reduce the runtime but only marginally, since the benefits only kick in from 3rd iterations on but the first iterations are the most expensive ones. Vertex distribution was slower and the supervertex Pointer Jumping method also slower than all other merging mechanisms. That may partly be  because of a lot of synchronization needed within each recursion.
+For the edge distribution Union Find, there are diminishing returns around 16 computing units. This is likely due to the fact that the ratio between the number of edges and vertices is 16:1 and when the edges are divided between 16 computing units, the work needed to find the lightest adjacent edge becomes linear in the number of nodes. The union find, which is done locally and also runs linearly in the number of nodes, slowly becomes the bottleneck. Past 64 computing units the time actually starts to increase. %TODO write about why? Could be more overhead of synchronization and distributing the work with diminishing returns.
 
 \mypar{Weakscaling}
-How well do our algorithms scale with increasing graph sizes?
+How well do our algorithms scale with increasing graph size?
 
 $<Insert Ploth>$
 %Weakscaling, full algos, sizes 11-19, line plot
-% TODO if not written like that in plot, make it clear that size X means vertex number being 2^10
 
 %TODO add some analyziz of the plot results
 
@@ -444,8 +444,8 @@ Which part of the algorithms are taking up most of the time ?
 $<Insert Plot>$
 %Comparison, segments, size 19 -> bar chart
 
-For the edge distribution we can see that the merging part or the Union Find takes up around half of the time??, becoming one of the bottleneck along with the synchronization in the finding the lightest adjacent edge part.
-For the vertex distribution it seems that expensive pre-processing for distributing edges takes up a big chunk of the total runtime. Additionally, the fact that even though initially computing units containing all edges for their respective vertices, as vertices are merged, reduction is needed to find the lightest adjacent edge for a connected component.
+For the edge distribution we can see that the merging part or the Union Find takes up XXX of the time, becoming one of the bottleneck along with the synchronization in the finding the lightest adjacent edge part??
+For the vertex distribution it seems that expensive pre-processing for distributing edges takes up a big chunk of the total runtime. Additionally, the fact that even though initially computing units containing all edges for their respective vertices, as vertices are merged, edges for a connected component are distributed across different computation unit and therefore a reduction is needed for finding the lightest adjacent edge.
 % TODO do we want to mention that the edges could have been sent a long to the computing unit responsible for a given root vertex. Not trivial if that would pay off or not.
 
 
