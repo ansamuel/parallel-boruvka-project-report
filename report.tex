@@ -4,6 +4,8 @@
 
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage{listings}
+\usepackage{xcolor}
 
 \newcommand{\R}[0]{\mathbb{R}}
 \newcommand{\N}[0]{\mathbb{N}}
@@ -217,19 +219,42 @@ In this section, structure is very important so one can follow the technical con
 
 Mention and cite any external resources that you used including libraries or other code.
 
-\section{Experimental Results}\label{sec:exp}
+\section{Experimental Results}
+\label{sec:exp}
+In this section we go over the benchmarking setup, as well as the results that we measured, including their
+interpretation.
 
-Here you evaluate your work using experiments. You start again with a
-very short summary of the section. The typical structure follows.
+\subsection{Experimental Setup} 
+% Specify the platform (processor, frequency, maybe OS, maybe cache sizes)
+% as well as the compiler, version, and flags used. If your work is about performance, 
+% I strongly recommend that you play with optimization flags and consider also icc for additional potential speedup.
+\mypar{Hardware}
+% TODO maybe change footnote to citation
+The benchmarks were executed on the RACKlette cluster\footnote{\url{https://racklette.ethz.ch/}}, setup and maintained
+by a group of students from ETH. The cluster consists of four identical nodes, each of which has two 64-core AMD EPYC
+7742 CPUs running at 2.25GHz with 512GB DDR4 3200MT/s RAM and four Nvidia Tesla V100 GPUs with 32GB GDDR5 VRAM for a
+total of 512 cores, 2TB of memory and 16 GPUs. The four nodes are connected using a speedy interconnect from Mellanox,
+namely HDR ConnectX-6 adapters for a 200Gbit/s connection.
 
-\mypar{Experimental setup} Specify the platform (processor, frequency, maybe OS, maybe cache sizes)
-as well as the compiler, version, and flags used. If your work is about performance, 
-I strongly recommend that you play with optimization flags and consider also icc for additional potential speedup.
+\mypar{Work Allocation}
+All four nodes were allocated for all benchmark executions. In addition, we pinned the CPU cores, such that the amount
+of used cores was equal on all computation nodes. We decided on this allocation strategy to get more consistent
+measurements. Otherwise, benchmarks with a low core count would have had an unfair advantage, as they would have
+required less network communication, resulting in potential spikes at threasholds where an additional node is needed.
 
-Then explain what kind of benchmarks you ran. The idea is to give enough information so the experiments are reproducible by somebody else on his or her code.
-For sorting you would talk about the input sizes. For a tool that performs NUMA optimization, you would specify the programs you ran.
+\mypar{Software}
+All benchmarks were conducted using CentOS Linux release 7.9.2009 (Core) with Linux kernel 3.10.0 and the MPI
+implementation mvapich2 version 2.3.4. The code was compiled with gcc version 10.3.0 using the compilation flags
+\lstinline[basicstyle=\ttfamily\color{black},identifierstyle=\color{black}]|-mavx -march=| \linebreak
+\lstinline[basicstyle=\ttfamily\color{black},identifierstyle=\color{black}]|native -O3|.
 
-\mypar{Results}
+% Then explain what kind of benchmarks you ran. The idea is to give enough information so the experiments are
+% reproducible by somebody else on his or her code.
+% For sorting you would talk about the input sizes. For a tool that performs NUMA optimization, you would specify the
+% programs you ran.
+% TODO
+
+\subsection{Results}
 % TODO compare to results from Chung and Condon
 Next divide the experiments into classes, one paragraph for each. In each class of experiments you typically pursue one questions that then is answered by a suitable plot or plots. For example, first you may want to investigate the performance behavior with changing input size, then how your code compares to external benchmarks.
 
