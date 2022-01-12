@@ -353,9 +353,10 @@ Sequential versions of some merging strategies were also implemented to get a be
 However, these sequential algorithms did not serve any additional purpose beyond that.
 
 \mypar{Baseline Implementation}
-To get an idea of how well our implementations perform, we decided to use parallel Boost as our baseline. This shows us
-how well our implementations hold up against current industry standard code. The reason why we chose parallel Boost is
-because it is considered to be the de facto standard when it comes to parallel graph libraries for C++.
+To get an idea of how well our implementations perform, we decided to use the Parallel Boost Graph Library (BGL) \cite{bgl} as
+our baseline. We considered other baseline implementations but came to the conclusion that the Parallel BGL is the most
+optimized and well-known library. One promising implementation uses OpenMP which might have lead to uncomparable results
+since we use MPI \cite{15418}. % TODO: Maybe leave this out since its a project by other students
 
 \mypar{Kronecker Graph Generator}
 We first experimented with different graph types and even implemented some generators for them, but ultimately decided
