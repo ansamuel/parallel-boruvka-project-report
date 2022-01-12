@@ -154,9 +154,9 @@ necessarily be unique for a given graph $G$.
 \mypar{Bor\r{u}vka's Algorithm}
 Bor\r{u}vka's algorithm \cite{boruuvka1926jistem, nevsetvril2001otakar} solves the MST problem as described above.
 Algorithm \ref{alg:boruvka} contains a high-level overview of how the algorithm operates. The algorithm terminates as
-soon as $T$ is a spanning tree. In case the input graph is not connected, the termination condition has to be slightly adapted to
-arrive at a forest. The sequential runtime is $\bigoh(m \log n)$, where $m = |E|$ and $n = |V|$ of the input graph $G =
-(V, E)$.
+soon as $T$ is a spanning tree. In case the input graph is not connected, the termination condition has to be slightly
+adapted to arrive at a forest. The sequential runtime is $\bigoh(m \log n)$, where $m = |E|$ and $n = |V|$ of the input
+graph $G = (V, E)$.
 
 \begin{algorithm}[!t]
   \caption{Bor\r{u}vka's algorithm}
@@ -197,9 +197,10 @@ each vertex individually, which has a potential worst case runtime of $\bigoh(n^
 % TODO maybe add a tikz image for this
 Supervertex pointer jumping \cite{chung1996parallel} is an extension of pointer jumping that uses randomness to get
 achieve an expected linear time algorithm. The technique is best explained in the aformentioned paper, but the high
-level idea is to select a set of vertices to be supervertices, perform pointer jumping on all non-supervertices, until they reach a superverex or a root, let each
-supervertex point to the next supervertex and repeat the process recursively on the supervertices. After the recursion,
-it is sufficient to perform only one more pointer jump for all non-supervertices.
+level idea is to select a set of vertices to be supervertices, perform pointer jumping on all non-supervertices, until
+they reach a superverex or a root, let each supervertex point to the next supervertex and repeat the process recursively
+on the supervertices. After the recursion, it is sufficient to perform only one more pointer jump for all
+non-supervertices.
 
 \mypar{MPI}
 The message passing interface \cite{clarke1994mpi} is a standard for developing applications on parallel computing
