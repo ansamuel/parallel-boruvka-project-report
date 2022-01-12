@@ -419,27 +419,33 @@ The benchmarking was run on the Raclette cluster which is set up and maintained 
 Like mentioned in \ref{sec:implementations}, the benchmarking was done on Kronecker Graphs of different sizes but the number of edges is always 16 times the number of vertices. The baseline which the results are compared against is the parallel version of Boost. %TODO mention the CI
 
 \mypar{Strong scaling}
-The first question is how well do our algorithms scale with increasing number of computing units when the input is a Kronecker graph with number of vertices being $2^{19}$ and number of edges being $2^{19}*16$ and how does it compare against the baseline.
+The first question is how well do our algorithms scale with increasing number of computing units. This was done with the input beign a Kronecker graph with number of vertices $2^{20}$ and number of edges being $2^{20}*16$
 
 $<Insert Ploth>$
-%strongscaling, full algos, size 19 -> line plot
-% TODO write important information not mentioned in plot, like number of vertives in graph being 2^19
+%strongscaling, full algos, size 20 -> line plot
+
+The best performing algorithm is the one with Edge Distribution with edge reduction and Union Find running on 64 computing units. Reducing the edges did reduce the runtime but only marginally, since the benefits only kick in from 3rd iterations on but the first iterations are the most expensive ones. Vertex distribution was slower and the supervertex Pointer Jumping method also slower than all other merging mechanisms. That may partly be  because of a lot of synchronization needed within each recursion.
+For the edge distribution Union Find, there are diminishing returns around 16 computing units. This is likely due to the fact that the ratio between the number of edges and vertices is 16:1 and when the edges are divided between 16 computing units, the work needed to find the lightest adjacent edge becomes linear in the number of nodes. The union find, which is done locally and also runs linearly in the number of nodes, slowly becomes the bottleneck. Past 64 computing units the time actually starts to increase. %TODO write about why? Could be more overhead of synchronization and distributing the work with diminishing returns
+
+\mypar{Comparison with baseline}
+How well do our algorithms perform in comparison against the baseline or parallel boost. This was done with strong scaling or with increasing number of computing units when the input is a Kronecker graph with number of vertices being $2^{19}$ and number of edges being $2^{19}*16$
+
+$<Insert Ploth>$
+%Strong scaling, skip boost, size 20 -> line plot
 
 Like can be seen in the plot %TODO add reference
-all our implementation exceed the performance of the parallel boost implementation when work is distributed on less than X computing units. The best performing one being the algorithm using Edge Distribution with edge reduction and Union Find running on 64 computing units. %TODO add how much better 
-Reducing the edges did reduce the runtime but only marginally, since the benefits only kick in from 3rd iterations on but the first iterations are the most expensive ones. Vertex distribution was slower and the supervertex Pointer Jumping method also slower than all other merging mechanisms. That may partly be  because of a lot of synchronization needed within each recursion.
-For the edge distribution Union Find, there are diminishing returns around 16 computing units. This is likely due to the fact that the ratio between the number of edges and vertices is 16:1 and when the edges are divided between 16 computing units, the work needed to find the lightest adjacent edge becomes linear in the number of nodes. The union find, which is done locally and also runs linearly in the number of nodes, slowly becomes the bottleneck. Past 64 computing units the time actually starts to increase. %TODO write about why? Could be more overhead of synchronization and distributing the work with diminishing returns.
+all our implementation exceed the performance of the parallel boost implementation when work is distributed on less than X computing units and all the edge distribution algorithms outperforming the baseline for these measurements. %TODO add how much better the best performing one is
 
 \mypar{Weakscaling}
 How well do our algorithms scale with increasing graph size?
 
 $<Insert Ploth>$
-%Weakscaling, full algos, sizes 11-19, line plot
+%Weak scaling, full algos, sizes 15-19 -> line plot
 
 %TODO add some analyziz of the plot results
 
 \mypar{Profiling}
-Which part of the algorithms are taking up most of the time ?
+Which part of the algorithms is taking up most of the time ?
 
 $<Insert Plot>$
 %Comparison, segments, size 19 -> bar chart
