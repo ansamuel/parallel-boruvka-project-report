@@ -368,10 +368,10 @@ project and call directly from the source. To get fair and comparable benchmarki
 executions, we seeded the graph generator, such that it always generates the same random graph.
 
 \mypar{Communication}
-All implementations use MPI as a communication protocol. Besides send and receive routines used to distribute the
-graph, we also use scatter, gather and reduction functionalities in our implementations. To reduce the cost of
-communication as far as possible, we kept the amount of MPI subroutine calls to a minimum, by first locally preparing
-the data and then sending everything at once.
+All implementations use an MPI implementation to communicate. Besides send and receive routines used to distribute the
+graph, we also use scatter, gather and reduction functionalities. % TODO: Should we use verbatim here?
+To minimize the cost of communication as much as possible, we keep the amount of MPI subroutine calls to a minimum. We
+achieve this by first locally preparing the data and then sending everything at once. % TODO: Where does this actually happen?
 
 \mypar{Limitations}
 So far all implementations don't compute the actual MST, but only its edge weight sum. In addition, the work has to be
