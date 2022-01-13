@@ -12,6 +12,7 @@
 \usepackage{algpseudocode}
 \usepackage{listings}
 \usepackage{xcolor}
+\usepackage{booktabs}
 
 \newcommand{\R}[0]{\mathbb{R}}
 \newcommand{\N}[0]{\mathbb{N}}
@@ -437,43 +438,50 @@ implementation mvapich2 version 2.3.4. The code was compiled with GCC version 10
 % reproducible by somebody else on his or her code.
 % For sorting you would talk about the input sizes. For a tool that performs NUMA optimization, you would specify the
 % programs you ran.
-As described in section \ref{par:kronecker_graph_generator}, all benchmarks were performed using Kronecker graphs. The
-amount of edges is in all cases $16$ times the amount of vertices. It is also important to mention that the
-implementation edge distribution using pointer jumping gave unbelievably bad results. Since we are not certain about the
-correctness of this implementation and since there was not enough time to look into the nature of these strange results,
-we decided to not include them in our reported measurements.
+As described in section \ref{par:kronecker_graph_generator}, all benchmarks were performed using Kronecker graphs. These
+graphs have $16$ times more edges than vertices (as per Graph500 specification \cite{graph500}). This is to ensure an
+average degree of $32$. The implementation ``edge distribution using pointer jumping'' resulted in bad performance.
+Since we are not certain which part of the algorithm causes this, we decided to not include it in our reported
+measurements.
 
 \mypar{Baseline Comparison}
-To compare our implementations with the baseline, we performed a strong scaling study using graphs with vertex count
-$2^{19}$. The number of used MPI processes in this strong scaling study were all powers of $2$ up until $2^6$. The
-baseline implementation did not allow us to go any furhter than that, as the cluster did not finish the execution. We
-were not able to determine the reason for this issue.
+To compare our implementations with the baseline, we performed a strong scaling study using graphs with $2^19$ vertices.
+The number of MPI processes in this study were the powers of $2$: $2^0, \dotsc 2^6$. The baseline implementation did not
+allow us to go any furhter than that because the execution took too long. We believe this to be an implementation issue
+within the parallel BGL.
 
 \mypar{Implementation Comparison}
-To compare our implementations with one another, we performed a strong and weak scaling study. The strong scaling study
-was performed using graphs with vertex count $2^{20}$. As this time there was no limitation due to the baseline not
-working with higher amounts of MPI processes, the number of used MPI processes was all powers of $2$ up until the
-maximum of $2^9$. The weak scaling study was performed using $1$ MPI node using a graph of size $2^{15}$, $4$ MPI nodes
-using a graph of size $2^{16}$, $16$ MPI nodes using a graph of size $2^{17}$, $64$ MPI nodes using a graph of size
-$2^{18}$ and $256$ MPI nodes using a graph of size $2^{19}$.
+To compare our implementations with each other, we performed a strong and weak scaling study. The strong scaling study
+was performed using graphs wth $2^{20}$ vertices. The number of MPI processes were the powers of $2$: $2^0, \dotsc,
+2^9$.
+The weak scaling study was performed using the following configurations: \\
+\begin{table}[h!]
+\centering
+\begin{tabular}{ll}    \toprule
+\textbf{MPI nodes} & \textbf{Graph nodes}  \\\midrule
+$1$ & $2^{15}$ \\ 
+$4$ & $2^{16}$ \\ 
+$16$ & $2^{17}$ \\
+$64$ & $2^{18}$ \\
+$256$ & $2^{19}$ \\ \bottomrule \hline
+\end{tabular}
+\end{table}
 
 \mypar{Detailed Runtime Analysis}
-To get a better understanding about which parts of the algorithms require the most amount of runtime, we performed more
-fine-grained measurements. We differentiated between graph distribution, lightest edge selection and merging.
+To get a better understanding of which parts of the algorithms require the most runtime, we performed fine-grained
+measurements. We differentiated between graph distribution, lightest edge selection and merging.
 % TODO add graph sizes and mpi node count
 
 \mypar{Summarizing Results}
 As we are working with runtimes, the arithmetic mean is the obvious choice for summarization. The results for one
 algorithm execution were summarized by computing the arithmetic mean of all MPI processes. To get a summary over all
-algorithm iterations, another arithmetic mean was computed, using the previousely mentioned results as its input.
-Although taking the maximum or minimum accross all MPI processes could have also been possible, the difference between
-these and the mean were negligibly small, as all algorithms call a synchronizing subroutine right before termination.
+algorithm iterations, another arithmetic mean was computed. Although taking the maximum or minimum accross all MPI
+processes could have also been possible, the difference between these and the mean were neglectable due to
+synchronization.
 
 \mypar{Repetitions}
-Due to problems with crashing nodes and other people wanting access to the cluster, we tried to achive a $90\%$
-confidence interval. As such, we collected measurements until the $90\%$ confidence interval was within $5\%$ of our
-reported means. This was achieved by performing $10$ repetitions in all benchmarks, whilst the first execution is
-discarded and counted as warmup. The warmup is also not used to compute the measurements reported in our plots.
+We collected measurements until the $90\%$ confidence interval was within $5\%$ of our reported means. This was achieved
+by performing $10$ repetitions in all benchmarks, whhere the first execution is discarded due to warmup.
 
 \subsection{Results}
 % TODO compare to results from Chung and Condon
