@@ -381,6 +381,7 @@ efficiently distribute the incident edges in all vertex distributed implementati
 individually, only one send operation containing all edges is performed for each computation unit.
 
 \mypar{Limitations}
+\label{par:limitation}
 % TODO: Leave this out since they actually calculate the graph but don't return it
 So far all implementations don't compute the actual MST, but only its edge weight sum. Moreover, the work has to be
 distributed among all computation units evenly, i.e. the amount of edges or vertices must be divisible by the amount of
@@ -446,25 +447,24 @@ measurements.
 
 \mypar{Baseline Comparison}
 To compare our implementations with the baseline, we performed a strong scaling study using graphs with $2^19$ vertices.
-The number of MPI processes in this study were the powers of $2$: $2^0, \dotsc 2^6$. The baseline implementation did not
-allow us to go any furhter than that because the execution took too long. We believe this to be an implementation issue
-within the parallel BGL.
+The number of MPI processes in this study were the powers of $2$: $2^0, \dotsc, 2^6$. The baseline implementation did
+not allow us to go any furhter than that because the execution took too long. We believe this to be an implementation
+issue within the parallel BGL.
 
 \mypar{Implementation Comparison}
 To compare our implementations with each other, we performed a strong and weak scaling study. The strong scaling study
-was performed using graphs wth $2^{20}$ vertices. The number of MPI processes were the powers of $2$: $2^0, \dotsc,
-2^9$.
-The weak scaling study was performed using the following configurations: \\
+was performed using graphs with $2^{20}$ vertices. The number of MPI processes were the powers of $2$: $2^0, \dotsc,
+2^9$. The weak scaling study was performed using the following configurations:
 \begin{table}[h!]
-\centering
-\begin{tabular}{ll}    \toprule
-\textbf{MPI nodes} & \textbf{Graph nodes}  \\\midrule
-$1$ & $2^{15}$ \\ 
-$4$ & $2^{16}$ \\ 
-$16$ & $2^{17}$ \\
-$64$ & $2^{18}$ \\
-$256$ & $2^{19}$ \\ \bottomrule \hline
-\end{tabular}
+  \centering
+  \begin{tabular}{ll} \toprule
+    \textbf{MPI nodes} & \textbf{Graph nodes} \\\midrule
+    $1$ & $2^{15}$ \\ 
+    $4$ & $2^{16}$ \\ 
+    $16$ & $2^{17}$ \\
+    $64$ & $2^{18}$ \\
+    $256$ & $2^{19}$ \\ \bottomrule \hline
+  \end{tabular}
 \end{table}
 
 \mypar{Detailed Runtime Analysis}
@@ -519,60 +519,62 @@ answer from the plot in its discussion.
 \mypar{Future Work}
 % You can also formulate next steps if you want. Be brief. After the conclusions there are only the references.
 % TODO update if limitations get updated
-Besides the obvious step of finding new strategies and implement more combinations, a possible way on how to improve the
-current implementations is by resolving the limitations described in section, % TODO ref to impl. section
-i.e. storing and returning the actual MST and allow any input graph to be executed on any number of MPI nodes. Another
-possibility would be to take more fine-grained measurements of the individual algorithm parts and try to find
-optimizations based on their outcome.
+Besides the obvious step of finding new strategies and implementing more combinations, a possible way on how to improve
+the current implementations is by resolving the limitations described in section \ref{par:limitation}. In particular,
+storing the actual MST and supporting all MPI configurations independent of the input graph. Moreover, depending on
+graph properties, such as the connectivity or the average degree, different strategies could be applied at run-time.
+This would require further, more-detailed measurements. Other work could also try to benchmark different graph types,
+for instance Erdös-Renyi graphs, and figure out which graph properties influence the runtimes.
+% TODO: This might need a few more sentences
 
-\section{Further comments}
-
-Here we provide some further tips.
-
-\mypar{Further general guidelines}
-
-\begin{itemize}
-\item For short papers, to save space, I use paragraph titles instead of
-subsections, as shown in the introduction.
-
-\item It is generally a good idea to break sections into such smaller
-units for readability and since it helps you to (visually) structure the story.
-
-\item The above section titles should be adapted to more precisely
-reflect what you do.
-
-\item Each section should be started with a very
-short summary of what the reader can expect in this section. Nothing
-more awkward as when the story starts and one does not know what the
-direction is or the goal.
-
-\item Make sure you define every acronym you use, no matter how
-convinced you are the reader knows it.
-
-\item Always spell-check before you submit (to us in this case).
-
-\item Be picky. When writing a paper you should always strive for very
-high quality. Many people may read it and the quality makes a big difference.
-In this class, the quality is part of the grade.
-
-\item Books helping you to write better: \cite{Higham:98} and \cite{Strunk:00}.
-
-\item Conversion to pdf (latex users only): 
-
-dvips -o conference.ps -t letter -Ppdf -G0 conference.dvi
-
-and then
-
-ps2pdf conference.ps
-\end{itemize}
-
-\mypar{Graphics} For plots that are not images {\em never} generate the bitmap formats
-jpeg, gif, bmp, tif. Use eps, which means encapsulate postscript. It is
-scalable since it is a vector graphic description of your graph. E.g.,
-from Matlab, you can export to eps.
-
-The format pdf is also fine for plots (you need pdflatex then), but only if the plot was never before in the format 
-jpeg, gif, bmp, tif.
+% \section{Further comments}
+%
+% Here we provide some further tips.
+%
+% \mypar{Further general guidelines}
+% 
+% \begin{itemize}
+% \item For short papers, to save space, I use paragraph titles instead of
+% subsections, as shown in the introduction.
+% 
+% \item It is generally a good idea to break sections into such smaller
+% units for readability and since it helps you to (visually) structure the story.
+% 
+% \item The above section titles should be adapted to more precisely
+% reflect what you do.
+% 
+% \item Each section should be started with a very
+% short summary of what the reader can expect in this section. Nothing
+% more awkward as when the story starts and one does not know what the
+% direction is or the goal.
+% 
+% \item Make sure you define every acronym you use, no matter how
+% convinced you are the reader knows it.
+% 
+% \item Always spell-check before you submit (to us in this case).
+% 
+% \item Be picky. When writing a paper you should always strive for very
+% high quality. Many people may read it and the quality makes a big difference.
+% In this class, the quality is part of the grade.
+% 
+% \item Books helping you to write better: \cite{Higham:98} and \cite{Strunk:00}.
+% 
+% \item Conversion to pdf (latex users only): 
+% 
+% dvips -o conference.ps -t letter -Ppdf -G0 conference.dvi
+% 
+% and then
+% 
+% ps2pdf conference.ps
+% \end{itemize}
+% 
+% \mypar{Graphics} For plots that are not images {\em never} generate the bitmap formats
+% jpeg, gif, bmp, tif. Use eps, which means encapsulate postscript. It is
+% scalable since it is a vector graphic description of your graph. E.g.,
+% from Matlab, you can export to eps.
+% 
+% The format pdf is also fine for plots (you need pdflatex then), but only if the plot was never before in the format 
+% jpeg, gif, bmp, tif.
 
 \bibliographystyle{IEEEbib}
 \bibliography{bibl_conf}
