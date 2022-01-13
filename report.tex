@@ -228,14 +228,15 @@ interpretation.
 % Specify the platform (processor, frequency, maybe OS, maybe cache sizes)
 % as well as the compiler, version, and flags used. If your work is about performance, 
 % I strongly recommend that you play with optimization flags and consider also icc for additional potential speedup.
-% TODO add intro text or indentation here to be consistent with report style
-\mypar{Hardware}
 % TODO maybe change footnote to citation
 The benchmarks were executed on the RACKlette cluster\footnote{\url{https://racklette.ethz.ch/}}, setup and maintained
-by a group of students from ETH. The cluster consists of four identical nodes, each of which has two 64-core AMD EPYC
-7742 CPUs running at 2.25GHz with 512GB DDR4 3200MT/s RAM and four Nvidia Tesla V100 GPUs with 32GB GDDR5 VRAM for a
-total of 512 cores, 2TB of memory and 16 GPUs. The four nodes are connected using a speedy interconnect from Mellanox,
-namely HDR ConnectX-6 adapters for a 200Gbit/s connection.
+by a group of students from ETH.
+
+\mypar{Hardware}
+The RACKlette cluster consists of four identical nodes, each of which has two 64-core AMD EPYC 7742 CPUs running at
+2.25GHz with 512GB DDR4 3200MT/s RAM and four Nvidia Tesla V100 GPUs with 32GB GDDR5 VRAM for a total of 512 cores, 2TB
+of memory and 16 GPUs. The four nodes are connected using a speedy interconnect from Mellanox, namely HDR ConnectX-6
+adapters for a 200Gbit/s connection.
 
 \mypar{Work Allocation}
 All four nodes were allocated for all benchmark executions. In addition, we pinned the CPU cores, such that the amount
