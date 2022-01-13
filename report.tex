@@ -411,69 +411,82 @@ very short summary of the section. The typical structure follows.
 %
 %Then explain what kind of benchmarks you ran. The idea is to give enough information so the experiments are reproducible by somebody else on his or her code.
 %For sorting you would talk about the input sizes. For a tool that performs NUMA optimization, you would specify the programs you ran.
-The benchmarking was run on the Raclette cluster which is set up and maintained by a group of students from ETH.
 % TODO write the details of the setup, like no. of computing units and nodes
 
 \mypar{Results}
+In the following paragraphs the benchmarking results are presented along with the the answers and insights they provide.
 % TODO compare to results from Chung and Condon
 %Next divide the experiments into classes, one paragraph for each. In each class of experiments you typically pursue one questions that then is answered by a suitable plot or plots. For example, first you may want to investigate the performance behavior with changing input size, then how your code compares to external benchmarks.
-Like mentioned in \ref{sec:implementations}, the benchmarking was done on Kronecker Graphs of different sizes but the number of edges is always 16 times the number of vertices. The baseline which the results are compared against is the parallel version of Boost. %TODO mention the CI
 
-\mypar{Strong scaling}
-The first question is how well do our algorithms scale with increasing number of computing units. This was done with the input beign a Kronecker graph with number of vertices $2^{20}$ and number of edges being $2^{20}*16$
-
-$<Insert Ploth>$
-%strongscaling, full algos, size 20 -> line plot
-
-The best performing algorithm is the one with Edge Distribution with edge reduction and Union Find running on 64 computing units. Reducing the edges did reduce the runtime but only marginally, since the benefits only kick in from 3rd iterations on but the first iterations are the most expensive ones. Vertex distribution was slower and the supervertex Pointer Jumping method also slower than all other merging mechanisms. That may partly be  because of a lot of synchronization needed within each recursion.
-For the edge distribution Union Find, there are diminishing returns around 16 computing units. This is likely due to the fact that the ratio between the number of edges and vertices is 16:1 and when the edges are divided between 16 computing units, the work needed to find the lightest adjacent edge becomes linear in the number of nodes. The union find, which is done locally and also runs linearly in the number of nodes, slowly becomes the bottleneck. Past 64 computing units the time actually starts to increase. %TODO write about why? Could be more overhead of synchronization and distributing the work with diminishing returns
-
-\mypar{Comparison with baseline}
-How well do our algorithms perform in comparison against the baseline or parallel boost. This was done with strong scaling or with increasing number of computing units when the input is a Kronecker graph with number of vertices being $2^{19}$ and number of edges being $2^{19}*16$
-
-$<Insert Ploth>$
-%Strong scaling, skip boost, size 20 -> line plot
-
-Like can be seen in the plot %TODO add reference
-all our implementation exceed the performance of the parallel boost implementation when work is distributed on less than X computing units and all the edge distribution algorithms outperforming the baseline for these measurements. %TODO add how much better the best performing one is
-
-\mypar{Weakscaling}
-How well do our algorithms scale with increasing graph size?
-
-$<Insert Ploth>$
-%Weak scaling, full algos, sizes 15-19 -> line plot
-
-%TODO add some analyziz of the plot results
-
-\mypar{Profiling}
-Which part of the algorithms is taking up most of the time ?
-
-$<Insert Plot>$
-%Comparison, segments, size 19 -> bar chart
-
-For the edge distribution we can see that the merging part or the Union Find takes up XXX of the time, becoming one of the bottleneck along with the synchronization in the finding the lightest adjacent edge part??
-For the vertex distribution it seems that expensive pre-processing for distributing edges takes up a big chunk of the total runtime. Additionally, the fact that even though initially computing units containing all edges for their respective vertices, as vertices are merged, edges for a connected component are distributed across different computation unit and therefore a reduction is needed for finding the lightest adjacent edge.
-% TODO do we want to mention that the edges could have been sent a long to the computing unit responsible for a given root vertex. Not trivial if that would pay off or not.
-
-
-For some tips on benchmarking including how to create a decent viewgraph see pages 22--27 in \cite{Pueschel:10}.
-
-{\bf Comments:}
-\begin{itemize}
-\item Create very readable, attractive plots (do 1 column, not 2 column plots
-for this report) with readable font size. However, the font size should also not be too large; typically it is smaller than the text font size.
-An example is in Fig.~\ref{fftperf} (of course you can have a different style).
-\item Every plot answers a question. You state this question and extract the
-answer from the plot in its discussion.
-\item Every plot should be referenced and discussed.
-\end{itemize}
+\mypar{How does the performance behavior change when work is distributed between increased number of MPI processes}
+To answer the question we used strong scaling study results without the baseline.
 
 \begin{figure}\centering
-  \includegraphics[scale=0.33]{dft-performance.eps}
-  \caption{Performance of four single precision implementations of the
-  discrete Fourier transform. The operations count is roughly the
-  same. The labels in this plot are maybe a little bit too small.\label{fftperf}}
+	\includegraphics[width=\columnwidth]{strongscaling_s20.pdf}
+	\caption{Strong Scaling Study w/o the baseline. Vertex count $2^{20}$. \label{scrongscaling-20}}
 \end{figure}
+%Strong scaling, skip boost, size 20 -> line plot
+
+Like can be seen in Fig. \ref{scrongscaling-20} all implementation have an improved runtime as the MPI processes increases up and including 4 processes.
+ All vertex distribution implementation perform similarly apart from the supervertices pointer jumping one which performs worse in comparison as the number of the MPI processes increases. The edge distribution implementations also perform similarly with the best performing algorithm being Edge Distributed union find w. reduced edges, running on 32 MPI processes. The Edge Distribution implementations scale better and the runtime almost halves as the number of MPI processes doubles up until 4 MPI processes when there start to be diminishing returns. It should be noted that the ratio between vertices and edges is only 1:16 and therefore seeing diminishing returns past 16 MPI processes not surprising and more dense graphs might benefit from running on a higher number of MPI processes.
+
+\mypar{How well do our algorithms perform compared to the baseline}
+To answer the question we used the strong scaling study results with the results for the parallel boost implementation.
+
+\begin{figure}\centering
+	\includegraphics[width=\columnwidth]{strongscaling_s19.pdf}
+	\caption{Strong Scaling Study with baseline. Vertex count $2^{19}$. \label{scrongscaling-19}}
+\end{figure}
+
+\begin{table}
+	\resizebox{\columnwidth}{!}{%
+		\begin{tabular}{ |p{2.5cm}||p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}| }
+			\hline
+			\multicolumn{8}{|c|}{Runtimes in s by number of processes} \\
+			\hline
+			No. processes &1 &2 &4 &8 &16 &32 &64\\
+			\hline
+			Edge distributed union find w. reduced edges &0.5050 &0.2997 &0.2001 &0.1254 &0.11 &0.1085 &0.1094\\
+			\hline
+			ParallelBoost &13.0532 &9.4513 &5.3956 &3.4787 &2.6483 &2.4329 &2.4421\\
+			\hline
+	\end{tabular}}
+	\caption{Runtime results from Strong Scaling Study. Vertex count $2^{19}$. \label{scrongscaling-19-table}}
+\end{table}
+
+From Fig. \ref{scrongscaling-19}, it can be seen that 
+all our implementations exceed the performance of the parallel boost implementation when work is distributed on 8 or less processes and all the edge distribution algorithms outperform the baseline for all measured cases. In Table. \ref{scrongscaling-19-table} we compare our best performing implementation, Edge distributed union find w. reduced edges against the baseline, ParallelBoost. Our implementation performs best when using 32 processes, which compared to ParallelBoost results in $2.4329s/0.1085s \approx 22.4$ x speedup.
+
+\mypar{How well do our algorithms scale with increasing graph size}
+
+\begin{figure}\centering
+	\includegraphics[width=\columnwidth]{weakscaling.pdf}
+	\caption{Weak Scaling Study. Vertex count $2^{18}$ - $2^{22}$. \label{weakscaling}}
+\end{figure}
+
+%TODO add some analyziz of the plot results, 
+
+\mypar{Which parts require the most amount of runtime}
+To answer this we use the fine-grained measurements that separates the runtimes between graph distribution, lightest edge selection and merging.
+
+\begin{figure}\centering
+	\includegraphics[width=\columnwidth]{comparison.pdf}
+	\caption{Comparison. Vertex count $2^{19}$, MPI processes 64. \label{comparison}}
+\end{figure}
+
+For vertex distribution it is obvious from Fig. \ref{comparison} that distributing the graph is a bottleneck while for the edge distributions that's a small part of the total runtime. Distributing the edges by vertices also doesn't result in much benefit for the lightest edge selection. This is probably because after merging, the edges for connected component end up being spread over different computation units. For the different merging strategy the sequential union is significantly faster than all the pointer jumping versions. Surprisingly the simple pointer jumping being the fastest of them, possibly due to fewer synchronizations needed. The union find, even though running sequentially also only takes up small part of the runtime.
+
+%For some tips on benchmarking including how to create a decent viewgraph see pages 22--27 in \cite{Pueschel:10}.
+%
+%{\bf Comments:}
+%\begin{itemize}
+%\item Create very readable, attractive plots (do 1 column, not 2 column plots
+%for this report) with readable font size. However, the font size should also not be too large; typically it is smaller than the text font size.
+%An example is in Fig.~\ref{fftperf} (of course you can have a different style).
+%\item Every plot answers a question. You state this question and extract the
+%answer from the plot in its discussion.
+%\item Every plot should be referenced and discussed.
+%\end{itemize}
 
 \section{Conclusions}
 
