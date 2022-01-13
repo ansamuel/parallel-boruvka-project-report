@@ -224,10 +224,11 @@ Mention and cite any external resources that you used including libraries or oth
 In this section we go over the benchmarking setup, as well as the results that we measured, including their
 interpretation.
 
-\subsection{Experimental Setup} 
+\subsection{Experimental Setup}
 % Specify the platform (processor, frequency, maybe OS, maybe cache sizes)
 % as well as the compiler, version, and flags used. If your work is about performance, 
 % I strongly recommend that you play with optimization flags and consider also icc for additional potential speedup.
+% TODO add intro text or indentation here to be consistent with report style
 \mypar{Hardware}
 % TODO maybe change footnote to citation
 The benchmarks were executed on the RACKlette cluster\footnote{\url{https://racklette.ethz.ch/}}, setup and maintained
@@ -248,11 +249,36 @@ implementation mvapich2 version 2.3.4. The code was compiled with gcc version 10
 \lstinline[basicstyle=\ttfamily\color{black},identifierstyle=\color{black}]|-mavx -march=| \linebreak
 \lstinline[basicstyle=\ttfamily\color{black},identifierstyle=\color{black}]|native -O3|.
 
+\subsection{Performed Benchmarks}
 % Then explain what kind of benchmarks you ran. The idea is to give enough information so the experiments are
 % reproducible by somebody else on his or her code.
 % For sorting you would talk about the input sizes. For a tool that performs NUMA optimization, you would specify the
 % programs you ran.
-% TODO
+As described in section, % TODO reference kronecker graph generator
+all benchmarks were performed using Kronecker graphs. The amount of edges is in all cases $16$ times the amount of
+vertices. It is also important to mention that the implementation edge distribution using pointer jumping gave
+unbelievably bad results. Since we are not certain about the correctness of this implementation and since there was not
+enough time to look into the nature of these strange results, we decided to not include them in our reported
+measurements.
+
+\mypar{Baseline Comparison}
+To compare our implementations with the baseline, we performed a strong scaling study using graphs with vertex count
+$2^{19}$. The number of used MPI processes in this strong scaling study were all powers of $2$ up until $2^6$. The
+baseline implementation did not allow us to go any furhter than that, as the cluster did not finish the execution. We
+were not able to determine the reason for this issue.
+
+\mypar{Implementation Comparison}
+To compare our implementations with one another, we performed a strong and weak scaling study. The strong scaling study
+was performed using graphs with vertex count $2^{20}$. As this time there was no limitation due to the baseline not
+working with higher amounts of MPI processes, the number of used MPI processes was all powers of $2$ up until the
+maximum of $2^9$. The weak scaling study was performed using $1$ MPI node using a graph of size $2^{15}$, $4$ MPI nodes
+using a graph of size $2^{16}$, $16$ MPI nodes using a graph of size $2^{17}$, $64$ MPI nodes using a graph of size
+$2^{18}$ and $256$ MPI nodes using a graph of size $2^{19}$.
+
+\mypar{Detailed Runtime Analysis}
+To get a better understanding about which parts of the algorithms require the most amount of runtime, we performed more
+fine-grained measurements. We differentiated between graph distribution, lightest edge selection and merging.
+% TODO add graph sizes and mpi node count
 
 \subsection{Results}
 % TODO compare to results from Chung and Condon
