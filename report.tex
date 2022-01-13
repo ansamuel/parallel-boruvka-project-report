@@ -462,6 +462,13 @@ To get a better understanding about which parts of the algorithms require the mo
 fine-grained measurements. We differentiated between graph distribution, lightest edge selection and merging.
 % TODO add graph sizes and mpi node count
 
+\mypar{Summarizing Results}
+As we are working with runtimes, the arithmetic mean is the obvious choice for summarization. The results for one
+algorithm execution were summarized by computing the arithmetic mean of all MPI processes. To get a summary over all
+algorithm iterations, another arithmetic mean was computed, using the previousely mentioned results as its input.
+Although taking the maximum or minimum accross all MPI processes could have also been possible, the difference between
+these and the mean were negligibly small, as all algorithms call a synchronizing subroutine right before termination.
+
 \mypar{Repetitions}
 Due to problems with crashing nodes and other people wanting access to the cluster, we tried to achive a $90\%$
 confidence interval. As such, we collected measurements until the $90\%$ confidence interval was within $5\%$ of our
