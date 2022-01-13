@@ -423,7 +423,7 @@ In the following paragraphs the benchmarking results are presented along with th
 To answer the question we use strong scaling study results without the baseline.
 
 \begin{figure}\centering
-	\includegraphics[width=\columnwidth]{strongscaling_s20.pdf}
+	\includegraphics[width=\columnwidth]{../benchmark-results/plots/strongscaling_s20.pdf}
 	\caption{Strong Scaling Study w/o the baseline. Vertex count $2^{20}$. \label{scrongscaling-20}}
 \end{figure}
 %Strong scaling, skip boost, size 20 -> line plot
@@ -435,7 +435,7 @@ Like can be seen in Fig. \ref{scrongscaling-20} all implementation have an impro
 To answer the question we use the strong scaling study results including the those for the parallel boost implementation.
 
 \begin{figure}\centering
-	\includegraphics[width=\columnwidth]{strongscaling_s19.pdf}
+	\includegraphics[width=\columnwidth]{../benchmark-results/plots/strongscaling_s19.pdf}
 	\caption{Strong Scaling Study with baseline. Vertex count $2^{19}$. \label{scrongscaling-19}}
 \end{figure}
 
@@ -461,7 +461,7 @@ all our implementations exceed the performance of the parallel boost implementat
 \mypar{How well do our algorithms scale with increasing graph size}
 
 \begin{figure}\centering
-	\includegraphics[width=\columnwidth]{weakscaling.pdf}
+	\includegraphics[width=\columnwidth]{../benchmark-results/plots/weakscaling.pdf}
 	\caption{Weak Scaling Study. Vertex count $2^{18}$ - $2^{22}$. \label{weakscaling}}
 \end{figure}
 
@@ -471,7 +471,7 @@ all our implementations exceed the performance of the parallel boost implementat
 To answer this we use the fine-grained measurements that separate the runtimes between graph distribution, lightest edge selection and merging.
 
 \begin{figure}\centering
-	\includegraphics[width=\columnwidth]{comparison.pdf}
+	\includegraphics[width=\columnwidth]{../benchmark-results/plots/comparison.pdf}
 	\caption{Comparison. Vertex count $2^{19}$, MPI processes 64. \label{comparison}}
 \end{figure}
 
