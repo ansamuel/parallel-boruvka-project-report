@@ -362,6 +362,7 @@ BGL is the most optimized and well-known library. One promising implementation u
 uncomparable results since we use MPI \cite{15418}. % TODO: Maybe leave this out since its a project by other students
 
 \mypar{Kronecker Graph Generator}
+\label{par:kronecker_graph_generator}
 Initially, we experimented with different kinds of graphs and implemented some generators for them, but ultimately
 decided to only use Kronecker graphs to benchmark our implementations. Self-written generators can be error-prone and it
 is difficult to efficiently generate large graphs. Therefore, we use the reference implementation of the Graph500
@@ -436,12 +437,11 @@ implementation mvapich2 version 2.3.4. The code was compiled with gcc version 10
 % reproducible by somebody else on his or her code.
 % For sorting you would talk about the input sizes. For a tool that performs NUMA optimization, you would specify the
 % programs you ran.
-As described in section, % TODO reference kronecker graph generator
-all benchmarks were performed using Kronecker graphs. The amount of edges is in all cases $16$ times the amount of
-vertices. It is also important to mention that the implementation edge distribution using pointer jumping gave
-unbelievably bad results. Since we are not certain about the correctness of this implementation and since there was not
-enough time to look into the nature of these strange results, we decided to not include them in our reported
-measurements.
+As described in section \ref{par:kronecker_graph_generator}, all benchmarks were performed using Kronecker graphs. The
+amount of edges is in all cases $16$ times the amount of vertices. It is also important to mention that the
+implementation edge distribution using pointer jumping gave unbelievably bad results. Since we are not certain about the
+correctness of this implementation and since there was not enough time to look into the nature of these strange results,
+we decided to not include them in our reported measurements.
 
 \mypar{Baseline Comparison}
 To compare our implementations with the baseline, we performed a strong scaling study using graphs with vertex count
