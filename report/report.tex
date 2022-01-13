@@ -443,7 +443,7 @@ As described in section \ref{par:kronecker_graph_generator}, all benchmarks were
 graphs have $16$ times more edges than vertices (as per Graph500 specification \cite{graph500}). This is to ensure an
 average degree of $32$. The implementation ``edge distribution using pointer jumping'' resulted in bad performance.
 Since we are not certain which part of the algorithm causes this, we decided to not include it in our reported
-measurements.
+measurements. % TODO maybe add better justification for this
 
 \mypar{Baseline Comparison}
 To compare our implementations with the baseline, we performed a strong scaling study using graphs with $2^19$ vertices.
