@@ -421,14 +421,14 @@ of memory and 16 GPUs. The four nodes are connected using a speedy interconnect 
 adapters for a 200Gbit/s connection.
 
 \mypar{Work Allocation}
-All four nodes were allocated for all benchmark executions. In addition, we pinned the CPU cores, such that the amount
-of used cores was equal on all computation nodes. We decided on this allocation strategy to get more consistent
-measurements. Otherwise, benchmarks with a low core count would have had an unfair advantage, as they would have
-required less network communication, resulting in potential spikes at threasholds where an additional node is needed.
+% TODO: Nodes might be confusing here
+All four nodes were used for the benchmarks. We pinned the CPU cores with the purpose that the amount of used CPU cores
+was equal on all nodes. This allocation strategy should lead to more consisten measurements because of the following
+reason. Benchmarks with a low MPI core count could have an unfair advantage due to less network communication.
 
 \mypar{Software}
 All benchmarks were conducted using CentOS Linux release 7.9.2009 (Core) with Linux kernel 3.10.0 and the MPI
-implementation mvapich2 version 2.3.4. The code was compiled with gcc version 10.3.0 using the compilation flags
+implementation mvapich2 version 2.3.4. The code was compiled with GCC version 10.3.0 using the compilation flags
 \lstinline[basicstyle=\ttfamily\color{black},identifierstyle=\color{black}]|-mavx -march=| \linebreak
 \lstinline[basicstyle=\ttfamily\color{black},identifierstyle=\color{black}]|native -O3|.
 
