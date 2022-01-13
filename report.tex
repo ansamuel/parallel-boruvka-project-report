@@ -462,6 +462,12 @@ To get a better understanding about which parts of the algorithms require the mo
 fine-grained measurements. We differentiated between graph distribution, lightest edge selection and merging.
 % TODO add graph sizes and mpi node count
 
+\mypar{Repetitions}
+Due to problems with crashing nodes and other people wanting access to the cluster, we tried to achive a $90\%$
+confidence interval. As such, we collected measurements until the $90\%$ confidence interval was within $5\%$ of our
+reported means. This was achieved by performing $10$ repetitions in all benchmarks, whilst the first execution is
+discarded and counted as warmup. The warmup is also not used to compute the measurements reported in our plots.
+
 \subsection{Results}
 % TODO compare to results from Chung and Condon
 Next divide the experiments into classes, one paragraph for each. In each class of experiments you typically pursue one questions that then is answered by a suitable plot or plots. For example, first you may want to investigate the performance behavior with changing input size, then how your code compares to external benchmarks.
