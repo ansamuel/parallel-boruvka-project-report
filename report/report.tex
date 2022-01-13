@@ -11,6 +11,8 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 
+\usepackage{tabularx}
+
 \newcommand{\R}[0]{\mathbb{R}}
 \newcommand{\N}[0]{\mathbb{N}}
 \newcommand{\C}[0]{\mathbb{C}}
@@ -439,21 +441,15 @@ To answer the question we use the strong scaling study results including the tho
   \caption{Strong Scaling Study with baseline. Vertex count $2^{19}$. \label{scrongscaling-19}}
 \end{figure}
 
-\begin{table}
-  \resizebox{\columnwidth}{!}{%
-    \begin{tabular}{ |p{2.5cm}||p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}|p{1cm}| }
-      \hline
-      \multicolumn{8}{|c|}{Runtimes in s by number of processes} \\
-      \hline
-      No. processes &1 &2 &4 &8 &16 &32 &64\\
-      \hline
-      Edge distributed union find w. reduced edges &0.5050 &0.2997 &0.2001 &0.1254 &0.11 &0.1085 &0.1094\\
-      \hline
-      ParallelBoost &13.0532 &9.4513 &5.3956 &3.4787 &2.6483 &2.4329 &2.4421\\
-      \hline
-  \end{tabular}}
+\begin{table*}
+  \begin{tabularx}{\linewidth}{| l || X | X | X | X | X | X | X |}
+    \hline
+    No. processes & 1 & 2 & 4 & 8 & 16 & 32 & 64 \\ \hline
+    Edge distributed union find w. reduced edges & 0.5050 & 0.2997 & 0.2001 & 0.1254 & 0.11 & 0.1085 & 0.1094 \\ \hline
+    ParallelBoost & 13.0532 & 9.4513 & 5.3956 & 3.4787 & 2.6483 & 2.4329 & 2.4421 \\ \hline
+  \end{tabularx}
   \caption{Runtime results from Strong Scaling Study. Vertex count $2^{19}$. \label{scrongscaling-19-table}}
-\end{table}
+\end{table*}
 
 From Fig. \ref{scrongscaling-19}, it can be seen that 
 all our implementations exceed the performance of the parallel boost implementation when work is distributed on 8 or less processes and all the edge distribution algorithms outperform the baseline for all measured cases. In Table. \ref{scrongscaling-19-table} we compare our best performing implementation, Edge distributed union find w. reduced edges against the baseline, ParallelBoost. Our implementation performs best when using 32 processes, which compared to ParallelBoost results in $2.4329s/0.1085s \approx 22.4$ x speedup.
