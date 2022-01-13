@@ -446,10 +446,10 @@ Since we are not certain which part of the algorithm causes this, we decided to 
 measurements. % TODO maybe add better justification for this
 
 \mypar{Baseline Comparison}
-To compare our implementations with the baseline, we performed a strong scaling study using graphs with $2^19$ vertices.
-The number of MPI processes in this study were the powers of $2$: $2^0, \dotsc, 2^6$. The baseline implementation did
-not allow us to go any furhter than that because the execution took too long. We believe this to be an implementation
-issue within the parallel BGL.
+To compare our implementations with the baseline, we performed a strong scaling study using graphs with $2^{19}$
+vertices. The number of MPI processes in this study were the powers of $2$: $2^0, \dotsc, 2^6$. The baseline
+implementation did not allow us to go any furhter than that because the execution took too long. We believe this to be
+an implementation issue within the parallel BGL.
 
 \mypar{Implementation Comparison}
 To compare our implementations with each other, we performed a strong and weak scaling study. The strong scaling study
