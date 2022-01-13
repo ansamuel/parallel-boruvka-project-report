@@ -447,25 +447,24 @@ measurements.
 
 \mypar{Baseline Comparison}
 To compare our implementations with the baseline, we performed a strong scaling study using graphs with $2^19$ vertices.
-The number of MPI processes in this study were the powers of $2$: $2^0, \dotsc 2^6$. The baseline implementation did not
-allow us to go any furhter than that because the execution took too long. We believe this to be an implementation issue
-within the parallel BGL.
+The number of MPI processes in this study were the powers of $2$: $2^0, \dotsc, 2^6$. The baseline implementation did
+not allow us to go any furhter than that because the execution took too long. We believe this to be an implementation
+issue within the parallel BGL.
 
 \mypar{Implementation Comparison}
 To compare our implementations with each other, we performed a strong and weak scaling study. The strong scaling study
-was performed using graphs wth $2^{20}$ vertices. The number of MPI processes were the powers of $2$: $2^0, \dotsc,
-2^9$.
-The weak scaling study was performed using the following configurations: \\
+was performed using graphs with $2^{20}$ vertices. The number of MPI processes were the powers of $2$: $2^0, \dotsc,
+2^9$. The weak scaling study was performed using the following configurations:
 \begin{table}[h!]
-\centering
-\begin{tabular}{ll}    \toprule
-\textbf{MPI nodes} & \textbf{Graph nodes}  \\\midrule
-$1$ & $2^{15}$ \\ 
-$4$ & $2^{16}$ \\ 
-$16$ & $2^{17}$ \\
-$64$ & $2^{18}$ \\
-$256$ & $2^{19}$ \\ \bottomrule \hline
-\end{tabular}
+  \centering
+  \begin{tabular}{ll} \toprule
+    \textbf{MPI nodes} & \textbf{Graph nodes} \\\midrule
+    $1$ & $2^{15}$ \\ 
+    $4$ & $2^{16}$ \\ 
+    $16$ & $2^{17}$ \\
+    $64$ & $2^{18}$ \\
+    $256$ & $2^{19}$ \\ \bottomrule \hline
+  \end{tabular}
 \end{table}
 
 \mypar{Detailed Runtime Analysis}
@@ -482,7 +481,7 @@ synchronization.
 
 \mypar{Repetitions}
 We collected measurements until the $90\%$ confidence interval was within $5\%$ of our reported means. This was achieved
-by performing $10$ repetitions in all benchmarks, whhere the first execution is discarded due to warmup.
+by performing $10$ repetitions in all benchmarks, where the first execution is discarded due to warmup.
 
 \subsection{Results}
 % TODO compare to results from Chung and Condon
