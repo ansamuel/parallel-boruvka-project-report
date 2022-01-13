@@ -146,7 +146,7 @@ three spanning trees. For simplicity, we will use the term spanning tree through
 working with spanning forests in case $G$ is not connected.
 
 \mypar{Minimum-Spanning-Tree Problem}
-In the MST problem, every edge $e$ of the input graph $G = (V, E)$ has an assoicated weight. Formally, there is a weight
+In the MST problem, every edge $e$ of the input graph $G = (V, E)$ has an associated weight. Formally, there is a weight
 function $w : E \to \N$ that is given as input. The goal is to find a spanning tree with a minimum edge weight sum, i.e.
 the edge weight of all other spanning trees is at least as large. Just like with a spanning tree, a MST must not
 necessarily be unique for a given graph $G$.
@@ -195,12 +195,11 @@ each vertex individually, which has a potential worst case runtime of $\bigoh(n^
 
 \mypar{Supervertex Pointer Jumping}
 % TODO maybe add a tikz image for this
-Supervertex pointer jumping \cite{chung1996parallel} is an extension of pointer jumping that uses randomness to get
-achieve an expected linear time algorithm. The technique is best explained in the aformentioned paper, but the high
-level idea is to select a set of vertices to be supervertices, perform pointer jumping on all non-supervertices, until
-they reach a superverex or a root, let each supervertex point to the next supervertex and repeat the process recursively
-on the supervertices. After the recursion, it is sufficient to perform only one more pointer jump for all
-non-supervertices.
+Supervertex pointer jumping \cite{chung1996parallel} is an extension of pointer jumping that uses randomness to achieve
+an expected linear time algorithm. The technique is best explained in the aformentioned paper, but the high level idea
+is to select a set of vertices to be supervertices, perform pointer jumping on all non-supervertices, until they reach a
+superverex or a root, let each supervertex point to the next supervertex and repeat the process recursively on the
+supervertices. After the recursion, it is sufficient to perform only one more pointer jump for all non-supervertices.
 
 \mypar{MPI}
 The message passing interface \cite{clarke1994mpi} is a standard for developing applications on parallel computing
@@ -222,16 +221,15 @@ variation of this graph construction for their benchmarks \cite{graph500}.
 % In this section, structure is very important so one can follow the technical content.
 
 % Mention and cite any external resources that you used including libraries or other code.
-This section contains information about the different implementations that we developed, as well as other technical
+This section contains information about the different implementations devloped, as well as other technical
 details, such as distribution strategies, limitations and the benchmarking infrastructure.
 
 \subsection{Distributing the Work}
-There are many ways as to how a graph can be distributed among multiple computation units. The two strategies that we
-looked into are distributing the work by edges, including their endpoint information, and distributing the work by
-vertices, including their incident edges. A combination of the two would also be possible, but was not considered in
-this project. As these two strategies have vastly different parallelization capabilities, we developed multiple
-implementations for both of these approaches. To get a better understanding of how they work, as well as their
-advantages and disadvantages, we describe them both in the following two paragraphs.
+There are many ways how a graph can be distributed among multiple computation units. The two strategies that we
+considered are distributing the edges and distributing the vertices. A combination of the two would also be conceivable,
+but was not considered in this project. As these two strategies have different parallelization capabilities, multiple
+implementations for both of these approaches were developed. To get a better understanding of how they operate and how
+they compare, the following two paragraphs describe them both.
 
 % TODO maybe move the original input graph into the middle to clearly separate the edge dist. and vertex dist. images
 \begin{figure*}
@@ -251,7 +249,7 @@ advantages and disadvantages, we describe them both in the following two paragra
         (v2) edge (v3)
         (v3) edge (v4);
     \end{tikzpicture}
-    \caption{Original input graph.}
+    \caption{Original input graph}
     \label{fig:work_distribution_original_input_graph}
   \end{subfigure}
   \begin{subfigure}{0.33\textwidth}
@@ -270,7 +268,7 @@ advantages and disadvantages, we describe them both in the following two paragra
         (v2) edge[cyan] (v3)
         (v3) edge[red] (v4);
     \end{tikzpicture}
-    \caption{Edge distributed input graph.}
+    \caption{Edge distributed input graph}
     \label{fig:work_distribution_edge_distributed_graph}
   \end{subfigure}
   \begin{subfigure}{0.33\textwidth}
@@ -294,110 +292,113 @@ advantages and disadvantages, we describe them both in the following two paragra
         [->] [>={Stealth[cyan]}] (v3) edge[cyan, bend right=10] (v4)
         [->] [>={Stealth[red]}] (v4) edge[red, bend right=10] (v3);
     \end{tikzpicture}
-    \caption{Vertex distributed input graph.}
+    \caption{Vertex distributed input graph}
     \label{fig:work_distribution_vertex_distributed_graph}
   \end{subfigure}
-  \caption{Work distribution example.}
+  \caption{Graph distribution example}
   \label{fig:work_distribution}
 \end{figure*}
 
 \mypar{Distribution by Edges}
-In this approach, we distribute the edges of the input graph as evenly as possible among all available computation
-units. An example of how such a distribution would look like can be seen in Fig.
-\ref{fig:work_distribution_edge_distributed_graph}. This strategy allows for a very fair work distribution, as every
-computation unit starts with approximately an equal amount of work during the selection of the minimum outgoing edge of every
-component. On the other hand, the merging of components cannot be parallelized using this approach. This is because
-during the process of merging all vertices inside a component, they have to agree on a unique component identifier, which is a
-process performed on vertices, not edges.
+In this approach, the edges of the input graph are distributed evenly among computation units. An illustration of such a
+distribution can be seen in Fig. \ref{fig:work_distribution_edge_distributed_graph}. This strategy allows for a uniform
+workload distribution, as every computation unit has the same amount of edges to process when selecting the minimum
+weight outgoing edges. On the other hand, the merging of components cannot be parallelized using this approach. This is
+because during the merging step, all vertices of a component have to unanimously agree on a new leader. But since a
+vertex is not owned by a computation unit, this cannot be accomplished without additional effort.
 
 \mypar{Distribution by Vertices}
-In this approach, we distribute the vertices of the input graph, including their incident edges, as evenly as possible
-among all available computation units. An example of how such a distribution would look like can be seen in Fig.
-\ref{fig:work_distribution_vertex_distributed_graph}. A major disadvantage of this approach is that all edges have to be
-distributed twice, as it is not guaranteed that the neighboring vertex gets distributed to the same computation unit. As
-such, this strategy requires a lot more work to distribute the graph information. In addition, the work is not
-distributed as fair as when using the edge distribution strategy, because a computation unit could end up with vertices
-that have a lot of incident edges, whilst another computation unit could end up with vertices that have almost no
-incident edges. As such, the computation of the minimum outgoing edge of every component is not as fair as it is in our
-other strategy. However, in this approach the merging of components can easily be parallelized.
+In this approach, the vertices of the input graph are distributed (including their incident edges) among computation
+units. An example of such a distribution can be seen in Fig. \ref{fig:work_distribution_vertex_distributed_graph}. One
+major disadvantage of this approach is that each edge gets distributed twice because it is not guaranteed that
+neighboring vertices are assigned to the same computation unit. Consequently, this strategy requires more time to
+distribute the graph. Moreover, the workload of each computation unit is unevenly distributed compared to the edge
+distribution strategy. Imagine a scenario, where certain vertices have a higher degree (amount of incident edges) than
+others. In that case the computation of the minimum weight outgoing edge of each component takes longer for some
+computation units whilst others are idle. However, with this approach the merging of components can be parallelized. 
+% TODO: Maybe the last sentence needs more explanation
 
 \subsection{Implementations}
 \label{sec:implementations}
-We developed various implementations using C++17, combining different merging approaches with the two aforementioned
-distribution strategies. Here is a list of all the combinations that we developed:
+For this project we developed various C++ implementations, combining different merging approaches with the two
+aforementioned distribution strategies. The following list contains all the combinations realized:
 \begin{itemize}
-  \item Edge distribution using union find data structure
-  \item Edge distribution using union find data structure with edge reduction
-  \item Edge distribution using pointer jumping
-  \item Vertex distribution using union find data structure
-  \item Vertex distribution using iterative vertex fixing
-  \item Vertex distribution using pointer jumping
-  \item Vertex distribution using supervertex pointer jumping
+  \item Edge Distribution, merging via
+  \begin{itemize}
+     \item Union find 
+     \item Union find and ignoring superfluous edges
+     \item Pointer jumping
+  \end{itemize}
+  \item Vertex Distribution, merging via
+  \begin{itemize}
+     \item Union find 
+     \item Iterative vertex fixing
+     \item Pointer jumping
+     \item Superverex pointer jumping
+  \end{itemize}
 \end{itemize}
-As one can see, this list does not contain every possible combination. This is because after some intermediate
-benchmarking we focused on the strategies that were the most promising, namely union find and edge distribution.
+Clearly, this list does not contain every possible combination. Intermediate benchmarking showed that some strategies
+were not promising enough to be pursued further.
 
-We are not going to give a detailed description for all of these implementations, as their rough idea should be clear
-with the information given in section \ref{sec:background}. The ones that might not be clear are ``edge distribution
-using union find data structure with edge reduction'' and ``vertex distribution using iterative vertex fixing''. The first
-uses an additional optimization, where edges with endpoints inside the same component get removed once they are
-detected. As this removal costs additional runtime, we try to figure out if it is worth the time saved in future
-iterations. The second uses an iterative fixing of the vertices, briefly mentioned in the pointer jumping paragraph in
-section \ref{sec:background}. This approach has a higher theoretical runtime, but uses far less communication compared
-to the pointer jumping strategy. The question was, whether the lower runtime guarantee is worth the additional
-communication.
+% TODO: Shouldn't we explain the implementations in more detail? It seems a bit meager
+We are not going to give detailed descriptions for all implementations, as their rough idea should be clear with the
+information given in section \ref{sec:background}. The ones that might not be self-explanatory are ``edge distribution
+using union find with edge reduction'' and ``vertex distribution using iterative vertex fixing''. The first one uses an
+additional optimization where edges with both endpoints in the same component get skipped over. As this removal costs
+additional runtime, we have to be cautious about the impact on performance. The second one uses an iterative fixing of
+the vertices, briefly mentioned in the pointer jumping paragraph in section \ref{sec:background}. This approach has a
+greater theoretical runtime, but uses far less communication compared to the vertex distributed pointer jumping
+implementation. The open question here is, whether the lower runtime guarantee is worth the additional communication.
+More on this in section \ref{sec:exp}. % TODO maybe update reference to a more specific one later on
 
-We also implemented sequential versions for some of the merging strategies, to get a better understanding of them.
-However, these sequential algorithms did not serve any additional purpose beyond that, i.e. they were not used to get
-any measurements.
+Sequential versions of some merging strategies were also implemented to get a better understanding of how they operate.
+However, these sequential algorithms did not serve any additional purpose beyond that.
 
 \mypar{Baseline Implementation}
-To get an idea of how well our implementations perform, we decided to use parallel Boost as our baseline. This shows us
-how well our implementations hold up against current industry standard code. The reason why we chose parallel Boost is
-because it is considered to be the de facto standard when it comes to parallel graph libraries for C++.
+To get an idea of how well our implementations perform, we decided to use the Parallel Boost Graph Library (BGL)
+\cite{bgl} as our baseline. We considered other baseline implementations but came to the conclusion that the Parallel
+BGL is the most optimized and well-known library. One promising implementation uses OpenMP which might have lead to
+uncomparable results since we use MPI \cite{15418}. % TODO: Maybe leave this out since its a project by other students
 
 \mypar{Kronecker Graph Generator}
-We first experimented with different graph types and even implemented some generators for them, but ultimately decided
-to only use Kronecker graphs, as they are part of the Graph500 benchmark toolkit to rate supercomputer systems. Compared
-to custom generated graphs, the results we get by using Kronecker graphs will be the most unbiased. The generator
-implementation that we used is the official Graph500 open source version available on
-GitHub\footnote{\url{https://github.com/graph500/graph500/tree/newreference/generator}}, which we copied into our
-project and call directly from the source. To get fair and comparable benchmarking results across all algorithm
-executions, we seeded the graph generator, such that it always generates the same random graph.
+Initially, we experimented with different kinds of graphs and implemented some generators for them, but ultimately
+decided to only use Kronecker graphs to benchmark our implementations. Self-written generators can be error-prone and it
+is difficult to efficiently generate large graphs. Therefore, we use the reference implementation of the Graph500
+specification that is available on
+GitHub\footnote{\url{https://github.com/graph500/graph500/tree/newreference/generator}}. An alternative to this is the
+Erdös-Renyi graph generator that is part of the Parallel BGL \cite{bgl}. To get reproducible benchmark results across
+all algorithm executions, we seeded the graph generator, so that it always generates the same random graph.
 
 \mypar{Communication}
-All implementations use MPI as a communication protocol. Besides send and receive routines used to distribute the
-graph, we also use scatter, gather and reduction functionalities in our implementations. To reduce the cost of
-communication as far as possible, we kept the amount of MPI subroutine calls to a minimum, by first locally preparing
-the data and then sending everything at once.
+All implementations use MPI as a communication protocol. Besides send and receive routines used to distribute the graph,
+we also use scatter, gather and reduction functionalities. % TODO: Should we use verbatim here?
+To minimize the cost of communication as much as possible, we keep the amount of MPI subroutine calls to a minimum. We
+achieve this by first locally preparing the data and then sending everything at once. This was used to e.g. more
+efficiently distribute the incident edges in all vertex distributed implementations. Instead of sending each edge
+individually, only one send operation containing all edges is performed for each computation unit.
 
 \mypar{Limitations}
-So far all implementations don't compute the actual MST, but only its edge weight sum. In addition, the work has to be
+\label{par:limitation}
+% TODO: Leave this out since they actually calculate the graph but don't return it
+So far all implementations don't compute the actual MST, but only its edge weight sum. Moreover, the work has to be
 distributed among all computation units evenly, i.e. the amount of edges or vertices must be divisible by the amount of
-computation units depending on whether it is an edge or vertex distributed algorithm. For most implementations both of
-these limitations would be quite easy to solve. This is especially true for the MST tree computation, as the lightest
-edges are distributed among the computation units anyway. However, we disregarded them as being low priority, as our
-focus lied on the difference between the various implementation strategies.
-% TODO maybe add that it only works with ints so far
+computation units depending on the distribution strategy. For most implementations, both of these limitations are
+straightforward to resolve. This is especially true for the MST tree computation, as the lightest edges are distributed
+among the computation units anyway.
+% TODO: maybe add that it only works with ints so far
+% TODO: Add more limitations?
 
 \mypar{Correctness}
-The correctness of the implementation comes down to the fact that all implementations only terminate once no new edge is
-selected, by any computation unit, to the resulting MST. For that reason, the result is a spanning tree. The computed
-spanning tree is also a MST due to the greedy nature of how the edges are chosen. The same proof holds as for why the
-Bor\r{u}vka's algorithm is correct\cite{nevsetvril2012origins}. For verifying the correctness we use unit tests. We
-wrote multiple manual unit tests that cover different edge cases to ensure the correctness of our implementations. On
-top of that we also use differential testing with larger Kronocker Graphs (1024 vertices), using the result of the
-parallel Boost implementation as a comparison. To get assurance during development and be able to more quickly merge
-open pull requests, we used continuous integration to build the application and execute the available unit tests.
+To verify the correctness of our algorithms, we perform unit tests using Catch2. On top of that, we perform differential
+tests with large Kronecker graphs that compare our implementations to the baseline (parallel BGL). To get assurance
+during development, we use continuous integration that executes the tests and reports potential failure.
 
 \subsection{Benchmarking Infrastructure}
 % TODO maybe move likwid description to background -> I think that's unessecary since it doesn't add to any understanding needed for the paper.
-To make the experimentation process faster, we developed a small benchmarking infrastructure that allows us to more
-easily benchmark the various algorithms with different graph sizes. The measurements were performed using the
-performance measurement tool LIKWID \cite{treibig2010likwid}. LIKWID uses hardware counters for its measurements and can
-be invoked by putting markers around the code that should be benchmarked. This allowed us to not only benchmark the
-entire execution, but also individual parts of the algorithms, which gave us more detailed information about which parts
-require the most amount of work.
+To ease the benchmarking process, we developed an infrastructure that allows us to parameterize the different
+algorithms. The results are obtained using the performance measurement tool LIKWID \cite{treibig2010likwid}. LIKWID uses
+hardware counters for its measurements and can be invoked by simply marking the code to be benchmarked. This allows us
+to benchmark parts of the algorithms and obtain detailed information to further improve certain functionality.
 
 \section{Experimental Results}\label{sec:exp}
 
@@ -489,65 +490,74 @@ For vertex distribution it is obvious from Fig. \ref{comparison} that distributi
 %\end{itemize}
 
 \section{Conclusions}
+% Here you need to summarize what you did and why this is
+% important. {\em Do not take the abstract} and put it in the past
+% tense. Remember, now the reader has (hopefully) read the report, so it
+% is a very different situation from the abstract. Try to highlight
+% important results and say the things you really want to get across
+% such as high-level statements (e.g., we believe that .... is the right
+% approach to .... Even though we only considered x, the
+% .... technique should be applicable ....)
 
-Here you need to summarize what you did and why this is
-important. {\em Do not take the abstract} and put it in the past
-tense. Remember, now the reader has (hopefully) read the report, so it
-is a very different situation from the abstract. Try to highlight
-important results and say the things you really want to get across
-such as high-level statements (e.g., we believe that .... is the right
-approach to .... Even though we only considered x, the
-.... technique should be applicable ....) You can also formulate next
-steps if you want. Be brief. After the conclusions there are only the references.
+\mypar{Future Work}
+% You can also formulate next steps if you want. Be brief. After the conclusions there are only the references.
+% TODO update if limitations get updated
+Besides the obvious step of finding new strategies and implementing more combinations, a possible way on how to improve
+the current implementations is by resolving the limitations described in section \ref{par:limitation}. In particular,
+storing the actual MST and supporting all MPI configurations independent of the input graph. Moreover, depending on
+graph properties, such as the connectivity or the average degree, different strategies could be applied at run-time.
+This would require further, more-detailed measurements. Other work could also try to benchmark different graph types,
+for instance Erdös-Renyi graphs, and figure out which graph properties influence the runtimes.
+% TODO: This might need a few more sentences
 
-%\section{Further comments}
+% \section{Further comments}
 %
-%Here we provide some further tips.
+% Here we provide some further tips.
 %
-%\mypar{Further general guidelines}
-%
-%\begin{itemize}
-%\item For short papers, to save space, I use paragraph titles instead of
-%subsections, as shown in the introduction.
-%
-%\item It is generally a good idea to break sections into such smaller
-%units for readability and since it helps you to (visually) structure the story.
-%
-%\item The above section titles should be adapted to more precisely
-%reflect what you do.
-%
-%\item Each section should be started with a very
-%short summary of what the reader can expect in this section. Nothing
-%more awkward as when the story starts and one does not know what the
-%direction is or the goal.
-%
-%\item Make sure you define every acronym you use, no matter how
-%convinced you are the reader knows it.
-%
-%\item Always spell-check before you submit (to us in this case).
-%
-%\item Be picky. When writing a paper you should always strive for very
-%high quality. Many people may read it and the quality makes a big difference.
-%In this class, the quality is part of the grade.
-%
-%\item Books helping you to write better: \cite{Higham:98} and \cite{Strunk:00}.
-%
-%\item Conversion to pdf (latex users only): 
-%
-%dvips -o conference.ps -t letter -Ppdf -G0 conference.dvi
-%
-%and then
-%
-%ps2pdf conference.ps
-%\end{itemize}
-%
-%\mypar{Graphics} For plots that are not images {\em never} generate the bitmap formats
-%jpeg, gif, bmp, tif. Use eps, which means encapsulate postscript. It is
-%scalable since it is a vector graphic description of your graph. E.g.,
-%from Matlab, you can export to eps.
-%
-%The format pdf is also fine for plots (you need pdflatex then), but only if the plot was never before in the format 
-%jpeg, gif, bmp, tif.
+% \mypar{Further general guidelines}
+% 
+% \begin{itemize}
+% \item For short papers, to save space, I use paragraph titles instead of
+% subsections, as shown in the introduction.
+% 
+% \item It is generally a good idea to break sections into such smaller
+% units for readability and since it helps you to (visually) structure the story.
+% 
+% \item The above section titles should be adapted to more precisely
+% reflect what you do.
+% 
+% \item Each section should be started with a very
+% short summary of what the reader can expect in this section. Nothing
+% more awkward as when the story starts and one does not know what the
+% direction is or the goal.
+% 
+% \item Make sure you define every acronym you use, no matter how
+% convinced you are the reader knows it.
+% 
+% \item Always spell-check before you submit (to us in this case).
+% 
+% \item Be picky. When writing a paper you should always strive for very
+% high quality. Many people may read it and the quality makes a big difference.
+% In this class, the quality is part of the grade.
+% 
+% \item Books helping you to write better: \cite{Higham:98} and \cite{Strunk:00}.
+% 
+% \item Conversion to pdf (latex users only): 
+% 
+% dvips -o conference.ps -t letter -Ppdf -G0 conference.dvi
+% 
+% and then
+% 
+% ps2pdf conference.ps
+% \end{itemize}
+% 
+% \mypar{Graphics} For plots that are not images {\em never} generate the bitmap formats
+% jpeg, gif, bmp, tif. Use eps, which means encapsulate postscript. It is
+% scalable since it is a vector graphic description of your graph. E.g.,
+% from Matlab, you can export to eps.
+% 
+% The format pdf is also fine for plots (you need pdflatex then), but only if the plot was never before in the format 
+% jpeg, gif, bmp, tif.
 
 \bibliographystyle{IEEEbib}
 \bibliography{bibl_conf}
