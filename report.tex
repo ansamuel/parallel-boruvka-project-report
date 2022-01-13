@@ -37,6 +37,15 @@
 % in this order), and the main result.  The abstract has to be
 % self-contained and readable for a person in the general area. You
 % should write the abstract last.
+Minimum-Spanning-Tree algorithms are among the most well known graph algorithms in computer science. They can be used as
+part of a larg variety of algorithms to compute intermediate results and are applied in numerous scientific fields. As
+such, having implementations that can handle large inputs and compute the result in a reasonable amount of time is of
+the utmost importance. In this paper, we compare a variety of implementation strategies that can be used to implement
+Bor\r{u}vka's MST algorithm. These strategies range from different work distribution approaches to a number of different
+pointer jumping schemes and using a union find datastructure. To measure and compare the performance of these
+implementations, we performed benchmarks on the RACKlette cluster and used parallel Boost as a baseline. Using these
+strategies, we were able to develop implementations that were ... times faster compared to our baseline implementation.
+% TODO calculate and add speedup
 \end{abstract}
 
 \section{Introduction}
