@@ -419,7 +419,7 @@ In the following paragraphs the benchmarking results are presented along with th
 %Next divide the experiments into classes, one paragraph for each. In each class of experiments you typically pursue one questions that then is answered by a suitable plot or plots. For example, first you may want to investigate the performance behavior with changing input size, then how your code compares to external benchmarks.
 
 \mypar{How does the performance behavior change when work is distributed between increased number of MPI processes}
-To answer the question we used strong scaling study results without the baseline.
+To answer the question we use strong scaling study results without the baseline.
 
 \begin{figure}\centering
 	\includegraphics[width=\columnwidth]{strongscaling_s20.pdf}
@@ -428,10 +428,10 @@ To answer the question we used strong scaling study results without the baseline
 %Strong scaling, skip boost, size 20 -> line plot
 
 Like can be seen in Fig. \ref{scrongscaling-20} all implementation have an improved runtime as the MPI processes increases up and including 4 processes.
- All vertex distribution implementation perform similarly apart from the supervertices pointer jumping one which performs worse in comparison as the number of the MPI processes increases. The edge distribution implementations also perform similarly with the best performing algorithm being Edge Distributed union find w. reduced edges, running on 32 MPI processes. The Edge Distribution implementations scale better and the runtime almost halves as the number of MPI processes doubles up until 4 MPI processes when there start to be diminishing returns. It should be noted that the ratio between vertices and edges is only 1:16 and therefore seeing diminishing returns past 16 MPI processes not surprising and more dense graphs might benefit from running on a higher number of MPI processes.
+ All vertex distribution implementation perform similarly apart from the supervertices pointer jumping one which performs worse in comparison as the number of the MPI processes increases. The edge distribution implementations also perform similarly with the best performing algorithm being Edge Distributed union find w. reduced edges, running on 32 MPI processes. The Edge Distribution implementations scale better and the runtime almost halves as the number of MPI processes doubles up until 4 MPI processes when there start to be diminishing returns. It should be noted that the ratio between vertices and edges is only 1:16 and therefore seeing diminishing returns past 16 MPI processes is not surprising and more dense graphs might benefit from running on a higher number of MPI processes.
 
 \mypar{How well do our algorithms perform compared to the baseline}
-To answer the question we used the strong scaling study results with the results for the parallel boost implementation.
+To answer the question we use the strong scaling study results including the those for the parallel boost implementation.
 
 \begin{figure}\centering
 	\includegraphics[width=\columnwidth]{strongscaling_s19.pdf}
@@ -467,14 +467,14 @@ all our implementations exceed the performance of the parallel boost implementat
 %TODO add some analyziz of the plot results, 
 
 \mypar{Which parts require the most amount of runtime}
-To answer this we use the fine-grained measurements that separates the runtimes between graph distribution, lightest edge selection and merging.
+To answer this we use the fine-grained measurements that separate the runtimes between graph distribution, lightest edge selection and merging.
 
 \begin{figure}\centering
 	\includegraphics[width=\columnwidth]{comparison.pdf}
 	\caption{Comparison. Vertex count $2^{19}$, MPI processes 64. \label{comparison}}
 \end{figure}
 
-For vertex distribution it is obvious from Fig. \ref{comparison} that distributing the graph is a bottleneck while for the edge distributions that's a small part of the total runtime. Distributing the edges by vertices also doesn't result in much benefit for the lightest edge selection. This is probably because after merging, the edges for connected component end up being spread over different computation units. For the different merging strategy the sequential union is significantly faster than all the pointer jumping versions. Surprisingly the simple pointer jumping being the fastest of them, possibly due to fewer synchronizations needed. The union find, even though running sequentially also only takes up small part of the runtime.
+For vertex distribution it is obvious from Fig. \ref{comparison} that distributing the graph is a bottleneck while for the edge distributions that's a small part of the total runtime. Distributing the edges by vertices also doesn't result in much benefit for the lightest edge selection. This is probably because after merging, the edges for connected component end up being spread over different computation units. For the different merging strategies the sequential union is significantly faster than all the pointer jumping versions. Surprisingly the simple pointer jumping being the fastest of them, possibly due to fewer synchronizations needed. The union find, even though running sequentially also only takes up small part of the total runtime.
 
 %For some tips on benchmarking including how to create a decent viewgraph see pages 22--27 in \cite{Pueschel:10}.
 %
