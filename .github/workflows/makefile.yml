@@ -24,4 +24,6 @@ jobs:
       run: sudo DEBIAN_FRONTEND=noninteractive apt-get install -yq ghostscript
 
     - name: Compile PDF
-      run: make report
+      run: |
+        cd report/
+        make report
