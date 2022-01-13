@@ -10,6 +10,9 @@
 
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs}
 
 \newcommand{\R}[0]{\mathbb{R}}
 \newcommand{\N}[0]{\mathbb{N}}
@@ -369,6 +372,7 @@ BGL is the most optimized and well-known library. One promising implementation u
 uncomparable results since we use MPI \cite{15418}. % TODO: Maybe leave this out since its a project by other students
 
 \mypar{Kronecker Graph Generator}
+\label{par:kronecker_graph_generator}
 Initially, we experimented with different kinds of graphs and implemented some generators for them, but ultimately
 decided to only use Kronecker graphs to benchmark our implementations. Self-written generators can be error-prone and it
 is difficult to efficiently generate large graphs. Therefore, we use the reference implementation of the Graph500
@@ -408,40 +412,108 @@ algorithms. The results are obtained using the performance measurement tool LIKW
 hardware counters for its measurements and can be invoked by simply marking the code to be benchmarked. This allows us
 to benchmark parts of the algorithms and obtain detailed information to further improve certain functionality.
 
-\section{Experimental Results}\label{sec:exp}
+\section{Experimental Results}
+\label{sec:exp}
+In this section we go over the benchmarking setup, as well as the results that we measured, including their
+interpretation.
 
-Here you evaluate your work using experiments. You start again with a
-very short summary of the section. The typical structure follows.
+\subsection{Experimental Setup}
+% Specify the platform (processor, frequency, maybe OS, maybe cache sizes)
+% as well as the compiler, version, and flags used. If your work is about performance, 
+% I strongly recommend that you play with optimization flags and consider also icc for additional potential speedup.
+% TODO maybe change footnote to citation
+The benchmarks were executed on the RACKlette cluster\footnote{\url{https://racklette.ethz.ch/}}, setup and maintained
+by a group of students from ETH.
 
-\mypar{Experimental setup} Specify the platform (processor, frequency, maybe OS, maybe cache sizes)
-as well as the compiler, version, and flags used. If your work is about performance, 
-I strongly recommend that you play with optimization flags and consider also icc for additional potential speedup.
+\mypar{Hardware}
+The RACKlette cluster consists of four identical nodes, each of which has two 64-core AMD EPYC 7742 CPUs running at
+2.25GHz with 512GB DDR4 3200MT/s RAM and four Nvidia Tesla V100 GPUs with 32GB GDDR5 VRAM for a total of 512 cores, 2TB
+of memory and 16 GPUs. The four nodes are connected using a speedy interconnect from Mellanox, namely HDR ConnectX-6
+adapters for a 200Gbit/s connection.
 
-Then explain what kind of benchmarks you ran. The idea is to give enough information so the experiments are reproducible by somebody else on his or her code.
-For sorting you would talk about the input sizes. For a tool that performs NUMA optimization, you would specify the programs you ran.
+\mypar{Work Allocation}
+% TODO: Nodes might be confusing here
+All four nodes were used for the benchmarks. We pinned the CPU cores with the purpose that the amount of used CPU cores
+was equal on all nodes. This allocation strategy should lead to more consisten measurements, as otherwise benchmarks
+with a low MPI core count could have an unfair advantage due to less network communication.
 
-\mypar{Results}
+\mypar{Software}
+All benchmarks were conducted using CentOS Linux release 7.9.2009 (Core) with Linux kernel 3.10.0 and the MPI
+implementation mvapich2 version 2.3.4. The code was compiled with GCC version 10.3.0 using the compilation flags
+\lstinline[basicstyle=\ttfamily\color{black},identifierstyle=\color{black}]|-mavx -march=| \linebreak
+\lstinline[basicstyle=\ttfamily\color{black},identifierstyle=\color{black}]|native -O3|.
+
+\subsection{Performed Benchmarks}
+% Then explain what kind of benchmarks you ran. The idea is to give enough information so the experiments are
+% reproducible by somebody else on his or her code.
+% For sorting you would talk about the input sizes. For a tool that performs NUMA optimization, you would specify the
+% programs you ran.
+As described in section \ref{par:kronecker_graph_generator}, all benchmarks were performed using Kronecker graphs. These
+graphs have $16$ times more edges than vertices (as per Graph500 specification \cite{graph500}). This is to ensure an
+average degree of $32$. The implementation ``edge distribution using pointer jumping'' resulted in bad performance.
+Since we are not certain which part of the algorithm causes this, we decided to not include it in our reported
+measurements. % TODO maybe add better justification for this
+
+\mypar{Baseline Comparison}
+To compare our implementations with the baseline, we performed a strong scaling study using graphs with $2^{19}$
+vertices. The number of MPI processes in this study were the powers of $2$: $2^0, \dotsc, 2^6$. The baseline
+implementation did not allow us to go any furhter than that because the execution took too long. We believe this to be
+an implementation issue within the parallel BGL.
+
+\mypar{Implementation Comparison}
+To compare our implementations with each other, we performed a strong and weak scaling study. The strong scaling study
+was performed using graphs with $2^{20}$ vertices. The number of MPI processes were the powers of $2$: $2^0, \dotsc,
+2^9$. The weak scaling study was performed using the following configurations:
+\begin{table}[h!]
+  \centering
+  \begin{tabular}{ll} \toprule
+    \textbf{MPI nodes} & \textbf{Graph nodes} \\\midrule
+    $1$ & $2^{15}$ \\ 
+    $4$ & $2^{16}$ \\ 
+    $16$ & $2^{17}$ \\
+    $64$ & $2^{18}$ \\
+    $256$ & $2^{19}$ \\ \bottomrule \hline
+  \end{tabular}
+\end{table}
+
+\mypar{Detailed Runtime Analysis}
+To get a better understanding of which parts of the algorithms require the most runtime, we performed fine-grained
+measurements. We differentiated between graph distribution, lightest edge selection and merging.
+% TODO add graph sizes and mpi node count
+
+\mypar{Summarizing Results}
+As we are working with runtimes, the arithmetic mean is the obvious choice for summarization. The results for one
+algorithm execution were summarized by computing the arithmetic mean of all MPI processes. To get a summary over all
+algorithm iterations, another arithmetic mean was computed. Although taking the maximum or minimum accross all MPI
+processes could have also been possible. The difference between these and the mean were neglectable due to
+synchronization at the end of the algorithms. % TODO: Maybe just say we used the maximum
+
+\mypar{Repetitions}
+We collected measurements until the $90\%$ confidence interval was within $5\%$ of our reported means. This was achieved
+by performing $10$ repetitions in all benchmarks, where the first execution is discarded due to warmup.
+
+\subsection{Results}
 % TODO compare to results from Chung and Condon
-Next divide the experiments into classes, one paragraph for each. In each class of experiments you typically pursue one questions that then is answered by a suitable plot or plots. For example, first you may want to investigate the performance behavior with changing input size, then how your code compares to external benchmarks.
-
-For some tips on benchmarking including how to create a decent viewgraph see pages 22--27 in \cite{Pueschel:10}.
-
-{\bf Comments:}
-\begin{itemize}
-\item Create very readable, attractive plots (do 1 column, not 2 column plots
-for this report) with readable font size. However, the font size should also not be too large; typically it is smaller than the text font size.
-An example is in Fig.~\ref{fftperf} (of course you can have a different style).
-\item Every plot answers a question. You state this question and extract the
-answer from the plot in its discussion.
-\item Every plot should be referenced and discussed.
-\end{itemize}
-
-\begin{figure}\centering
-  \includegraphics[scale=0.33]{dft-performance.eps}
-  \caption{Performance of four single precision implementations of the
-  discrete Fourier transform. The operations count is roughly the
-  same. The labels in this plot are maybe a little bit too small.\label{fftperf}}
-\end{figure}
+% Next divide the experiments into classes, one paragraph for each. In each class of experiments you typically pursue one questions that then is answered by a suitable plot or plots. For example, first you may want to investigate the performance behavior with changing input size, then how your code compares to external benchmarks.
+% 
+% For some tips on benchmarking including how to create a decent viewgraph see pages 22--27 in \cite{Pueschel:10}.
+% 
+% {\bf Comments:}
+% \begin{itemize}
+% \item Create very readable, attractive plots (do 1 column, not 2 column plots
+% for this report) with readable font size. However, the font size should also not be too large; typically it is smaller than the text font size.
+% An example is in Fig.~\ref{fftperf} (of course you can have a different style).
+% \item Every plot answers a question. You state this question and extract the
+% answer from the plot in its discussion.
+% \item Every plot should be referenced and discussed.
+% \end{itemize}
+% 
+% \begin{figure}\centering
+%   \includegraphics[scale=0.33]{dft-performance.eps}
+%   \caption{Performance of four single precision implementations of the
+%   discrete Fourier transform. The operations count is roughly the
+%   same. The labels in this plot are maybe a little bit too small.\label{fftperf}}
+% \end{figure}
 
 \section{Conclusions}
 % Here you need to summarize what you did and why this is
