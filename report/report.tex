@@ -23,8 +23,7 @@
 
 \newcommand{\mypar}[1]{{\bf #1.}}
 
-% TODO: Maybe remove the work efficient and change tree to forest?
-\title{Efficient Parallelization of Bor\r{u}vka's Minimum Spanning Tree Algorithm}
+\title{Efficient Parallelization of Bor\r{u}vka's \linebreak Minimum Spanning Tree Algorithm}
 
 \fiveauthors
   {Samuel Anzalone \\[-0.8ex] {\small BS Computational Science} \\[-0.8ex] {\small \texttt{ansamuel@ethz.ch}}}
@@ -86,7 +85,7 @@ Other scientific fields, such as epidemiology or taxonomy, apply MST algorithms 
 example problems.
 \begin{itemize}
   \item \textbf{Networking} MST algorithms find trees in computer networks that can be used for broadcasting without
-    loops. % TODO: Maybe cite https://dl.acm.org/doi/10.1145/359657.359665
+    loops. % TODO: Maybe cite https://dl.acm.org/doi/10.1145/359657.359665 (Matteo)
   \item \textbf{$\frac{3}{2}$-ap\-prox\-i\-mate metric TSP} By combining algorithms that find MSTs, matchings and
     eulerian circuits, one can develop a $\frac{3}{2}$-ap\-prox\-i\-mation algorithm solving the metric traveling
     salesperson problem \cite{christofides1976worst}.
@@ -103,7 +102,7 @@ In our research, we focus on the MST algorithm proposed by Bor\r{u}vka \cite{bor
 which is one of the most prominent MST algorithms as of today. We implement this algorithm using different work
 distribution and merging strategies. Our implementations use the Message Passing Interface (MPI) for communication.
 Randomly generated Kronecker graphs are used to evaluate the performance of our implementation.
-% TODO: Mention how we perform compared to other implementations once we have results
+% TODO: Mention how we perform compared to other implementations once we have results (Hulda)
 
 \mypar{Related Work}
 % Next, you have to give a brief overview of
@@ -193,12 +192,11 @@ corresponding set of an element and merging two sets takes $\bigoh(\alpha(n))$ t
 operations can be used to describe the connected components in the algorithm \ref{alg:boruvka}. Note that the runtime
 achieved here is not on a per-operation basis. Single operations can take longer but the data structure adjusts itself
 so that successive operations are faster.
-
+% TODO maybe remove this paragraph skip
 We use the so-called path compression strategy when performing \verb|find()| operations and we merge sets by rank during
 \verb|union()| calls \cite{intro_to_algos}.
 
 \mypar{Pointer Jumping}
-% TODO maybe add a tikz image or algorithm description for this
 Pointer jumping \cite{jeje1992introduction} (also referred to as path doubling) is a design technique that allows an
 algorithm to follow a path using only logarithmic time with respect to the length of the longest path. It does this by
 redirecting the parent pointers that describe the path, to point to the parent of the parent for each vertex on the path
@@ -207,7 +205,6 @@ simultaneously. This process is then repeated until every vertex points to the r
 each vertex individually, which has a potential worst case runtime of $\bigoh(n^2)$.
 
 \mypar{Supervertex Pointer Jumping}
-% TODO maybe add a tikz image for this
 Supervertex pointer jumping \cite{chung1996parallel} is an extension of pointer jumping that uses randomness to achieve
 an expected linear time algorithm. The technique is best explained in the aformentioned paper, but the high level idea
 is to select a set of vertices to be supervertices, perform pointer jumping on all non-supervertices, until they reach a
@@ -244,7 +241,6 @@ but was not considered in this project. As these two strategies have different p
 implementations for both of these approaches were developed. To get a better understanding of how they operate and how
 they compare, the following two paragraphs describe them both.
 
-% TODO maybe move the original input graph into the middle to clearly separate the edge dist. and vertex dist. images
 \begin{figure*}
   \begin{subfigure}{0.33\textwidth}
     \centering
@@ -329,7 +325,6 @@ distribute the graph. Moreover, the workload of each computation unit is unevenl
 distribution strategy. Imagine a scenario, where certain vertices have a higher degree (amount of incident edges) than
 others. In that case the computation of the minimum weight outgoing edge of each component takes longer for some
 computation units whilst others are idle. However, with this approach the merging of components can be parallelized. 
-% TODO: Maybe the last sentence needs more explanation
 
 \subsection{Implementations}
 \label{sec:implementations}
@@ -353,7 +348,6 @@ aforementioned distribution strategies. The following list contains all the comb
 Clearly, this list does not contain every possible combination. Intermediate benchmarking showed that some strategies
 were not promising enough to be pursued further.
 
-% TODO: Shouldn't we explain the implementations in more detail? It seems a bit meager
 We are not going to give detailed descriptions for all implementations, as their rough idea should be clear with the
 information given in section \ref{sec:background}. The ones that might not be self-explanatory are ``edge distribution
 using union find with edge reduction'' and ``vertex distribution using iterative vertex fixing''. The first one uses an
@@ -362,7 +356,7 @@ additional runtime, we have to be cautious about the impact on performance. The 
 the vertices, briefly mentioned in the pointer jumping paragraph in section \ref{sec:background}. This approach has a
 greater theoretical runtime, but uses far less communication compared to the vertex distributed pointer jumping
 implementation. The open question here is, whether the lower runtime guarantee is worth the additional communication.
-More on this in section \ref{sec:exp}. % TODO maybe update reference to a more specific one later on
+More on this in section \ref{sec:exp}. % TODO maybe update reference to a more specific one later on (Mike)
 
 Sequential versions of some merging strategies were also implemented to get a better understanding of how they operate.
 However, these sequential algorithms did not serve any additional purpose beyond that.
@@ -371,7 +365,8 @@ However, these sequential algorithms did not serve any additional purpose beyond
 To get an idea of how well our implementations perform, we decided to use the Parallel Boost Graph Library (BGL)
 \cite{bgl} as our baseline. We considered other baseline implementations but came to the conclusion that the Parallel
 BGL is the most optimized and well-known library. One promising implementation uses OpenMP which might have lead to
-uncomparable results since we use MPI \cite{15418}. % TODO: Maybe leave this out since its a project by other students
+uncomparable results since we use MPI \cite{15418}.
+% TODO: Maybe leave this out since its a project by other students (Matteo)
 
 \mypar{Kronecker Graph Generator}
 \label{par:kronecker_graph_generator}
@@ -385,22 +380,19 @@ all algorithm executions, we seeded the graph generator, so that it always gener
 
 \mypar{Communication}
 All implementations use MPI as a communication protocol. Besides send and receive routines used to distribute the graph,
-we also use scatter, gather and reduction functionalities. % TODO: Should we use verbatim here?
-To minimize the cost of communication as much as possible, we keep the amount of MPI subroutine calls to a minimum. We
-achieve this by first locally preparing the data and then sending everything at once. This was used to e.g. more
-efficiently distribute the incident edges in all vertex distributed implementations. Instead of sending each edge
-individually, only one send operation containing all edges is performed for each computation unit.
+we also use scatter, gather and reduction functionalities. To minimize the cost of communication as much as possible, we
+keep the amount of MPI subroutine calls to a minimum. We achieve this by first locally preparing the data and then
+sending everything at once. This was used to e.g. more efficiently distribute the incident edges in all vertex
+distributed implementations. Instead of sending each edge individually, only one send operation containing all edges is
+performed for each computation unit.
 
 \mypar{Limitations}
 \label{par:limitation}
-% TODO: Leave this out since they actually calculate the graph but don't return it
 So far all implementations don't compute the actual MST, but only its edge weight sum. Moreover, the work has to be
 distributed among all computation units evenly, i.e. the amount of edges or vertices must be divisible by the amount of
 computation units depending on the distribution strategy. For most implementations, both of these limitations are
 straightforward to resolve. This is especially true for the MST tree computation, as the lightest edges are distributed
 among the computation units anyway.
-% TODO: maybe add that it only works with ints so far
-% TODO: Add more limitations?
 
 \mypar{Correctness}
 To verify the correctness of our algorithms, we perform unit tests using Catch2. On top of that, we perform differential
@@ -408,7 +400,6 @@ tests with large Kronecker graphs that compare our implementations to the baseli
 during development, we use continuous integration that executes the tests and reports potential failure.
 
 \subsection{Benchmarking Infrastructure}
-% TODO maybe move likwid description to background -> I think that's unessecary since it doesn't add to any understanding needed for the paper.
 To ease the benchmarking process, we developed an infrastructure that allows us to parameterize the different
 algorithms. The results are obtained using the performance measurement tool LIKWID \cite{treibig2010likwid}. LIKWID uses
 hardware counters for its measurements and can be invoked by simply marking the code to be benchmarked. This allows us
@@ -423,7 +414,7 @@ interpretation.
 % Specify the platform (processor, frequency, maybe OS, maybe cache sizes)
 % as well as the compiler, version, and flags used. If your work is about performance, 
 % I strongly recommend that you play with optimization flags and consider also icc for additional potential speedup.
-% TODO maybe change footnote to citation
+% TODO maybe change footnote to citation (Mike)
 The benchmarks were executed on the RACKlette cluster\footnote{\url{https://racklette.ethz.ch/}}, setup and maintained
 by a group of students from ETH.
 
@@ -434,10 +425,9 @@ of memory and 16 GPUs. The four nodes are connected using a speedy interconnect 
 adapters for a 200Gbit/s connection.
 
 \mypar{Work Allocation}
-% TODO: Nodes might be confusing here
-All four nodes were used for the benchmarks. We pinned the CPU cores with the purpose that the amount of used CPU cores
-was equal on all nodes. This allocation strategy should lead to more consisten measurements, as otherwise benchmarks
-with a low MPI core count could have an unfair advantage due to less network communication.
+All four cluster nodes were used for the benchmarks. We pinned the CPU cores with the purpose that the amount of used
+CPU cores was equal on all nodes. This allocation strategy should lead to more consisten measurements, as otherwise
+benchmarks with a low MPI core count could have an unfair advantage due to less network communication.
 
 \mypar{Software}
 All benchmarks were conducted using CentOS Linux release 7.9.2009 (Core) with Linux kernel 3.10.0 and the MPI
@@ -454,7 +444,7 @@ As described in section \ref{par:kronecker_graph_generator}, all benchmarks were
 graphs have $16$ times more edges than vertices (as per Graph500 specification \cite{graph500}). This is to ensure an
 average degree of $32$. The implementation ``edge distribution using pointer jumping'' resulted in bad performance.
 Since we are not certain which part of the algorithm causes this, we decided to not include it in our reported
-measurements. % TODO maybe add better justification for this
+measurements. % TODO maybe add better justification for this (Matteo)
 
 \mypar{Baseline Comparison}
 To compare our implementations with the baseline, we performed a strong scaling study using graphs with $2^{19}$
@@ -490,14 +480,13 @@ As we are working with runtimes, the arithmetic mean is the obvious choice for s
 algorithm execution were summarized by computing the arithmetic mean of all MPI processes. To get a summary over all
 algorithm iterations, another arithmetic mean was computed. Although taking the maximum or minimum accross all MPI
 processes could have also been possible. The difference between these and the mean were neglectable due to
-synchronization at the end of the algorithms. % TODO: Maybe just say we used the maximum
+synchronization at the end of the algorithms. % TODO: Maybe just say we used the maximum (Matteo)
 
 \mypar{Repetitions}
 We collected measurements until the $90\%$ confidence interval was within $5\%$ of our reported means. This was achieved
 by performing $10$ repetitions in all benchmarks, where the first execution is discarded due to warmup.
 
 \subsection{Results}
-% TODO compare to results from Chung and Condon
 This section contains the results of the performed benchmarks, including an analysis.
 % Next divide the experiments into classes, one paragraph for each. In each class of experiments you typically pursue
 % one questions that then is answered by a suitable plot or plots. For example, first you may want to investigate the
@@ -526,7 +515,7 @@ This section contains the results of the performed benchmarks, including an anal
 
 \begin{figure}
   \includegraphics[width=\columnwidth]{../benchmark-results/plots/strongscaling_s19.pdf}
-  \caption{Strong scaling comparison with the baseline, $2^{19}$ Vertices} % TODO: Is the caption really needed?
+  \caption{Strong scaling comparison with the baseline, $2^{19}$ Vertices}
   \label{fig:strongscaling-19}
 \end{figure}
 
@@ -552,12 +541,12 @@ $9.4513s/0.2997s \approx 31.5$ was achieved when using $2$ processes.
 
 \begin{figure}
   \includegraphics[width=\columnwidth]{../benchmark-results/plots/strongscaling_s20.pdf}
-  \caption{Strong scaling comparison without the baseline, $2^{20}$ Vertices.} % TODO: Is the caption really needed?
+  \caption{Strong scaling comparison without the baseline, $2^{20}$ Vertices.}
   \label{fig:strongscaling-20}
 \end{figure}
 \begin{figure}
   \includegraphics[width=\columnwidth]{../benchmark-results/plots/weakscaling.pdf}
-  \caption{Weak scaling comparison, $2^{18}$ - $2^{22}$ Vertices.} % TODO: Is the caption really needed?
+  \caption{Weak scaling comparison, $2^{18}$ - $2^{22}$ Vertices.}
   \label{fig:weakscaling}
 \end{figure}
 
@@ -571,10 +560,10 @@ jumping. This is most likely due to the randomness of that merging strategy. Ano
 distributed implementations do not scale after reaching $16$ MPI processes. As the ratio between vertices and edges is
 exactly $1:16$, it is not surprising to see diminishing returns past 16 MPI processes. More dense graphs might benefit
 from running on more MPI processes.
-% TODO is this argumentation valid?
+% TODO is this argumentation valid? (Mike)
 The weak scaling comparison of Fig. \ref{fig:weakscaling} shows a similar picture. In addition, the weak scaling
 comparison indicates that the edge distributed implementations will perform better with a growing number of processes
-and increasing number of vertices. % TODO: We should talk more about the weak scaling
+and increasing number of vertices.
 
 \begin{figure}
   \includegraphics[width=\columnwidth]{../benchmark-results/plots/comparison.pdf}
@@ -593,7 +582,9 @@ except for the iterative vertex fixing approach. Interestingly, this approach ou
 strategies, even though it has a worse theoretical runtime. This result indicates that the additional synchronization
 required is not worth the tighter theoretical runtime bound. The terrible runtime of the supervertex pointer jumping
 merge strategy gives a reason as to why it performed so much worse compared to the other pointer jumping
-approaches in the strong scaling study. %TODO, maybe rather stress that the supervertex one has the most synchronization needed, which gives an explanation of why it performs the worst, thus the strongscaling results.
+approaches in the strong scaling study.
+% TODO, maybe rather stress that the supervertex one has the most synchronization needed, which gives an explanation of
+% why it performs the worst, thus the strongscaling results. (Hulda)
 In addition, the plot shows that the large standard deviation of the vertex distributed supervertices pointer jumping
 implementation comes from the merge step. This strengthens the claim made in the previous paragraph.
 
@@ -606,7 +597,7 @@ implementation comes from the merge step. This strengthens the claim made in the
 % such as high-level statements (e.g., we believe that .... is the right
 % approach to .... Even though we only considered x, the
 % .... technique should be applicable ....)
-As is evident form the benchmark evaluation % TODO: Reference
+As is evident form the benchmark evaluation % TODO: Reference (Mike)
 we outperform the Parallel BGL by a wide margin. The best approach to distribute the work is the edge distribution
 strategy. Intuitively, this does make sense since there is less data to distribute. The merging strategy used by the
 algorithm does not have a significant impact on the performance. However, the ``Supervertex Pointer Jumping'' performs
@@ -617,14 +608,13 @@ supervertex pointer jumping performes worse than pointer jumping on structured a
 
 \mypar{Future Work}
 % You can also formulate next steps if you want. Be brief. After the conclusions there are only the references.
-% TODO update if limitations get updated
 Besides the obvious step of finding new strategies and implementing more combinations, a possible way on how to improve
 the current implementations is by resolving the limitations described in section \ref{par:limitation}. In particular,
 storing the actual MST and supporting all MPI configurations independent of the input graph. Moreover, depending on
 graph properties, such as the connectivity or the average degree, different strategies could be applied at run-time.
 This would require further, more-detailed measurements. Other work could also try to benchmark different graph types,
 for instance Erdös-Renyi graphs, and figure out which graph properties influence the runtimes. Moreover, it would be
-interesting to see if a parallelized merging strategy using a wait-free Union-Find data structure \cite{wfuf} performs % TODO: Fix Union-Find naming
+interesting to see if a parallelized merging strategy using a wait-free Union-Find data structure \cite{wfuf} performs
 better than our current implementations.
 
 % \section{Further comments}
