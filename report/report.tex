@@ -563,9 +563,10 @@ mentioning, that the standard deviation for all implementations is minuscule, ex
 jumping. This is most likely due to the randomness of that merging strategy. Another interesting point is that the edge
 distributed implementations do not scale after reaching $16$ MPI processes. As the ratio between vertices and edges is
 exactly $1:16$, it is not surprising to see diminishing returns past $16$ MPI processes. This is because the lightest
-edge computation gets bottlenecked by the communication, as the amount of vertices is larger than the number of edges
-an MPI process owns. More dense graphs might benefit from running on more MPI processes. The weak scaling comparison of
-Fig. \ref{fig:weakscaling} shows a similar picture. In addition, the weak scaling comparison indicates that the edge
+edge computation communicates proportional to the amount of vertices of the input graph. After the $16$ process
+threshold, the communication outweighs the per-process work, resulting in worse performance for increasing MPI
+processes. More dense graphs might benefit from running on more MPI processes. The weak scaling comparison of Fig.
+\ref{fig:weakscaling} shows a similar picture. In addition, the weak scaling comparison indicates that the edge
 distributed implementations will perform better with a growing number of processes and increasing number of vertices.
 
 \begin{figure}
