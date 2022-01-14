@@ -114,9 +114,9 @@ on parallelizing MST algorithms. One such paper \cite{chung1996parallel}, which 
 project, evaluates how the performance of Bor\r{u}vka behaves when using different pointer jumping schemes. They also
 show that in principle a speedup proportional to the number of processors can be achieved.
 
-Other research limits itself on sufficiently dense graphs and presents an algorithm for the bulk synchronous parallel
-(BSP) model \cite{dehne1998practical}. Furthermore, a parallelization of the MST algorithm using GPUs is presented in
-\cite{de2017parallel}.
+Other research limits itself on sufficiently dense \linebreak graphs and presents an algorithm for the bulk synchronous
+parallel (BSP) model \cite{dehne1998practical}. Furthermore, a parallelization of the MST algorithm using GPUs is
+presented in \cite{de2017parallel}.
 
 Some implementations that can be found make use of wait-free Union-Find data structures \cite{wfuf}. Such data
 structures speed-up the merge step of the Vor\r{u}vka algorithm. However, they do not aid in distributing the work over
@@ -158,10 +158,10 @@ three spanning trees. For simplicity, we will use the term spanning tree through
 working with spanning forests in case $G$ is not connected.
 
 \mypar{Minimum-Spanning-Tree Problem}
-In the MST problem, every edge $e$ of the input graph $G = (V, E)$ has an associated weight. Formally, there is a weight
-function $w : E \to \N$ that is given as input. The goal is to find a spanning tree with a minimum edge weight sum, i.e.
-the edge weight of all other spanning trees is at least as large. Just like with a spanning tree, an MST must not
-necessarily be unique for a given graph $G$.
+In the \linebreak MST problem, every edge $e$ of the input graph $G = (V, E)$ has an associated weight. Formally, there
+is a weight function $w : E \to \N$ that is given as input. The goal is to find a spanning tree with a minimum edge
+weight sum, i.e. the edge weight of all other spanning trees is at least as large. Just like with a spanning tree, an
+MST must not necessarily be unique for a given graph $G$.
 
 \mypar{Bor\r{u}vka's Algorithm}
 Bor\r{u}vka's algorithm \cite{boruuvka1926jistem, nevsetvril2001otakar} solves the MST problem as described above.
@@ -205,11 +205,12 @@ simultaneously. This process is then repeated until every vertex points to the r
 each vertex individually, which has a potential worst case runtime of $\bigoh(n^2)$.
 
 \mypar{Supervertex Pointer Jumping}
-Supervertex pointer jumping \cite{chung1996parallel} is an extension of pointer jumping that uses randomness to achieve
-an expected linear time algorithm. The technique is best explained in the aforementioned paper, but the high level idea
-is to select a set of vertices to be supervertices, perform pointer jumping on all non-supervertices, until they reach a
-supervertex or a root, let each supervertex point to the next supervertex and repeat the process recursively on the
-supervertices. After the recursion, it is sufficient to perform only one more pointer jump for all non-supervertices.
+Supervertex \linebreak pointer jumping \cite{chung1996parallel} is an extension of pointer jumping that uses randomness
+to achieve an expected linear time algorithm. The technique is best explained in the aforementioned paper, but the high
+level idea is to select a set of vertices to be supervertices, perform pointer jumping on all non-supervertices, until
+they reach a supervertex or a root, let each supervertex point to the next supervertex and repeat the process
+recursively on the supervertices. After the recursion, it is sufficient to perform only one more pointer jump for all
+non-supervertices.
 
 \mypar{MPI}
 The message passing interface \cite{clarke1994mpi} is a standard for developing applications on parallel computing
@@ -419,8 +420,8 @@ ETH.
 \mypar{Hardware}
 The RACKlette cluster consists of four identical nodes, each of which has two 64-core AMD EPYC 7742 CPUs running at
 2.25GHz with 512GB DDR4 3200MT/s RAM and four Nvidia Tesla V100 GPUs with 32GB GDDR5 VRAM for a total of 512 cores, 2TB
-of memory and 16 GPUs. The four nodes are connected using a speedy interconnect from Mellanox, namely HDR ConnectX-6
-adapters for a 200Gbit/s connection.
+of memory and 16 GPUs. The four nodes are connected using a speedy interconnect from \linebreak Mellanox, namely HDR
+ConnectX-6 adapters for a \linebreak 200Gbit/s connection.
 
 \mypar{Work Allocation}
 All four cluster nodes were used for the benchmarks. We pinned the CPU cores with the purpose that the amount of used
