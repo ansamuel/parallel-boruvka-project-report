@@ -523,6 +523,13 @@ by performing $10$ repetitions in all benchmarks, where the first execution is d
 % such as high-level statements (e.g., we believe that .... is the right
 % approach to .... Even though we only considered x, the
 % .... technique should be applicable ....)
+As is evident form the benchmark evaluation % TODO: Reference
+we outperform the parallel BGL by a wide margin. The best approach to distribute the work is the edge distribution
+strategy. Intuitively, this does make sense since there is less data to distribute. The merging strategy used by the
+algorithm does not have a significant impact on the performance. However, the ``Supervertex Pointer Jumping'' performs
+the worst. In conclusion, we can say that we achieved our goal and found approaches that perform better than a state of
+the art implementation. The Parallel BGL is, of course, more sophisticated and supports generic graph data structures as
+well as other algorithms.
 
 \mypar{Future Work}
 % You can also formulate next steps if you want. Be brief. After the conclusions there are only the references.
@@ -532,8 +539,9 @@ the current implementations is by resolving the limitations described in section
 storing the actual MST and supporting all MPI configurations independent of the input graph. Moreover, depending on
 graph properties, such as the connectivity or the average degree, different strategies could be applied at run-time.
 This would require further, more-detailed measurements. Other work could also try to benchmark different graph types,
-for instance Erdös-Renyi graphs, and figure out which graph properties influence the runtimes.
-% TODO: This might need a few more sentences
+for instance Erdös-Renyi graphs, and figure out which graph properties influence the runtimes. Moreover, it would be
+interesting to see if a parallelized merging strategy using a wait-free Union-Find data structure \cite{wfuf} performs % TODO: Fix Union-Find naming
+better than our current implementations.
 
 % \section{Further comments}
 %
