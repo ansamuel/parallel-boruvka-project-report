@@ -492,7 +492,6 @@ We collected measurements until the $90\%$ confidence interval was within $5\%$ 
 by performing $10$ repetitions in all benchmarks, where the first execution is discarded due to warmup.
 
 \subsection{Results}
-% TODO compare to results from Chung and Condon
 % Next divide the experiments into classes, one paragraph for each. In each class of experiments you typically pursue one questions that then is answered by a suitable plot or plots. For example, first you may want to investigate the performance behavior with changing input size, then how your code compares to external benchmarks.
 % 
 % For some tips on benchmarking including how to create a decent viewgraph see pages 22--27 in \cite{Pueschel:10}.
@@ -529,7 +528,8 @@ strategy. Intuitively, this does make sense since there is less data to distribu
 algorithm does not have a significant impact on the performance. However, the ``Supervertex Pointer Jumping'' performs
 the worst. In conclusion, we can say that we achieved our goal and found approaches that perform better than a state of
 the art implementation. The Parallel BGL is, of course, more sophisticated and supports generic graph data structures as
-well as other algorithms.
+well as other algorithms. The results we found are similar to those of Chung and Condon \cite{chung1996parallel} in that
+supervertex pointer jumping performes worse than pointer jumping on structured and random graphs.
 
 \mypar{Future Work}
 % You can also formulate next steps if you want. Be brief. After the conclusions there are only the references.
