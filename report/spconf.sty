@@ -55,6 +55,10 @@
 %
 % Date:    30 Dec 2021
 %
+% Modified by:  Mike Marti -- mikmarti@ethz.ch
+%
+% Date:    14 Jan 2022
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % These commands change default text fonts to the scalable PostScript
@@ -122,17 +126,33 @@
 \def\sthanks#1{\gdef\thefootnote{\fnsymbol{footnote}}\@@savethanks{#1}}
 
 \def\fiveauthors#1#2#3#4#5{\gdef\@address{}
-   \gdef\@name{\begin{tabular}{@{}c@{}}
-        #1
-   \end{tabular} \hskip 3ex \begin{tabular}{@{}c@{}}
-        #2
-   \end{tabular} \hskip 3ex \begin{tabular}{@{}c@{}}
-        #3
-   \end{tabular}\\[2em] \begin{tabular}{@{}c@{}}
-        #4
-   \end{tabular} \hskip 3ex \begin{tabular}{@{}c@{}}
-        #5
-\end{tabular}}}
+  \gdef\@name{
+    \begin{tabular}{@{}c@{}} #1 \end{tabular}
+    \hskip 3ex
+    \begin{tabular}{@{}c@{}} #2 \end{tabular}
+    \hskip 3ex
+    \begin{tabular}{@{}c@{}} #3 \end{tabular}
+    \\[2em]
+    \begin{tabular}{@{}c@{}} #4 \end{tabular}
+    \hskip 3ex
+    \begin{tabular}{@{}c@{}} #5 \end{tabular}
+  }
+}
+
+\def\fiveauthorsalt#1#2#3#4#5{\gdef\@address{}
+  \gdef\@name{
+    \hskip -5ex
+    \begin{tabular}{@{}c@{}} #1 \end{tabular}
+    \hskip 2ex
+    \begin{tabular}{@{}c@{}} #2 \end{tabular}
+    \hskip 2ex
+    \begin{tabular}{@{}c@{}} #3 \end{tabular}
+    \hskip 2ex
+    \begin{tabular}{@{}c@{}} #4 \end{tabular}
+    \hskip 2ex
+    \begin{tabular}{@{}c@{}} #5 \end{tabular}
+  }
+}
 
 \def\@sect#1#2#3#4#5#6[#7]#8{
    \refstepcounter{#1}\edef\@svsec{\csname the#1\endcsname.\hskip 0.6em}
