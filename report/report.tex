@@ -443,7 +443,7 @@ As described in section \ref{par:kronecker_graph_generator}, all benchmarks were
 graphs have $16$ times more edges than vertices (as per Graph500 specification \cite{graph500}). This is to ensure an
 average degree of $32$. The implementation \emph{Edge Distributed Pointer Jumping} resulted in bad performance.
 Since we are not certain which part of the algorithm causes this, we decided to not include it in our reported
-measurements. % TODO maybe add better justification for this (Matteo)
+measurements.
 
 \mypar{Baseline Comparison}
 To compare our implementations with the baseline, we performed a strong scaling study using graphs with $2^{19}$
@@ -476,10 +476,8 @@ performed using $64$ MPI processes and a graph with $2^{19}$ vertices.
 
 \mypar{Summarizing Results}
 As we are working with runtimes, the arithmetic mean is the obvious choice for summarization. The results for one
-algorithm execution were summarized by computing the arithmetic mean of all MPI processes. To get a summary over all
-algorithm iterations, another arithmetic mean was computed. Although taking the maximum or minimum accross all MPI
-processes could have also been possible. The difference between these and the mean were neglectable due to
-synchronization at the end of the algorithms. % TODO: Maybe just say we used the maximum (Matteo)
+algorithm execution were summarized by taking the maximum time taken by any MPI process. To get a summary over all
+algorithm iterations, an arithmetic mean was computed. 
 
 \mypar{Repetitions}
 We collected measurements until the $90\%$ confidence interval was within $5\%$ of our reported means. This was achieved
