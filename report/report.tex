@@ -58,7 +58,7 @@ to $31.5$ times faster compared to our baseline implementation.
 % content should be the same. Introduction and abstract should fill at most the first page, better less.
 \label{sec:intro}
 In this section we briefly introduce and explain what Minimum-Spanning-Tree algorithms are used for. In addition, we
-describe our contribution to the scientific comunity as well as work related to ours.
+describe our contribution to the scientific community as well as work related to ours.
 
 Formally, an MST of a given undirected connected graph $G = (V, E)$ with vertices $V = \{ 0, \dotsc, n - 1 \}$ and
 weighted edges $E \subseteq V \times V$, can be defined as an ayclic subgraph of $G$ which connnects all vertices in
@@ -102,7 +102,7 @@ In our research, we focus on the MST algorithm proposed by Bor\r{u}vka \cite{bor
 which is one of the most prominent MST algorithms as of today. We implement this algorithm using different work
 distribution and merging strategies. Our implementations use the Message Passing Interface (MPI) for communication.
 Randomly generated Kronecker graphs are used to evaluate the performance of our implementation. In this paper we present
-a parallel MST implementation which performs significantly better than a state of the art implementation.
+a parallel MST implementation that performs significantly better than a state of the art implementation.
 
 \mypar{Related Work}
 % Next, you have to give a brief overview of
@@ -110,7 +110,7 @@ a parallel MST implementation which performs significantly better than a state o
 % references. Briefly explain what they do. In the end contrast to what
 % you do to make now precisely clear what your contribution is.
 As the MST problem is very versatile and can be used in various scientific disciplines, there already is some research
-on parallelizing MST algorithms. One such paper \cite{chung1996parallel}, which is also the main inspriation of this
+on parallelizing MST algorithms. One such paper \cite{chung1996parallel}, which is also the main inspiration of this
 project, evaluates how the performance of Bor\r{u}vka behaves when using different pointer jumping schemes. They also
 show that in principle a speedup proportional to the number of processors can be achieved.
 
@@ -123,7 +123,7 @@ structures speed-up the merge step of the Vor\r{u}vka algorithm. However, they d
 multiple computing nodes.
 
 Our research is similar to that of Chung and Condon \cite{chung1996parallel}, but differs in the work distribution
-strategies applied. Moreover, we also evaluate local merging strategies using Union Find data structures additionaly to
+strategies applied. Moreover, we also evaluate local merging strategies using Union Find data structures additionally to
 the pointer jumping schemes. We do not, however, use the wait-free implementations of those data structures as described
 in \cite{wfuf}.
 
@@ -160,7 +160,7 @@ working with spanning forests in case $G$ is not connected.
 \mypar{Minimum-Spanning-Tree Problem}
 In the MST problem, every edge $e$ of the input graph $G = (V, E)$ has an associated weight. Formally, there is a weight
 function $w : E \to \N$ that is given as input. The goal is to find a spanning tree with a minimum edge weight sum, i.e.
-the edge weight of all other spanning trees is at least as large. Just like with a spanning tree, a MST must not
+the edge weight of all other spanning trees is at least as large. Just like with a spanning tree, an MST must not
 necessarily be unique for a given graph $G$.
 
 \mypar{Bor\r{u}vka's Algorithm}
@@ -206,7 +206,7 @@ each vertex individually, which has a potential worst case runtime of $\bigoh(n^
 
 \mypar{Supervertex Pointer Jumping}
 Supervertex pointer jumping \cite{chung1996parallel} is an extension of pointer jumping that uses randomness to achieve
-an expected linear time algorithm. The technique is best explained in the aformentioned paper, but the high level idea
+an expected linear time algorithm. The technique is best explained in the aforementioned paper, but the high level idea
 is to select a set of vertices to be supervertices, perform pointer jumping on all non-supervertices, until they reach a
 supervertex or a root, let each supervertex point to the next supervertex and repeat the process recursively on the
 supervertices. After the recursion, it is sufficient to perform only one more pointer jump for all non-supervertices.
@@ -231,7 +231,7 @@ variation of this graph construction for their benchmarks \cite{graph500}.
 % In this section, structure is very important so one can follow the technical content.
 
 % Mention and cite any external resources that you used including libraries or other code.
-This section contains information about the different implementations devloped, as well as other technical
+This section contains information about the different implementations developed, as well as other technical
 details, such as distribution strategies, limitations and the benchmarking infrastructure.
 
 \subsection{Distributing the Work}
@@ -364,7 +364,7 @@ However, these sequential algorithms did not serve any additional purpose beyond
 \mypar{Baseline Implementation}
 To get an idea of how well our implementations perform, we decided to use the Parallel Boost Graph Library (BGL)
 \cite{bgl} as our baseline. We considered other baseline implementations but came to the conclusion that the Parallel
-BGL is the most optimized and well-known library. One promising implementation uses OpenMP which might have lead to
+BGL is the most optimized and well-known library. One promising implementation uses OpenMP which might have led to
 uncomparable results since we use MPI \cite{15418}.
 
 \mypar{Kronecker Graph Generator}
@@ -448,7 +448,7 @@ measurements.
 \mypar{Baseline Comparison}
 To compare our implementations with the baseline, we performed a strong scaling study using graphs with $2^{19}$
 vertices. The number of MPI processes in this study were the powers of $2$: $2^0, \dotsc, 2^6$. The baseline
-implementation did not allow us to go any furhter than that because the execution took too long. We believe this to be
+implementation did not allow us to go any further than that because the execution took too long. We believe this to be
 an implementation issue within the parallel BGL.
 
 \mypar{Implementation Comparison}
@@ -534,8 +534,8 @@ This section contains the results of the performed benchmarks, including an anal
 \mypar{Baseline Comparison}
 The results of the strong scaling comparison for the baseline comparison are presented in Fig.
 \ref{fig:strongscaling-19}. All our implementations exceed the performance of Parallel BGL when work is distributed on
-$8$ or less MPI processes. For more than $8$ MPI processes, only the edge distributed algorithms outperform the
-baseline. We verified that these reults are statistically significant by making sure that the $90\%$ confidence
+$8$ or fewer MPI processes. For more than $8$ MPI processes, only the edge distributed algorithms outperform the
+baseline. We verified that these results are statistically significant by making sure that the $90\%$ confidence
 intervals do not overlap. An interesting observation is that Parallel BGL performs exceptionally poorly for low MPI core
 counts, whilst our implementations are more consistent. Table \ref{tab:strongscaling-19-table} contains the absolute
 runtimes of our best implementation, \emph{Edge Distributed Union Find with reduced edges}, and the baseline. The best
@@ -556,12 +556,12 @@ speedup of $9.4513s/0.2997s \approx 31.5$ was achieved when using $2$ processes.
 Fig. \ref{fig:strongscaling-20} contains the results of our strong scaling comparison. As can be seen, the edge
 distributed implementations outperform the vertex distributed implementations substantially. All vertex distribution
 implementation perform similarly apart from the supervertices pointer jumping one which performs worse in comparison as
-the number of MPI processes increases. The reason for this is explained in the fine-grainded analysis. It is also worth
+the number of MPI processes increases. The reason for this is explained in the fine-grained analysis. It is also worth
 mentioning, that the standard deviation for all implementations is minuscule, except the one of the supervertex pointer
 jumping. This is most likely due to the randomness of that merging strategy. Another interesting point is that the edge
 distributed implementations do not scale after reaching $16$ MPI processes. As the ratio between vertices and edges is
 exactly $1:16$, it is not surprising to see diminishing returns past $16$ MPI processes. This is because the lightest
-edge computation communicates proportional to the amount of vertices of the input graph. After the $16$ process
+edge computation communicates proportionally to the amount of vertices of the input graph. After the $16$ process
 threshold, the communication outweighs the per-process work, resulting in worse performance for increasing MPI
 processes. More dense graphs might benefit from running on more MPI processes. The weak scaling comparison of Fig.
 \ref{fig:weakscaling} shows a similar picture. In addition, the weak scaling comparison indicates that the edge
@@ -579,7 +579,7 @@ distribution is an immense bottleneck for the vertex distributed implementations
 of the total runtime of the edge distributed implementations. An explanation of this could be, that the edge
 distribution implementations use an \verb|MPI_Scatter|, potentially implemented as a tree. In the vertex distribution
 implementations, the work is sequentially distributed by the MPI process \verb|0|. The lightest edge selection performs
-very similar accross all implementations. On the other hand, the Union Find merging strategy outperforms all others,
+very similar across all implementations. On the other hand, the Union Find merging strategy outperforms all others,
 except for the iterative vertex fixing approach. Interestingly, this approach outperforms the other two pointer jumping
 strategies, even though it has a worse theoretical runtime. This result indicates that the additional synchronization
 required is not worth the tighter theoretical runtime bound. The same holds for the supervertex pointer jumping, the
@@ -596,13 +596,13 @@ comes from the merge step. This strengthens the claim made in the previous parag
 % such as high-level statements (e.g., we believe that .... is the right
 % approach to .... Even though we only considered x, the
 % .... technique should be applicable ....)
-As is evident form the benchmark evaluation in section \ref{sec:results}, we outperform the Parallel BGL by a wide
+As is evident from the benchmark evaluation in section \ref{sec:results}, we outperform the Parallel BGL by a wide
 margin. The best approach to distribute the work is the edge distribution strategy. Intuitively, this does make sense
 since there is less data to distribute. The merging strategy used by the algorithm does not have a significant impact on
 the performance. However, the \emph{Supervertex Pointer Jumping} performs the worst. In conclusion, we can say that we
 achieved our goal and found approaches that perform better than one state of the art implementation. The Parallel BGL
 is, of course, more sophisticated and supports generic graph data structures as well as other algorithms. The results we
-found are similar to those of Chung and Condon \cite{chung1996parallel} in that supervertex pointer jumping performes
+found are similar to those of Chung and Condon \cite{chung1996parallel} in that supervertex pointer jumping performs
 worse than pointer jumping on structured and random graphs.
 
 \mypar{Future Work}
