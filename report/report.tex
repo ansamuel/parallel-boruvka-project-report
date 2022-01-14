@@ -42,6 +42,14 @@
 % in this order), and the main result.  The abstract has to be
 % self-contained and readable for a person in the general area. You
 % should write the abstract last.
+Minimum-Spanning-Tree algorithms are among the most well-known graph algorithms in computer science. They can be used as
+part of a large variety of algorithms to compute intermediate results and are applied in numerous scientific fields. As
+such, having implementations that can handle large inputs and compute the result in a reasonable amount of time is of
+utmost importance. In this paper, we look at a variety of work distribution and merging strategies that can be used to
+implement Bor\r{u}vka's MST algorithm. We developed some implementations using a mixture of these strategies. To measure
+and compare the performance of these implementations, we performed benchmarks on the RACKlette cluster and used the
+Parallel Boost Graph Library as a baseline. Using these strategies, we were able to develop implementations that were up
+to $31.5$ times faster compared to our baseline implementation.
 \end{abstract}
 
 \section{Introduction}
@@ -449,10 +457,10 @@ Since we are not certain which part of the algorithm causes this, we decided to 
 measurements. % TODO maybe add better justification for this
 
 \mypar{Baseline Comparison}
-To compare our implementations with the baseline, we performed a strong scaling study using graphs with $2^19$ vertices.
-The number of MPI processes in this study were the powers of $2$: $2^0, \dotsc, 2^6$. The baseline implementation did
-not allow us to go any furhter than that because the execution took too long. We believe this to be an implementation
-issue within the parallel BGL.
+To compare our implementations with the baseline, we performed a strong scaling study using graphs with $2^{19}$
+vertices. The number of MPI processes in this study were the powers of $2$: $2^0, \dotsc, 2^6$. The baseline
+implementation did not allow us to go any furhter than that because the execution took too long. We believe this to be
+an implementation issue within the parallel BGL.
 
 \mypar{Implementation Comparison}
 To compare our implementations with each other, we performed a strong and weak scaling study. The strong scaling study
