@@ -187,7 +187,7 @@ graph $G = (V, E)$.
 \end{algorithm}
 
 \mypar{Union Find Data Structure}
-A Fnion Find data structure stores a partition of a set into disjoint subsets in such a way, that finding the
+A Union Find data structure stores a partition of a set into disjoint subsets in such a way, that finding the
 corresponding set of an element and merging two sets takes $\bigoh(\alpha(n))$ time \cite{efficiency_union_find}. These
 operations can be used to describe the connected components in the algorithm \ref{alg:boruvka}. Note that the runtime
 achieved here is not on a per-operation basis. Single operations can take longer but the data structure adjusts itself
@@ -205,7 +205,7 @@ simultaneously. This process is then repeated until every vertex points to the r
 each vertex individually, which has a potential worst case runtime of $\bigoh(n^2)$.
 
 \mypar{Supervertex Pointer Jumping}
-Supervertex Pointer Jumping \cite{chung1996parallel} is an extension of pointer jumping that uses randomness to achieve
+Supervertex pointer jumping \cite{chung1996parallel} is an extension of pointer jumping that uses randomness to achieve
 an expected linear time algorithm. The technique is best explained in the aformentioned paper, but the high level idea
 is to select a set of vertices to be supervertices, perform pointer jumping on all non-supervertices, until they reach a
 supervertex or a root, let each supervertex point to the next supervertex and repeat the process recursively on the
@@ -342,7 +342,7 @@ aforementioned distribution strategies. The following list contains all the comb
      \item Union Find 
      \item Iterative Vertex Fixing
      \item Pointer Jumping
-     \item Superverex Pointer Jumping
+     \item Supervertex Pointer Jumping
   \end{itemize}
 \end{itemize}
 Clearly, this list does not contain every possible combination. Intermediate benchmarking showed that some strategies
@@ -585,7 +585,7 @@ merge strategy gives a reason as to why it performed so much worse compared to t
 approaches in the strong scaling study.
 % TODO, maybe rather stress that the supervertex one has the most synchronization needed, which gives an explanation of
 % why it performs the worst, thus the strongscaling results. (Hulda)
-In addition, the plot shows that the large standard deviation of the vertex distributed supervertices pointer jumping
+In addition, the plot shows that the large standard deviation of the \emph{Vertex Distributed Supervertex Pointer Jumping}
 implementation comes from the merge step. This strengthens the claim made in the previous paragraph.
 
 \section{Conclusions}
