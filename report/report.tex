@@ -538,35 +538,32 @@ implementations are much more consistent. Table \ref{tab:strongscaling-19-table}
 best implementation, ``edge distributed union find with reduced edges'', and the baseline. The best speedup of
 $9.4513/0.2997s \approx 31.5$ was achieved when using $2$ processes.
 
-\mypar{How does the performance behavior change when work is distributed between increased number of MPI processes}
-To answer the question we use strong scaling study results without the baseline.
-
 \begin{figure}
   \includegraphics[width=\columnwidth]{../benchmark-results/plots/strongscaling_s20.pdf}
-  \caption{Strong Scaling Study w/o the baseline. Vertex count $2^{20}$.}
-  \label{fig:scrongscaling-20}
+  \caption{Strong scaling study without the baseline. Vertex count $2^{20}$.}
+  \label{fig:strongscaling-20}
 \end{figure}
-%Strong scaling, skip boost, size 20 -> line plot
-
-Like can be seen in Fig. \ref{fig:scrongscaling-20} all implementation have an improved runtime as the MPI processes
-increases up and including 4 processes. All vertex distribution implementation perform similarly apart from the
-supervertices pointer jumping one which performs worse in comparison as the number of the MPI processes increases. The
-edge distribution implementations also perform similarly with the best performing algorithm being Edge Distributed union
-find w. reduced edges, running on 32 MPI processes. The Edge Distribution implementations scale better and the runtime
-almost halves as the number of MPI processes doubles up until 4 MPI processes when there start to be diminishing
-returns. It should be noted that the ratio between vertices and edges is only 1:16 and therefore seeing diminishing
-returns past 16 MPI processes is not surprising and more dense graphs might benefit from running on a higher number of
-MPI processes.
-
-\mypar{How well do our algorithms scale with increasing graph size}
-
 \begin{figure}
   \includegraphics[width=\columnwidth]{../benchmark-results/plots/weakscaling.pdf}
   \caption{Weak Scaling Study. Vertex count $2^{18}$ - $2^{22}$.}
   \label{fig:weakscaling}
 \end{figure}
 
-%TODO add some analyziz of the plot results, 
+\mypar{Implementation Comparison}
+Fig. \ref{fig:strongscaling-20} contains the results of our strong scaling study to compare our implementations with one
+another. As can be seen, the edge distributed implementations outperform the vertex distributed implementations by a
+lot. All vertex distribution implementation perform similarly apart from the supervertices pointer jumping one which
+performs worse in comparison as the number of the MPI processes increases. The reason for this will be explored during
+the fine-grained analysis. It is also worth mentioning that the standard deviation for all implementations is relatively
+small, except the one using supervertex pointer jumping. This is most likely due to the randomness involved, which can
+result in vastly different executions. % TODO is this a reasonable explenation?
+Another interesting point is that the edge distributed implementations stop to scale after reaching $16$ MPI processes.
+As the ratio between vertices and edges is exactly $1:16$, it is not surprising to see diminishing returns past 16 MPI
+processes. More dense graphs might benefit from running on a higher number of MPI processes.
+% TODO is this argumentation valid?
+The weak scaling study presented in Fig. \ref{fig:weakscaling} paints a similar picture. In addition, the weak scaling
+study indicates that the edge distributed implementations will perform better with a growing number of processes and
+increasing number of vertices.
 
 \mypar{Which parts require the most amount of runtime}
 To answer this we use the fine-grained measurements that separate the runtimes between graph distribution, lightest edge
