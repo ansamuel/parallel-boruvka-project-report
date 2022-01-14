@@ -543,12 +543,12 @@ This section contains the results of the performed benchmarks, including an anal
 
 \mypar{Baseline Comparison}
 The results of the strong scaling study for the baseline comparison are presented in Fig. \ref{fig:strongscaling-19}.
-All our implementations exceed the performance of the parallel Boost implementation when work is distributed on $8$ or
-less MPI processes. For more than $8$ MPI processed, only the edge distributed algorithms outperform the baseline. An
+All our implementations exceed the performance of parallel BGL when work is distributed on $8$ or
+less MPI processes. For more than $8$ MPI processes, only the edge distributed algorithms outperform the baseline. An
 interesting observation is that parallel Boost performs extremely poorly for low MPI core counts, whilst our
 implementations are much more consistent. Table \ref{tab:strongscaling-19-table} contains the absolute runtimes of our
 best implementation, ``edge distributed union find with reduced edges'', and the baseline. The best speedup of
-$9.4513/0.2997s \approx 31.5$ was achieved when using $2$ processes.
+$9.4513s/0.2997s \approx 31.5$ was achieved when using $2$ processes.
 
 \begin{figure}
   \includegraphics[width=\columnwidth]{../benchmark-results/plots/strongscaling_s20.pdf}
@@ -595,7 +595,8 @@ iterative vertex fixing approach. Interestingly, this approach outperforms the o
 even though it has a worse theoretical runtime. This result indicates that the additional synchronization required in
 these strategies is not worth the tighter theoretical runtime bound. The terrible runtime of the supervertex pointer
 jumping merge strategy gives a reason as to why it performed so much worse compared to the other pointer jumping
-approaches in the strong scaling study. In addition, the graph shows that a big portion of the standard deviation of the
+approaches in the strong scaling study. %TODO, maybe rather stress that the supervertex one has the most synchronization needed, which gives an explanation of why it performs the worst, thus the strongscaling results.
+In addition, the graph shows that a big portion of the standard deviation of the
 vertex distributed supervertices pointer jumping implementation comes from the merge strategy. This strengthens the
 claim made in the previous paragraph.
 
