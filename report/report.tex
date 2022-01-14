@@ -466,7 +466,7 @@ was performed using graphs with $2^{20}$ vertices. The number of MPI processes w
     $64$ & $2^{21}$ \\
     $256$ & $2^{22}$ \\ \bottomrule \hline
   \end{tabular}
-  \caption{Configuration for weak scaling study.}
+  \caption{Configuration for weak scaling comparison}
   \label{tab:weakscaling-table}
 \end{table}
 
@@ -515,7 +515,7 @@ This section contains the results of the performed benchmarks, including an anal
 
 \begin{figure}
   \includegraphics[width=\columnwidth]{../benchmark-results/plots/strongscaling_s19.pdf}
-  \caption{Strong scaling comparison with the baseline, $2^{19}$ Vertices}
+  \caption{Strong scaling comparison with the baseline, $2^{19}$ vertices}
   \label{fig:strongscaling-19}
 \end{figure}
 
@@ -526,7 +526,7 @@ This section contains the results of the performed benchmarks, including an anal
     Edge Distributed Union Find w. reduced edges & 0.5050 & 0.2997 & 0.2001 & 0.1254 & 0.11 & 0.1085 & 0.1094 \\ 
     Parallel Boost Graph Library & 13.0532 & 9.4513 & 5.3956 & 3.4787 & 2.6483 & 2.4329 & 2.4421 \\ \bottomrule \hline
   \end{tabularx}
-  \caption{Runtime results in seconds from strong scaling comparison, $2^{19}$ Vertices}
+  \caption{Runtime results in seconds from strong scaling comparison, $2^{19}$ vertices}
   \label{tab:strongscaling-19-table}
 \end{table*}
 
@@ -541,12 +541,12 @@ $9.4513s/0.2997s \approx 31.5$ was achieved when using $2$ processes.
 
 \begin{figure}
   \includegraphics[width=\columnwidth]{../benchmark-results/plots/strongscaling_s20.pdf}
-  \caption{Strong scaling comparison without the baseline, $2^{20}$ Vertices.}
+  \caption{Strong scaling comparison without the baseline, $2^{20}$ vertices}
   \label{fig:strongscaling-20}
 \end{figure}
 \begin{figure}
   \includegraphics[width=\columnwidth]{../benchmark-results/plots/weakscaling.pdf}
-  \caption{Weak scaling comparison, $2^{18}$ - $2^{22}$ Vertices.}
+  \caption{Weak scaling comparison, $2^{18}$ - $2^{22}$ vertices}
   \label{fig:weakscaling}
 \end{figure}
 
@@ -567,7 +567,7 @@ and increasing number of vertices.
 
 \begin{figure}
   \includegraphics[width=\columnwidth]{../benchmark-results/plots/comparison.pdf}
-  \caption{Comparison of time spent on parts, $2^{19}$ Vertices, 64 MPI processes}
+  \caption{Comparison of time spent on parts, $2^{19}$ vertices, 64 MPI processes}
   \label{fig:comparison}
 \end{figure}
 
