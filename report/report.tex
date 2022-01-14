@@ -101,8 +101,7 @@ be able to treat the patient accordingly.
 In our research, we focus on the MST algorithm proposed by Bor\r{u}vka \cite{boruuvka1926jistem, nevsetvril2001otakar},
 which is one of the most prominent MST algorithms as of today. We implement this algorithm using different work
 distribution and merging strategies. Our implementations use the Message Passing Interface (MPI) for communication.
-Randomly generated Kronecker graphs are used to evaluate the performance of our implementation.
-% TODO: Mention how we perform compared to other implementations once we have results (Hulda)
+Randomly generated Kronecker graphs are used to evaluate the performance of our implementation. In this paper we present a parallel MST implementation which performs multiple times better than the Parallel BGL implementation. % TODO, do we want to call PGL state-of-the-art?
 
 \mypar{Related Work}
 % Next, you have to give a brief overview of
@@ -580,11 +579,8 @@ implementations, the work is sequentially distributed by the MPI process \verb|0
 very similar accross all implementations. On the other hand, the union find merging strategy outperforms all others,
 except for the iterative vertex fixing approach. Interestingly, this approach outperforms the other two pointer jumping
 strategies, even though it has a worse theoretical runtime. This result indicates that the additional synchronization
-required is not worth the tighter theoretical runtime bound. The terrible runtime of the supervertex pointer jumping
-merge strategy gives a reason as to why it performed so much worse compared to the other pointer jumping
-approaches in the strong scaling study.
-% TODO, maybe rather stress that the supervertex one has the most synchronization needed, which gives an explanation of
-% why it performs the worst, thus the strongscaling results. (Hulda)
+required is not worth the tighter theoretical runtime bound. The same reasoning holds for why the supervertex pointer jumping
+merge strategy, the strategy requiring most amount of synchronization, performed so terribly in the strong scaling study.
 In addition, the plot shows that the large standard deviation of the vertex distributed supervertices pointer jumping
 implementation comes from the merge step. This strengthens the claim made in the previous paragraph.
 
