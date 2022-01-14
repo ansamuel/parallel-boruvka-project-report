@@ -246,13 +246,13 @@ they compare, the following two paragraphs describe them both.
 \begin{figure*}
   \begin{subfigure}{0.33\textwidth}
     \centering
-    \begin{tikzpicture}[every node/.style={circle,draw,align=center,font=\small,minimum size=1.5em},
+    \begin{tikzpicture}[every node/.style={circle,draw,align=center,font=\small,minimum size=1em},
       node distance=3cm]
       \node (v1) {};
-      \node[below right=3cm and .5cm of v1] (v2) {};
-      \node[below right=1.5cm and 2.5cm of v1] (v3) {};
-      \node[below right=2cm of v3] (v4) {};
-      \node[right=of v1] (v5) {};
+      \node[below right=2cm and .2cm of v1] (v2) {};
+      \node[below right=.75cm and 1.5cm of v1] (v3) {};
+      \node[below right=1.25cm of v3] (v4) {};
+      \node[right=2.5cm of v1] (v5) {};
       \path[>={Stealth[black]}, every edge/.style={draw=black, thick}]
         (v1) edge (v2)
         (v1) edge (v3)
@@ -265,13 +265,13 @@ they compare, the following two paragraphs describe them both.
   \end{subfigure}
   \begin{subfigure}{0.33\textwidth}
     \centering
-    \begin{tikzpicture}[every node/.style={circle,draw,align=center,font=\small,minimum size=1.5em},
+    \begin{tikzpicture}[every node/.style={circle,draw,align=center,font=\small,minimum size=1em},
       node distance=3cm]
       \node (v1) {};
-      \node[below right=3cm and .5cm of v1] (v2) {};
-      \node[below right=1.5cm and 2.5cm of v1] (v3) {};
-      \node[below right=2cm of v3] (v4) {};
-      \node[right=of v1] (v5) {};
+      \node[below right=2cm and .2cm of v1] (v2) {};
+      \node[below right=.75cm and 1.5cm of v1] (v3) {};
+      \node[below right=1.25cm of v3] (v4) {};
+      \node[right=2.5cm of v1] (v5) {};
       \path[>={Stealth[black]}, every edge/.style={draw=black, thick}]
         (v1) edge[cyan] (v2)
         (v1) edge[cyan] (v3)
@@ -284,13 +284,13 @@ they compare, the following two paragraphs describe them both.
   \end{subfigure}
   \begin{subfigure}{0.33\textwidth}
     \centering
-    \begin{tikzpicture}[every node/.style={circle,draw,align=center,font=\small,minimum size=1.5em},
+    \begin{tikzpicture}[every node/.style={circle,draw,align=center,font=\small,minimum size=1em},
       node distance=3cm]
       \node[cyan, fill=cyan] (v1) {};
-      \node[red, fill=red, below right=3cm and .5cm of v1] (v2) {};
-      \node[cyan, fill=cyan, below right=1.5cm and 2.5cm of v1] (v3) {};
-      \node[red, fill=red, below right=2cm of v3] (v4) {};
-      \node[cyan, fill=cyan, right=of v1] (v5) {};
+      \node[red, fill=red, below right=2cm and .2cm of v1] (v2) {};
+      \node[cyan, fill=cyan, below right=.75cm and 1.5cm of v1] (v3) {};
+      \node[red, fill=red, below right=1.25cm of v3] (v4) {};
+      \node[cyan, fill=cyan, right=2.5cm of v1] (v5) {};
       \path[>={Stealth[black]}, every edge/.style={draw=black, thick}]
         [->] [>={Stealth[cyan]}] (v1) edge[cyan, bend right=10] (v2)
         [->] [>={Stealth[red]}] (v2) edge[red, bend right=10] (v1)
