@@ -595,7 +595,8 @@ iterative vertex fixing approach. Interestingly, this approach outperforms the o
 even though it has a worse theoretical runtime. This result indicates that the additional synchronization required in
 these strategies is not worth the tighter theoretical runtime bound. The terrible runtime of the supervertex pointer
 jumping merge strategy gives a reason as to why it performed so much worse compared to the other pointer jumping
-approaches in the strong scaling study. In addition, the graph shows that a big portion of the standard deviation of the
+approaches in the strong scaling study. %TODO, maybe rather stress that the supervertex one has the most synchronization needed, which gives an explanation of why it performs the worst, thus the strongscaling results.
+In addition, the graph shows that a big portion of the standard deviation of the
 vertex distributed supervertices pointer jumping implementation comes from the merge strategy. This strengthens the
 claim made in the previous paragraph.
 
