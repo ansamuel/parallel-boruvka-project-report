@@ -528,13 +528,14 @@ This section contains the results of the performed benchmarks, including an anal
 \end{table*}
 
 \mypar{Baseline Comparison}
-The results of the strong scaling comparison for the baseline comparison are presented in Fig. \ref{fig:strongscaling-19}.
-All our implementations exceed the performance of Parallel BGL when work is distributed on $8$ or
-less MPI processes. For more than $8$ MPI processes, only the edge distributed algorithms outperform the baseline. An
-interesting observation is that Parallel BGL performs exceptionally poorly for low MPI core counts, whilst our
-implementations are more consistent. Table \ref{tab:strongscaling-19-table} contains the absolute runtimes of our
-best implementation, \emph{Edge Distributed Union Find with reduced edges}, and the baseline. The best speedup of
-$9.4513s/0.2997s \approx 31.5$ was achieved when using $2$ processes.
+The results of the strong scaling comparison for the baseline comparison are presented in Fig.
+\ref{fig:strongscaling-19}. All our implementations exceed the performance of Parallel BGL when work is distributed on
+$8$ or less MPI processes. For more than $8$ MPI processes, only the edge distributed algorithms outperform the
+baseline. We verified that these reults are statistically significant by making sure that the $90\%$ confidence
+intervals do not overlap. An interesting observation is that Parallel BGL performs exceptionally poorly for low MPI core
+counts, whilst our implementations are more consistent. Table \ref{tab:strongscaling-19-table} contains the absolute
+runtimes of our best implementation, \emph{Edge Distributed Union Find with reduced edges}, and the baseline. The best
+speedup of $9.4513s/0.2997s \approx 31.5$ was achieved when using $2$ processes.
 
 \begin{figure}
   \includegraphics[width=\columnwidth]{../benchmark-results/plots/strongscaling_s20.pdf}
