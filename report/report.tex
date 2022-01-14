@@ -472,8 +472,8 @@ was performed using graphs with $2^{20}$ vertices. The number of MPI processes w
 
 \mypar{Detailed Runtime Analysis}
 To get a better understanding of which parts of the algorithms require the most runtime, we performed fine-grained
-measurements. We differentiated between graph distribution, lightest edge selection and merging.
-% TODO add graph sizes and mpi node count
+measurements. We differentiated between graph distribution, lightest edge selection and merging. This benchmark was
+performed using $64$ MPI processes and a graph with $2^{19}$ vertices.
 
 \mypar{Summarizing Results}
 As we are working with runtimes, the arithmetic mean is the obvious choice for summarization. The results for one
@@ -569,7 +569,7 @@ increasing number of vertices.
 
 \begin{figure}
   \includegraphics[width=\columnwidth]{../benchmark-results/plots/comparison.pdf}
-  \caption{Comparison. Vertex count $2^{19}$, MPI processes 64.}
+  \caption{Comparison of time spent on parts. Vertex count $2^{19}$, MPI processes 64.}
   \label{fig:comparison}
 \end{figure}
 
