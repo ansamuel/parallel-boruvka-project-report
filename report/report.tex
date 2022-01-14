@@ -565,12 +565,12 @@ $9.4513s/0.2997s \approx 31.5$ was achieved when using $2$ processes.
 Fig. \ref{fig:strongscaling-20} contains the results of our strong scaling comparison. As can be seen, the edge
 distributed implementations outperform the vertex distributed implementations substantially. All vertex distribution
 implementation perform similarly apart from the supervertices pointer jumping one which performs worse in comparison as
-the number of the MPI processes increases. The reason for this is explained in the fine-grainded analysis. It is also
-worth mentioning, that the standard deviation for all implementations is minuscule, except the one of the supervertex
-pointer jumping. This is most likely due to the randomness of that merging strategy.
-Another interesting point is that the edge distributed implementations do not scale after reaching $16$ MPI processes.
-As the ratio between vertices and edges is exactly $1:16$, it is not surprising to see diminishing returns past 16 MPI
-processes. More dense graphs might benefit from running on more MPI processes.
+the number of MPI processes increases. The reason for this is explained in the fine-grainded analysis. It is also worth
+mentioning, that the standard deviation for all implementations is minuscule, except the one of the supervertex pointer
+jumping. This is most likely due to the randomness of that merging strategy. Another interesting point is that the edge
+distributed implementations do not scale after reaching $16$ MPI processes. As the ratio between vertices and edges is
+exactly $1:16$, it is not surprising to see diminishing returns past 16 MPI processes. More dense graphs might benefit
+from running on more MPI processes.
 % TODO is this argumentation valid?
 The weak scaling comparison of Fig. \ref{fig:weakscaling} shows a similar picture. In addition, the weak scaling
 comparison indicates that the edge distributed implementations will perform better with a growing number of processes
@@ -591,7 +591,7 @@ implementations, the work is sequentially distributed by the MPI process \verb|0
 very similar accross all implementations. On the other hand, the union find merging strategy outperforms all others,
 except for the iterative vertex fixing approach. Interestingly, this approach outperforms the other two pointer jumping
 strategies, even though it has a worse theoretical runtime. This result indicates that the additional synchronization
-required in is not worth the tighter theoretical runtime bound. The terrible runtime of the supervertex pointer jumping
+required is not worth the tighter theoretical runtime bound. The terrible runtime of the supervertex pointer jumping
 merge strategy gives a reason as to why it performed so much worse compared to the other pointer jumping
 approaches in the strong scaling study. %TODO, maybe rather stress that the supervertex one has the most synchronization needed, which gives an explanation of why it performs the worst, thus the strongscaling results.
 In addition, the plot shows that the large standard deviation of the vertex distributed supervertices pointer jumping
