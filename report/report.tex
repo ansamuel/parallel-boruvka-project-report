@@ -41,7 +41,7 @@
 % in this order), and the main result.  The abstract has to be
 % self-contained and readable for a person in the general area. You
 % should write the abstract last.
-Minimum-Spanning-Tree algorithms are among the most well-known graph algorithms in computer science. They can be used as
+Minimum Spanning Tree algorithms are among the most well-known graph algorithms in computer science. They can be used as
 part of a large variety of algorithms to compute intermediate results and are applied in numerous scientific fields. As
 such, having implementations that can handle large inputs and compute the result in a reasonable amount of time is of
 utmost importance. In this paper, we look at a variety of work distribution and merging strategies that can be used to
@@ -101,8 +101,8 @@ be able to treat the patient accordingly.
 In our research, we focus on the MST algorithm proposed by Bor\r{u}vka \cite{boruuvka1926jistem, nevsetvril2001otakar},
 which is one of the most prominent MST algorithms as of today. We implement this algorithm using different work
 distribution and merging strategies. Our implementations use the Message Passing Interface (MPI) for communication.
-Randomly generated Kronecker graphs are used to evaluate the performance of our implementation.
-% TODO: Mention how we perform compared to other implementations once we have results (Hulda)
+Randomly generated Kronecker graphs are used to evaluate the performance of our implementation. In this paper we present
+a parallel MST implementation which performs significantly better than a state of the art implementation.
 
 \mypar{Related Work}
 % Next, you have to give a brief overview of
@@ -186,8 +186,8 @@ graph $G = (V, E)$.
   \end{algorithmic}
 \end{algorithm}
 
-\mypar{Union Find Data structure}
-A union-find data structure stores a partition of a set into disjoint subsets in such a way, that finding the
+\mypar{Union Find Data Structure}
+A Union Find data structure stores a partition of a set into disjoint subsets in such a way, that finding the
 corresponding set of an element and merging two sets takes $\bigoh(\alpha(n))$ time \cite{efficiency_union_find}. These
 operations can be used to describe the connected components in the algorithm \ref{alg:boruvka}. Note that the runtime
 achieved here is not on a per-operation basis. Single operations can take longer but the data structure adjusts itself
@@ -331,27 +331,27 @@ computation units whilst others are idle. However, with this approach the mergin
 For this project we developed various C++ implementations, combining different merging approaches with the two
 aforementioned distribution strategies. The following list contains all the combinations realized:
 \begin{itemize}
-  \item Edge Distribution, merging via
+  \item Edge Distributed, merging via
   \begin{itemize}
-     \item Union find 
-     \item Union find and ignoring superfluous edges
-     \item Pointer jumping
+     \item Union Find 
+     \item Union Find with reduced edges
+     \item Pointer Jumping
   \end{itemize}
-  \item Vertex Distribution, merging via
+  \item Vertex Distributed, merging via
   \begin{itemize}
-     \item Union find 
-     \item Iterative vertex fixing
-     \item Pointer jumping
-     \item Superverex pointer jumping
+     \item Union Find 
+     \item Iterative Vertex Fixing
+     \item Pointer Jumping
+     \item Supervertex Pointer Jumping
   \end{itemize}
 \end{itemize}
 Clearly, this list does not contain every possible combination. Intermediate benchmarking showed that some strategies
 were not promising enough to be pursued further.
 
 We are not going to give detailed descriptions for all implementations, as their rough idea should be clear with the
-information given in section \ref{sec:background}. The ones that might not be self-explanatory are ``edge distribution
-using union find with edge reduction'' and ``vertex distribution using iterative vertex fixing''. The first one uses an
-additional optimization where edges with both endpoints in the same component get skipped over. As this removal costs
+information given in section \ref{sec:background}. The ones that might not be self-explanatory are \emph{Edge
+Distributed Union Find with reduced edges} and \emph{Vertex Distributed Iterative Vertex Fixing}. The first one uses
+an additional optimization where edges with both endpoints in the same component get skipped over. As this removal costs
 additional runtime, we have to be cautious about the impact on performance. The second one uses an iterative fixing of
 the vertices, briefly mentioned in the pointer jumping paragraph in section \ref{sec:background}. This approach has a
 greater theoretical runtime, but uses far less communication compared to the vertex distributed pointer jumping
@@ -442,7 +442,7 @@ using the compilation flags
 % programs you ran.
 As described in section \ref{par:kronecker_graph_generator}, all benchmarks were performed using Kronecker graphs. These
 graphs have $16$ times more edges than vertices (as per Graph500 specification \cite{graph500}). This is to ensure an
-average degree of $32$. The implementation ``edge distribution using pointer jumping'' resulted in bad performance.
+average degree of $32$. The implementation \emph{Edge Distributed Pointer Jumping} resulted in bad performance.
 Since we are not certain which part of the algorithm causes this, we decided to not include it in our reported
 measurements. % TODO maybe add better justification for this (Matteo)
 
@@ -526,8 +526,8 @@ This section contains the results of the performed benchmarks, including an anal
   \begin{tabularx}{\linewidth}{ l | c  c  c  c  c  c  c }
     \toprule
     \textbf{Number of processes} & \textbf{1} & \textbf{2} & \textbf{4} & \textbf{8} & \textbf{16} & \textbf{32} &
-      \textbf{64} \\\midrule
-    Edge distributed union find w. reduced edges & 0.5050 & 0.2997 & 0.2001 & 0.1254 & 0.11 & 0.1085 & 0.1094 \\
+      \textbf{64} \\ \midrule
+    Edge Distributed Union Find w. reduced edges & 0.5050 & 0.2997 & 0.2001 & 0.1254 & 0.11 & 0.1085 & 0.1094 \\
     Parallel Boost Graph Library & 13.0532 & 9.4513 & 5.3956 & 3.4787 & 2.6483 & 2.4329 & 2.4421 \\ \bottomrule
   \end{tabularx}
   \caption{Runtime results in seconds from strong scaling comparison, $2^{19}$ Vertices}
@@ -540,7 +540,7 @@ All our implementations exceed the performance of Parallel BGL when work is dist
 less MPI processes. For more than $8$ MPI processes, only the edge distributed algorithms outperform the baseline. An
 interesting observation is that Parallel BGL performs exceptionally poorly for low MPI core counts, whilst our
 implementations are more consistent. Table \ref{tab:strongscaling-19-table} contains the absolute runtimes of our
-best implementation, ``edge distributed union find with reduced edges'', and the baseline. The best speedup of
+best implementation, \emph{Edge Distributed Union Find with reduced edges}, and the baseline. The best speedup of
 $9.4513s/0.2997s \approx 31.5$ was achieved when using $2$ processes.
 
 \begin{figure}
@@ -580,16 +580,13 @@ distribution is an immense bottleneck for the vertex distributed implementations
 of the total runtime of the edge distributed implementations. An explanation of this could be, that the edge
 distribution implementations use an \verb|MPI_Scatter|, potentially implemented as a tree. In the vertex distribution
 implementations, the work is sequentially distributed by the MPI process \verb|0|. The lightest edge selection performs
-very similar accross all implementations. On the other hand, the union find merging strategy outperforms all others,
+very similar accross all implementations. On the other hand, the Union Find merging strategy outperforms all others,
 except for the iterative vertex fixing approach. Interestingly, this approach outperforms the other two pointer jumping
 strategies, even though it has a worse theoretical runtime. This result indicates that the additional synchronization
-required is not worth the tighter theoretical runtime bound. The terrible runtime of the supervertex pointer jumping
-merge strategy gives a reason as to why it performed so much worse compared to the other pointer jumping
-approaches in the strong scaling study.
-% TODO, maybe rather stress that the supervertex one has the most synchronization needed, which gives an explanation of
-% why it performs the worst, thus the strongscaling results. (Hulda)
-In addition, the plot shows that the large standard deviation of the vertex distributed supervertices pointer jumping
-implementation comes from the merge step. This strengthens the claim made in the previous paragraph.
+required is not worth the tighter theoretical runtime bound. The same holds for the supervertex pointer jumping, the
+strategy requiring the most synchronizations, which performed poorly in the strong scaling comparison. In addition, the
+plot shows that the large standard deviation of the \emph{Vertex Distributed Supervertex Pointer Jumping} implementation
+comes from the merge step. This strengthens the claim made in the previous paragraph.
 
 \section{Conclusions}
 % Here you need to summarize what you did and why this is
@@ -603,8 +600,8 @@ implementation comes from the merge step. This strengthens the claim made in the
 As is evident form the benchmark evaluation \ref{sec:results} we outperform the Parallel BGL by a wide margin. The best
 approach to distribute the work is the edge distribution strategy. Intuitively, this does make sense since there is less
 data to distribute. The merging strategy used by the algorithm does not have a significant impact on the performance.
-However, the ``Supervertex Pointer Jumping'' performs the worst. In conclusion, we can say that we achieved our goal and
-found approaches that perform better than a state of the art implementation. The Parallel BGL is, of course, more
+However, the \emph{Supervertex Pointer Jumping} performs the worst. In conclusion, we can say that we achieved our goal
+and found approaches that perform better than one state of the art implementation. The Parallel BGL is, of course, more
 sophisticated and supports generic graph data structures as well as other algorithms. The results we found are similar
 to those of Chung and Condon \cite{chung1996parallel} in that supervertex pointer jumping performes worse than pointer
 jumping on structured and random graphs.
