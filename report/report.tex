@@ -580,7 +580,7 @@ distribution is an immense bottleneck for the vertex distributed implementations
 of the total runtime of the edge distributed implementations. An explanation of this could be, that the edge
 distribution implementations use an \verb|MPI_Scatter|, potentially implemented as a tree. In the vertex distribution
 implementations, the work is sequentially distributed by the MPI process \verb|0|. The lightest edge selection performs
-very similar across all implementations. On the other hand, the Union Find merging strategy outperforms all others,
+very similarly across all implementations. On the other hand, the Union Find merging strategy outperforms all others,
 except for the iterative vertex fixing approach. Interestingly, this approach outperforms the other two pointer jumping
 strategies, even though it has a worse theoretical runtime. This result indicates that the additional synchronization
 required is not worth the tighter theoretical runtime bound. The same holds for the supervertex pointer jumping, the
