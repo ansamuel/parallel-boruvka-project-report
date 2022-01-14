@@ -425,8 +425,9 @@ adapters for a 200Gbit/s connection.
 
 \mypar{Work Allocation}
 All four cluster nodes were used for the benchmarks. We pinned the CPU cores with the purpose that the amount of used
-CPU cores was equal on all nodes. This allocation strategy should lead to more consisten measurements, as otherwise
-benchmarks with a low MPI core count could have an unfair advantage due to less network communication.
+CPU cores was equal on all nodes. In addition, the cores were chosen such that the amount of cache overlap is minimized.
+This allocation strategy should lead to more consisten measurements, as otherwise benchmarks with a low MPI core count
+could have an unfair advantage due to less network communication.
 
 \mypar{Software}
 All benchmarks were conducted using CentOS Linux release 7.9.2009 (Core) with Linux kernel 3.10.0, the MPI
