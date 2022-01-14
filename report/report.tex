@@ -456,7 +456,8 @@ an implementation issue within the parallel BGL.
 To compare our implementations with each other, we performed a strong and weak scaling study. The strong scaling study
 was performed using graphs with $2^{20}$ vertices. The number of MPI processes were the powers of $2$: $2^0, \dotsc,
 2^9$. The weak scaling study was performed using the configurations seen in Table \ref{tab:weakscaling-table}.
-\begin{table}[h!]
+
+\begin{table}[!t]
   \centering
   \begin{tabular}{ll} \toprule
     \textbf{MPI nodes} & \textbf{Graph vertices} \\\midrule
