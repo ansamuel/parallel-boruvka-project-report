@@ -356,7 +356,7 @@ additional runtime, we have to be cautious about the impact on performance. The 
 the vertices, briefly mentioned in the pointer jumping paragraph in section \ref{sec:background}. This approach has a
 greater theoretical runtime, but uses far less communication compared to the vertex distributed pointer jumping
 implementation. The open question here is, whether the lower runtime guarantee is worth the additional communication.
-More on this in section \ref{sec:exp}. % TODO maybe update reference to a more specific one later on (Mike)
+This is answered in section \ref{sec:results}.
 
 Sequential versions of some merging strategies were also implemented to get a better understanding of how they operate.
 However, these sequential algorithms did not serve any additional purpose beyond that.
@@ -413,9 +413,8 @@ interpretation.
 % Specify the platform (processor, frequency, maybe OS, maybe cache sizes)
 % as well as the compiler, version, and flags used. If your work is about performance, 
 % I strongly recommend that you play with optimization flags and consider also icc for additional potential speedup.
-% TODO maybe change footnote to citation (Mike)
-The benchmarks were executed on the RACKlette cluster\footnote{\url{https://racklette.ethz.ch/}}, setup and maintained
-by a group of students from ETH.
+The benchmarks were executed on the RACKlette cluster \cite{racklette}, setup and maintained by a group of students from
+ETH.
 
 \mypar{Hardware}
 The RACKlette cluster consists of four identical nodes, each of which has two 64-core AMD EPYC 7742 CPUs running at
@@ -425,14 +424,15 @@ adapters for a 200Gbit/s connection.
 
 \mypar{Work Allocation}
 All four cluster nodes were used for the benchmarks. We pinned the CPU cores with the purpose that the amount of used
-CPU cores was equal on all nodes. This allocation strategy should lead to more consisten measurements, as otherwise
-benchmarks with a low MPI core count could have an unfair advantage due to less network communication.
+CPU cores was equal on all nodes. In addition, the cores were chosen such that the amount of cache overlap is minimized.
+This allocation strategy should lead to more consistent measurements, as otherwise benchmarks with a low MPI core count
+could have an unfair advantage due to less network communication.
 
 \mypar{Software}
-All benchmarks were conducted using CentOS Linux release 7.9.2009 (Core) with Linux kernel 3.10.0 and the MPI
-implementation mvapich2 version 2.3.4. The code was compiled with GCC version 10.3.0 using the compilation flags
-\lstinline[basicstyle=\ttfamily\color{black},identifierstyle=\color{black}]|-mavx -march=| \linebreak
-\lstinline[basicstyle=\ttfamily\color{black},identifierstyle=\color{black}]|native -O3|.
+All benchmarks were conducted using CentOS Linux release 7.9.2009 (Core) with Linux kernel 3.10.0, the MPI
+implementation mvapich2 version 2.3.4 and Parallel BGL version 1.78.0. The code was compiled with GCC version 10.3.0
+using the compilation flags
+\lstinline[basicstyle=\ttfamily\color{black},identifierstyle=\color{black}]|-mavx -march=native -O3|.
 
 \subsection{Performed Benchmarks}
 % Then explain what kind of benchmarks you ran. The idea is to give enough information so the experiments are
@@ -455,15 +455,17 @@ an implementation issue within the parallel BGL.
 To compare our implementations with each other, we performed a strong and weak scaling study. The strong scaling study
 was performed using graphs with $2^{20}$ vertices. The number of MPI processes were the powers of $2$: $2^0, \dotsc,
 2^9$. The weak scaling study was performed using the configurations seen in Table \ref{tab:weakscaling-table}.
-\begin{table}[h!]
+
+\begin{table}[!t]
   \centering
-  \begin{tabular}{ll} \toprule
-    \textbf{MPI nodes} & \textbf{Graph vertices} \\\midrule
+  \begin{tabular}{l l}
+    \toprule
+    \textbf{MPI nodes} & \textbf{Graph vertices} \\ \midrule
     $1$ & $2^{18}$ \\ 
     $4$ & $2^{19}$ \\ 
     $16$ & $2^{20}$ \\
     $64$ & $2^{21}$ \\
-    $256$ & $2^{22}$ \\ \bottomrule \hline
+    $256$ & $2^{22}$ \\ \bottomrule
   \end{tabular}
   \caption{Configuration for weak scaling comparison}
   \label{tab:weakscaling-table}
@@ -484,6 +486,7 @@ We collected measurements until the $90\%$ confidence interval was within $5\%$ 
 by performing $10$ repetitions in all benchmarks, where the first execution is discarded due to warmup.
 
 \subsection{Results}
+\label{sec:results}
 This section contains the results of the performed benchmarks, including an analysis.
 % Next divide the experiments into classes, one paragraph for each. In each class of experiments you typically pursue
 % one questions that then is answered by a suitable plot or plots. For example, first you may want to investigate the
@@ -519,9 +522,10 @@ This section contains the results of the performed benchmarks, including an anal
 \begin{table*}
   \begin{tabularx}{\linewidth}{ l | c  c  c  c  c  c  c }
     \toprule
-    \textbf{Number of processes} & \textbf{1} & \textbf{2} & \textbf{4} & \textbf{8} & \textbf{16} & \textbf{32} & \textbf{64} \\\midrule
-    Edge Distributed Union Find w. reduced edges & 0.5050 & 0.2997 & 0.2001 & 0.1254 & 0.11 & 0.1085 & 0.1094 \\ 
-    Parallel Boost Graph Library & 13.0532 & 9.4513 & 5.3956 & 3.4787 & 2.6483 & 2.4329 & 2.4421 \\ \bottomrule \hline
+    \textbf{Number of processes} & \textbf{1} & \textbf{2} & \textbf{4} & \textbf{8} & \textbf{16} & \textbf{32} &
+      \textbf{64} \\ \midrule
+    Edge Distributed Union Find w. reduced edges & 0.5050 & 0.2997 & 0.2001 & 0.1254 & 0.11 & 0.1085 & 0.1094 \\
+    Parallel Boost Graph Library & 13.0532 & 9.4513 & 5.3956 & 3.4787 & 2.6483 & 2.4329 & 2.4421 \\ \bottomrule
   \end{tabularx}
   \caption{Runtime results in seconds from strong scaling comparison, $2^{19}$ vertices}
   \label{tab:strongscaling-19-table}
@@ -556,12 +560,12 @@ the number of MPI processes increases. The reason for this is explained in the f
 mentioning, that the standard deviation for all implementations is minuscule, except the one of the supervertex pointer
 jumping. This is most likely due to the randomness of that merging strategy. Another interesting point is that the edge
 distributed implementations do not scale after reaching $16$ MPI processes. As the ratio between vertices and edges is
-exactly $1:16$, it is not surprising to see diminishing returns past 16 MPI processes. More dense graphs might benefit
-from running on more MPI processes.
-% TODO is this argumentation valid? (Mike)
-The weak scaling comparison of Fig. \ref{fig:weakscaling} shows a similar picture. In addition, the weak scaling
-comparison indicates that the edge distributed implementations will perform better with a growing number of processes
-and increasing number of vertices.
+exactly $1:16$, it is not surprising to see diminishing returns past $16$ MPI processes. This is because the lightest
+edge computation communicates proportional to the amount of vertices of the input graph. After the $16$ process
+threshold, the communication outweighs the per-process work, resulting in worse performance for increasing MPI
+processes. More dense graphs might benefit from running on more MPI processes. The weak scaling comparison of Fig.
+\ref{fig:weakscaling} shows a similar picture. In addition, the weak scaling comparison indicates that the edge
+distributed implementations will perform better with a growing number of processes and increasing number of vertices.
 
 \begin{figure}
   \includegraphics[width=\columnwidth]{../benchmark-results/plots/comparison.pdf}
@@ -592,14 +596,14 @@ comes from the merge step. This strengthens the claim made in the previous parag
 % such as high-level statements (e.g., we believe that .... is the right
 % approach to .... Even though we only considered x, the
 % .... technique should be applicable ....)
-As is evident form the benchmark evaluation % TODO: Reference (Mike)
-we outperform the Parallel BGL by a wide margin. The best approach to distribute the work is the edge distribution
-strategy. Intuitively, this does make sense since there is less data to distribute. The merging strategy used by the
-algorithm does not have a significant impact on the performance. However, the \emph{Supervertex Pointer Jumping} performs
-the worst. In conclusion, we can say that we achieved our goal and found approaches that perform better than one state of
-the art implementation. The Parallel BGL is, of course, more sophisticated and supports generic graph data structures as
-well as other algorithms. The results we found are similar to those of Chung and Condon \cite{chung1996parallel} in that
-supervertex pointer jumping performes worse than pointer jumping on structured and random graphs.
+As is evident form the benchmark evaluation in section \ref{sec:results}, we outperform the Parallel BGL by a wide
+margin. The best approach to distribute the work is the edge distribution strategy. Intuitively, this does make sense
+since there is less data to distribute. The merging strategy used by the algorithm does not have a significant impact on
+the performance. However, the \emph{Supervertex Pointer Jumping} performs the worst. In conclusion, we can say that we
+achieved our goal and found approaches that perform better than one state of the art implementation. The Parallel BGL
+is, of course, more sophisticated and supports generic graph data structures as well as other algorithms. The results we
+found are similar to those of Chung and Condon \cite{chung1996parallel} in that supervertex pointer jumping performes
+worse than pointer jumping on structured and random graphs.
 
 \mypar{Future Work}
 % You can also formulate next steps if you want. Be brief. After the conclusions there are only the references.
