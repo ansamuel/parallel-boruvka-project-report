@@ -489,7 +489,9 @@ by performing $10$ repetitions in all benchmarks, where the first execution is d
 \subsection{Results}
 % TODO compare to results from Chung and Condon
 This section contains the results of the performed benchmarks, including an analysis.
-% Next divide the experiments into classes, one paragraph for each. In each class of experiments you typically pursue one questions that then is answered by a suitable plot or plots. For example, first you may want to investigate the performance behavior with changing input size, then how your code compares to external benchmarks.
+% Next divide the experiments into classes, one paragraph for each. In each class of experiments you typically pursue
+% one questions that then is answered by a suitable plot or plots. For example, first you may want to investigate the
+% performance behavior with changing input size, then how your code compares to external benchmarks.
 
 % For some tips on benchmarking including how to create a decent viewgraph see pages 22--27 in \cite{Pueschel:10}.
 
@@ -565,23 +567,27 @@ The weak scaling study presented in Fig. \ref{fig:weakscaling} paints a similar 
 study indicates that the edge distributed implementations will perform better with a growing number of processes and
 increasing number of vertices.
 
-\mypar{Which parts require the most amount of runtime}
-To answer this we use the fine-grained measurements that separate the runtimes between graph distribution, lightest edge
-selection and merging.
-
 \begin{figure}
   \includegraphics[width=\columnwidth]{../benchmark-results/plots/comparison.pdf}
   \caption{Comparison. Vertex count $2^{19}$, MPI processes 64.}
   \label{fig:comparison}
 \end{figure}
 
-For vertex distribution it is obvious from Fig. \ref{fig:comparison} that distributing the graph is a bottleneck while
-for the edge distributions that's a small part of the total runtime. Distributing the edges by vertices also doesn't
-result in much benefit for the lightest edge selection. This is probably because after merging, the edges for connected
-component end up being spread over different computation units. For the different merging strategies the sequential
-union is significantly faster than all the pointer jumping versions. Surprisingly the simple pointer jumping being the
-fastest of them, possibly due to fewer synchronizations needed. The union find, even though running sequentially also
-only takes up small part of the total runtime.
+\mypar{Detailed Runtime Analysis}
+Fig. \ref{fig:comparison} gives us more details as to why the edge distributed implementations outperform the vertex
+distributed implementations. The work distribution is a huge bottleneck for the vertex distributed implementations,
+whereas it only makes up a small part of the total runtime of the edge distribution implementations. An explanation of
+this could be that the edge distribution implementations use a scatter for their work distribution, potentially using a
+tree appraoch to achieve this. In the vertex distribution implementations the work is distributed by the root MPI
+process one after the other, giving us a worse theoretical runtime. The lightest edge selection performs very similar
+accross all implementations. On the other hand, the union find merging strategy outperforms all others, except for the
+iterative vertex fixing approach. Interestingly, this approach outperforms the other two pointer jumping strategies,
+even though it has a worse theoretical runtime. This result indicates that the additional synchronization required in
+these strategies is not worth the tighter theoretical runtime bound. The terrible runtime of the supervertex pointer
+jumping merge strategy gives a reason as to why it performed so much worse compared to the other pointer jumping
+approaches in the strong scaling study. In addition, the graph shows that a big portion of the standard deviation of the
+vertex distributed supervertices pointer jumping implementation comes from the merge strategy. This strengthens the
+claim made in the previous paragraph.
 
 \section{Conclusions}
 % Here you need to summarize what you did and why this is
