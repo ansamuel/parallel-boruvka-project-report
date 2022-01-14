@@ -101,7 +101,8 @@ be able to treat the patient accordingly.
 In our research, we focus on the MST algorithm proposed by Bor\r{u}vka \cite{boruuvka1926jistem, nevsetvril2001otakar},
 which is one of the most prominent MST algorithms as of today. We implement this algorithm using different work
 distribution and merging strategies. Our implementations use the Message Passing Interface (MPI) for communication.
-Randomly generated Kronecker graphs are used to evaluate the performance of our implementation. In this paper we present a parallel MST implementation which performs significantly better than the state-of-the-art implementation.
+Randomly generated Kronecker graphs are used to evaluate the performance of our implementation. In this paper we present
+a parallel MST implementation which performs significantly better than a state of the art implementation.
 
 \mypar{Related Work}
 % Next, you have to give a brief overview of
@@ -579,10 +580,10 @@ implementations, the work is sequentially distributed by the MPI process \verb|0
 very similar accross all implementations. On the other hand, the union find merging strategy outperforms all others,
 except for the iterative vertex fixing approach. Interestingly, this approach outperforms the other two pointer jumping
 strategies, even though it has a worse theoretical runtime. This result indicates that the additional synchronization
-required is not worth the tighter theoretical runtime bound. The same reasoning holds for why the supervertex pointer jumping
-merge strategy, the strategy requiring most amount of synchronization, performed so terribly in the strong scaling study.
-In addition, the plot shows that the large standard deviation of the vertex distributed supervertices pointer jumping
-implementation comes from the merge step. This strengthens the claim made in the previous paragraph.
+required is not worth the tighter theoretical runtime bound. The same holds for the supervertex pointer jumping, the
+strategy requiring the most synchronizations, which performed poorly in the strong scaling comparison. In addition, the
+plot shows that the large standard deviation of the \emph{Vertex Distributed Supervertex Pointer Jumping} implementation
+comes from the merge step. This strengthens the claim made in the previous paragraph.
 
 \section{Conclusions}
 % Here you need to summarize what you did and why this is
@@ -597,9 +598,10 @@ As is evident form the benchmark evaluation % TODO: Reference (Mike)
 we outperform the Parallel BGL by a wide margin. The best approach to distribute the work is the edge distribution
 strategy. Intuitively, this does make sense since there is less data to distribute. The merging strategy used by the
 algorithm does not have a significant impact on the performance. However, the ``Supervertex Pointer Jumping'' performs
-the worst. In conclusion, we can say that we achieved our goal and found approaches that perform better than a state-of-the-art implementation. The Parallel BGL is, of course, more sophisticated and supports generic graph data structures as
-well as other algorithms. The results we found are similar to those of Chung and Condon \cite{chung1996parallel} in that
-supervertex pointer jumping performes worse than pointer jumping on structured and random graphs.
+the worst. In conclusion, we can say that we achieved our goal and found approaches that perform better than one state
+of the art implementation. The Parallel BGL is, of course, more sophisticated and supports generic graph data structures
+as well as other algorithms. The results we found are similar to those of Chung and Condon \cite{chung1996parallel} in
+that supervertex pointer jumping performes worse than pointer jumping on structured and random graphs.
 
 \mypar{Future Work}
 % You can also formulate next steps if you want. Be brief. After the conclusions there are only the references.
