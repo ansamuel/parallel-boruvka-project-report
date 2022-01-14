@@ -429,10 +429,10 @@ CPU cores was equal on all nodes. This allocation strategy should lead to more c
 benchmarks with a low MPI core count could have an unfair advantage due to less network communication.
 
 \mypar{Software}
-All benchmarks were conducted using CentOS Linux release 7.9.2009 (Core) with Linux kernel 3.10.0 and the MPI
-implementation mvapich2 version 2.3.4. The code was compiled with GCC version 10.3.0 using the compilation flags
-\lstinline[basicstyle=\ttfamily\color{black},identifierstyle=\color{black}]|-mavx -march=| \linebreak
-\lstinline[basicstyle=\ttfamily\color{black},identifierstyle=\color{black}]|native -O3|.
+All benchmarks were conducted using CentOS Linux release 7.9.2009 (Core) with Linux kernel 3.10.0, the MPI
+implementation mvapich2 version 2.3.4 and Parallel BGL version 1.78.0. The code was compiled with GCC version 10.3.0
+using the compilation flags
+\lstinline[basicstyle=\ttfamily\color{black},identifierstyle=\color{black}]|-mavx -march=native -O3|.
 
 \subsection{Performed Benchmarks}
 % Then explain what kind of benchmarks you ran. The idea is to give enough information so the experiments are
