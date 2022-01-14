@@ -356,7 +356,7 @@ additional runtime, we have to be cautious about the impact on performance. The 
 the vertices, briefly mentioned in the pointer jumping paragraph in section \ref{sec:background}. This approach has a
 greater theoretical runtime, but uses far less communication compared to the vertex distributed pointer jumping
 implementation. The open question here is, whether the lower runtime guarantee is worth the additional communication.
-More on this in section \ref{sec:exp}. % TODO maybe update reference to a more specific one later on (Mike)
+More on this in section \ref{sec:results}.
 
 Sequential versions of some merging strategies were also implemented to get a better understanding of how they operate.
 However, these sequential algorithms did not serve any additional purpose beyond that.
@@ -487,6 +487,7 @@ We collected measurements until the $90\%$ confidence interval was within $5\%$ 
 by performing $10$ repetitions in all benchmarks, where the first execution is discarded due to warmup.
 
 \subsection{Results}
+\label{sec:results}
 This section contains the results of the performed benchmarks, including an analysis.
 % Next divide the experiments into classes, one paragraph for each. In each class of experiments you typically pursue
 % one questions that then is answered by a suitable plot or plots. For example, first you may want to investigate the
@@ -596,14 +597,14 @@ implementation comes from the merge step. This strengthens the claim made in the
 % such as high-level statements (e.g., we believe that .... is the right
 % approach to .... Even though we only considered x, the
 % .... technique should be applicable ....)
-As is evident form the benchmark evaluation % TODO: Reference (Mike)
-we outperform the Parallel BGL by a wide margin. The best approach to distribute the work is the edge distribution
-strategy. Intuitively, this does make sense since there is less data to distribute. The merging strategy used by the
-algorithm does not have a significant impact on the performance. However, the ``Supervertex Pointer Jumping'' performs
-the worst. In conclusion, we can say that we achieved our goal and found approaches that perform better than a state of
-the art implementation. The Parallel BGL is, of course, more sophisticated and supports generic graph data structures as
-well as other algorithms. The results we found are similar to those of Chung and Condon \cite{chung1996parallel} in that
-supervertex pointer jumping performes worse than pointer jumping on structured and random graphs.
+As is evident form the benchmark evaluation \ref{sec:results} we outperform the Parallel BGL by a wide margin. The best
+approach to distribute the work is the edge distribution strategy. Intuitively, this does make sense since there is less
+data to distribute. The merging strategy used by the algorithm does not have a significant impact on the performance.
+However, the ``Supervertex Pointer Jumping'' performs the worst. In conclusion, we can say that we achieved our goal and
+found approaches that perform better than a state of the art implementation. The Parallel BGL is, of course, more
+sophisticated and supports generic graph data structures as well as other algorithms. The results we found are similar
+to those of Chung and Condon \cite{chung1996parallel} in that supervertex pointer jumping performes worse than pointer
+jumping on structured and random graphs.
 
 \mypar{Future Work}
 % You can also formulate next steps if you want. Be brief. After the conclusions there are only the references.
