@@ -191,6 +191,7 @@ corresponding set of an element and merging two sets takes $\bigoh(\alpha(n))$ t
 operations can be used to describe the connected components in the algorithm \ref{alg:boruvka}. Note that the runtime
 achieved here is not on a per-operation basis. Single operations can take longer but the data structure adjusts itself
 so that successive operations are faster.
+
 % TODO maybe remove this paragraph skip
 We use the so-called path compression strategy when performing \verb|find()| operations and we merge sets by rank during
 \verb|union()| calls \cite{intro_to_algos}.
@@ -244,13 +245,13 @@ they compare, the following two paragraphs describe them both.
 \begin{figure*}
   \begin{subfigure}{0.33\textwidth}
     \centering
-    \begin{tikzpicture}[every node/.style={circle,draw,align=center,font=\small,minimum size=1em},
+    \begin{tikzpicture}[every node/.style={circle,draw,align=center,font=\small,minimum size=.7em},
       node distance=3cm]
       \node (v1) {};
-      \node[below right=2cm and .2cm of v1] (v2) {};
-      \node[below right=.75cm and 1.5cm of v1] (v3) {};
-      \node[below right=1.25cm of v3] (v4) {};
-      \node[right=2.5cm of v1] (v5) {};
+      \node[below right=1.5cm and .1cm of v1] (v2) {};
+      \node[below right=.5cm and 1cm of v1] (v3) {};
+      \node[below right=1cm of v3] (v4) {};
+      \node[right=2cm of v1] (v5) {};
       \path[>={Stealth[black]}, every edge/.style={draw=black, thick}]
         (v1) edge (v2)
         (v1) edge (v3)
@@ -263,13 +264,13 @@ they compare, the following two paragraphs describe them both.
   \end{subfigure}
   \begin{subfigure}{0.33\textwidth}
     \centering
-    \begin{tikzpicture}[every node/.style={circle,draw,align=center,font=\small,minimum size=1em},
+    \begin{tikzpicture}[every node/.style={circle,draw,align=center,font=\small,minimum size=.7em},
       node distance=3cm]
       \node (v1) {};
-      \node[below right=2cm and .2cm of v1] (v2) {};
-      \node[below right=.75cm and 1.5cm of v1] (v3) {};
-      \node[below right=1.25cm of v3] (v4) {};
-      \node[right=2.5cm of v1] (v5) {};
+      \node[below right=1.5cm and .1cm of v1] (v2) {};
+      \node[below right=.5cm and 1cm of v1] (v3) {};
+      \node[below right=1cm of v3] (v4) {};
+      \node[right=2cm of v1] (v5) {};
       \path[>={Stealth[black]}, every edge/.style={draw=black, thick}]
         (v1) edge[cyan] (v2)
         (v1) edge[cyan] (v3)
@@ -282,13 +283,13 @@ they compare, the following two paragraphs describe them both.
   \end{subfigure}
   \begin{subfigure}{0.33\textwidth}
     \centering
-    \begin{tikzpicture}[every node/.style={circle,draw,align=center,font=\small,minimum size=1em},
+    \begin{tikzpicture}[every node/.style={circle,draw,align=center,font=\small,minimum size=.7em},
       node distance=3cm]
       \node[cyan, fill=cyan] (v1) {};
-      \node[red, fill=red, below right=2cm and .2cm of v1] (v2) {};
-      \node[cyan, fill=cyan, below right=.75cm and 1.5cm of v1] (v3) {};
-      \node[red, fill=red, below right=1.25cm of v3] (v4) {};
-      \node[cyan, fill=cyan, right=2.5cm of v1] (v5) {};
+      \node[red, fill=red, below right=1.5cm and .1cm of v1] (v2) {};
+      \node[cyan, fill=cyan, below right=.5cm and 1cm of v1] (v3) {};
+      \node[red, fill=red, below right=1cm of v3] (v4) {};
+      \node[cyan, fill=cyan, right=2cm of v1] (v5) {};
       \path[>={Stealth[black]}, every edge/.style={draw=black, thick}]
         [->] [>={Stealth[cyan]}] (v1) edge[cyan, bend right=10] (v2)
         [->] [>={Stealth[red]}] (v2) edge[red, bend right=10] (v1)
