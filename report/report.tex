@@ -421,12 +421,6 @@ using the compilation flags
 obtained using the performance measurement tool LIKWID \cite{treibig2010likwid}. LIKWID uses hardware counters for its
 measurements and can be invoked by simply marking the code to be benchmarked. 
 
-\begin{figure}
-  \includegraphics[width=\columnwidth]{../benchmark-results/plots/strongscaling_s19.pdf}
-  \caption{Strong scaling comparison with the baseline, $2^{19}$ vertices}
-  \label{fig:strongscaling-19}
-\end{figure}
-
 \subsection{Performed Benchmarks}
 % Then explain what kind of benchmarks you ran. The idea is to give enough information so the experiments are
 % reproducible by somebody else on his or her code.
@@ -463,6 +457,12 @@ algorithm iterations, an arithmetic mean was computed.
 \mypar{Repetitions}
 We collected measurements until the $90\%$ confidence interval was within $5\%$ of our reported means. This was achieved
 by performing $10$ repetitions in all benchmarks, where the first execution is discarded due to warmup.
+
+\begin{figure}
+  \includegraphics[width=\columnwidth]{../benchmark-results/plots/strongscaling_s19.pdf}
+  \caption{Strong scaling comparison with the baseline, $2^{19}$ vertices}
+  \label{fig:strongscaling-19}
+\end{figure}
 
 \subsection{Results}
 \label{sec:results}
