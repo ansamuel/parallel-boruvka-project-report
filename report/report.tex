@@ -449,31 +449,16 @@ Since we are not certain which part of the algorithm causes this, we decided to 
 measurements.
 
 \mypar{Baseline Comparison}
-To compare our implementations with the baseline, we performed a strong scaling study using graphs with $2^{19}$
-vertices. The number of MPI processes in this study were the powers of $2$: $2^0, \dotsc, 2^6$. The baseline
-implementation did not allow us to go any further than that because the execution took too long. We believe this to be
-an implementation issue within the parallel BGL.
+To compare our implementations with the baseline, we performed a strong scaling comparison using graphs with $2^{19}$
+vertices. The number of MPI processes were the powers of $2$: $2^0, \dotsc, 2^6$. The baseline implementation did not
+allow us to go any further than that because the execution took too long. We believe this to be an implementation issue
+within the parallel BGL.
 
 \mypar{Implementation Comparison}
-To compare our implementations with each other, we performed a strong and weak scaling study. The strong scaling study
-was performed using graphs with $2^{20}$ vertices. The number of MPI processes were the powers of $2$: $2^0, \dotsc,
-2^9$. The weak scaling study was performed using the configurations seen in Table \ref{tab:weakscaling-table}.
-
-\begin{table}[!t]
-  \centering
-  \resizebox{0.5\columnwidth}{!}{
-  \begin{tabular}{l l}
-    \toprule
-    \textbf{MPI nodes} & \textbf{Graph vertices} \\ \midrule
-    $1$ & $2^{18}$ \\ 
-    $4$ & $2^{19}$ \\ 
-    $16$ & $2^{20}$ \\
-    $64$ & $2^{21}$ \\
-    $256$ & $2^{22}$ \\ \bottomrule
-  \end{tabular}}
-  \caption{Configuration for weak scaling comparison}
-  \label{tab:weakscaling-table}
-\end{table}
+To compare our implementations with each other, we performed a strong and weak scaling comparison. The strong scaling
+comparison was performed using graphs with $2^{20}$ vertices. The number of MPI processes were the powers of $2$: $2^0,
+\dotsc, 2^9$. The weak scaling comparison was performed using the configurations seen on the x-axis of Fig.
+\ref{fig:weakscaling}.
 
 \mypar{Detailed Runtime Analysis}
 To get a better understanding of which parts of the algorithms require the most runtime, we performed fine-grained
