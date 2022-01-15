@@ -373,7 +373,7 @@ generates the same random graph.
 \mypar{Communication}
 All implementations use MPI as a communication protocol. Besides send and receive routines used to distribute the graph,
 we also use scatter, gather and reduction functionalities. To minimize the communication, we first prepare data locally
-and send it in bulk. This was used to e.g. more efficiently distribute the incident edges in all vertex distributed
+and send it in bulk. This is used to e.g. more efficiently distribute the incident edges in all vertex distributed
 implementations.
 
 \mypar{Limitations}
