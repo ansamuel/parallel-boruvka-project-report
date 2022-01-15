@@ -292,7 +292,7 @@ variation of this graph construction for their benchmarks \cite{graph500}.
 
 % Mention and cite any external resources that you used including libraries or other code.
 This section contains information about the different implementations developed, as well as other technical
-details, such as distribution strategies, limitations and the benchmarking infrastructure.
+details, such as distribution strategies and limitations.
 
 \mypar{Distributing the Work}
 There are many ways how a graph can be distributed among multiple computation units. The two strategies that we
@@ -372,8 +372,9 @@ generates the same random graph.
 
 \mypar{Communication}
 All implementations use MPI as a communication protocol. Besides send and receive routines used to distribute the graph,
-we also use scatter, gather and reduction functionalities. To minimize the communication, we first prepare data locally
-and send it in bulk. This is used to e.g. more efficiently distribute the incident edges in all vertex distributed
+we also use scatter, gather and reduction functionalities. To minimize the cost of communication as much as possible, we
+keep the amount of MPI subroutine calls to a minimum. We achieve this by first locally preparing the data and then
+sending it in bulk. This is used to e.g. more efficiently distribute the incident edges in all vertex distributed
 implementations.
 
 \mypar{Limitations}
@@ -421,12 +422,6 @@ using the compilation flags
 obtained using the performance measurement tool LIKWID \cite{treibig2010likwid}. LIKWID uses hardware counters for its
 measurements and can be invoked by simply marking the code to be benchmarked. 
 
-\begin{figure}
-  \includegraphics[width=\columnwidth]{../benchmark-results/plots/strongscaling_s19.pdf}
-  \caption{Strong scaling comparison with the baseline, $2^{19}$ vertices}
-  \label{fig:strongscaling-19}
-\end{figure}
-
 \subsection{Performed Benchmarks}
 % Then explain what kind of benchmarks you ran. The idea is to give enough information so the experiments are
 % reproducible by somebody else on his or her code.
@@ -463,6 +458,12 @@ algorithm iterations, an arithmetic mean was computed.
 \mypar{Repetitions}
 We collected measurements until the $90\%$ confidence interval was within $5\%$ of our reported means. This was achieved
 by performing $10$ repetitions in all benchmarks, where the first execution is discarded due to warmup.
+
+\begin{figure}
+  \includegraphics[width=\columnwidth]{../benchmark-results/plots/strongscaling_s19.pdf}
+  \caption{Strong scaling comparison with the baseline, $2^{19}$ vertices}
+  \label{fig:strongscaling-19}
+\end{figure}
 
 \subsection{Results}
 \label{sec:results}
@@ -526,12 +527,6 @@ counts, whilst our implementations are more consistent. Table \ref{tab:strongsca
 runtimes of our best implementation, \emph{Edge Distributed Union Find with reduced edges}, and the baseline. The best
 speedup of $9.4513s/0.2997s \approx 31.5$ was achieved when using $2$ processes.
 
-\begin{figure}
-  \includegraphics[width=\columnwidth]{../benchmark-results/plots/weakscaling.pdf}
-  \caption{Weak scaling comparison, $2^{18}$ - $2^{22}$ vertices}
-  \label{fig:weakscaling}
-\end{figure}
-
 \mypar{Implementation Comparison}
 Fig. \ref{fig:strongscaling-20} contains the results of our strong scaling comparison. As can be seen, the edge
 distributed implementations outperform the vertex distributed implementations substantially. All vertex distribution
@@ -548,9 +543,9 @@ processes. More dense graphs might benefit from running on more MPI processes. T
 distributed implementations will perform better with a growing number of processes and increasing number of vertices.
 
 \begin{figure}
-  \includegraphics[width=\columnwidth]{../benchmark-results/plots/comparison.pdf}
-  \caption{Comparison of time spent on parts, $2^{19}$ vertices, 64 MPI processes}
-  \label{fig:comparison}
+  \includegraphics[width=\columnwidth]{../benchmark-results/plots/weakscaling.pdf}
+  \caption{Weak scaling comparison, $2^{18}$ - $2^{22}$ vertices}
+  \label{fig:weakscaling}
 \end{figure}
 
 \mypar{Detailed Runtime Analysis}
@@ -566,6 +561,12 @@ required is not worth the tighter theoretical runtime bound. The same holds for 
 strategy requiring the most synchronizations, which performed poorly in the strong scaling comparison. In addition, the
 plot shows that the large standard deviation of the \emph{Vertex Distributed Supervertex Pointer Jumping} implementation
 comes from the merge step. This strengthens the claim made in the previous paragraph.
+
+\begin{figure}
+  \includegraphics[width=\columnwidth]{../benchmark-results/plots/comparison.pdf}
+  \caption{Comparison of time spent on parts, $2^{19}$ vertices, 64 MPI processes}
+  \label{fig:comparison}
+\end{figure}
 
 \section{Conclusions}
 % Here you need to summarize what you did and why this is
