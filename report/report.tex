@@ -47,7 +47,7 @@ utmost importance. In this paper, we look at a variety of work distribution and 
 implement Bor\r{u}vka's MST algorithm. We developed some implementations using a mixture of these strategies. To measure
 and compare the performance of these implementations, we performed benchmarks on the RACKlette cluster and used the
 Parallel Boost Graph Library as a baseline. Using these strategies, we were able to develop implementations that are up
-to $31.5$ times faster compared to the baseline.
+to $32.6$ times faster compared to the baseline.
 \end{abstract}
 
 \section{Introduction}
@@ -500,21 +500,21 @@ This section contains the results of the performed benchmarks, including an anal
 \end{figure}
 
 \begin{table}[!t]
-	\centering
+  \centering
   \resizebox{0.75\columnwidth}{!}{
-	\begin{tabular}{l l l}
-		\toprule
-		\textbf{MPI processes} & \textbf{Best impl.} & \textbf{Parallel BGL} \\ \midrule
-		$1$ & $0.5050$ & $13.0532$\\ 
-		$2$ & $0.2997$ & $9.4513$\\ 
-		$4$ & $0.2001$ & $5.3956$\\
-		$8$ & $0.1254$ & $3.4787$\\
-		$16$ & $0.11$ & $2.6483$\\
-		$32$ & $0.1085$ & $2.4329$\\
-		$64$ & $0.1094$ & $2.4421$\\ \bottomrule
-	\end{tabular}}
-	\caption{Runtime results in seconds from strong scaling comparison, $2^{19}$ vertices}
-	\label{tab:strongscaling-19-table}
+  \begin{tabular}{l l l}
+    \toprule
+    \textbf{MPI processes} & \textbf{Best impl.} & \textbf{Parallel BGL} \\ \midrule
+    $1$ & $0.51679$ & $12.76185$ \\
+    $2$ & $0.28577$ & $9.31996$ \\
+    $4$ & $0.18393$ & $5.38284$ \\
+    $8$ & $0.12564$ & $3.42770$ \\
+    $16$ & $0.10462$ & $2.61154$ \\
+    $32$ & $0.09486$ & $2.39382$ \\
+    $64$ & $0.09639$ & $2.38184$ \\ \bottomrule
+  \end{tabular}}
+  \caption{Runtime results in seconds from strong scaling comparison, $2^{19}$ vertices}
+  \label{tab:strongscaling-19-table}
 \end{table}
 
 \mypar{Baseline Comparison}
@@ -525,7 +525,7 @@ baseline. We verified that these results are statistically significant by making
 intervals do not overlap. An interesting observation is that Parallel BGL performs exceptionally poorly for low MPI core
 counts, whilst our implementations are more consistent. Table \ref{tab:strongscaling-19-table} contains the absolute
 runtimes of our best implementation, \emph{Edge Distributed Union Find with reduced edges}, and the baseline. The best
-speedup of $9.4513s/0.2997s \approx 31.5$ was achieved when using $2$ processes.
+speedup of $9.31996s/0.28577s \approx 32.6$ was achieved when using $2$ processes.
 
 \mypar{Implementation Comparison}
 Fig. \ref{fig:strongscaling-20} contains the results of our strong scaling comparison. As can be seen, the edge
