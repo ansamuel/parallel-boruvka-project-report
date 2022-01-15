@@ -320,8 +320,8 @@ computation units whilst others are idle. However, with this approach the mergin
 
 \mypar{Implementations}
 \label{sec:implementations}
-For this project we developed various C++ implementations, combining different merging approaches with the two
-aforementioned distribution strategies. The following list contains all the combinations realized:
+For this project we developed various C++ implementations, combining different \linebreak merging approaches with the
+two aforementioned distribution strategies. The following list contains all the combinations realized:
 \begin{itemize}[noitemsep]
   \item Edge Distributed, merging via
   { \setlist{nolistsep}
@@ -364,7 +364,7 @@ incomparable results since we use MPI \cite{15418}.
 \mypar{Kronecker Graph Generator}
 \label{par:kronecker_graph_generator}
 Initially, we experimented with different kinds of graphs and implemented some generators for them, but ultimately
-decided to only benchmark Kronecker graphs. Self-written generators can be error-prone and it is difficult to
+decided to only benchmark Kronecker graphs. Self-writ\-ten generators can be error-prone and it is difficult to
 efficiently generate large graphs. Therefore, we decided to use the reference implementation of the Graph500
 specification. An alternative to this is the Erdös-Renyi graph generator that is part of the Parallel BGL \cite{bgl}. To
 get reproducible benchmark results across all algorithm executions, we seeded the graph generator, so that it always
@@ -578,12 +578,13 @@ comes from the merge step. This strengthens the claim made in the previous parag
 % approach to .... Even though we only considered x, the
 % .... technique should be applicable ....)
 As is evident from the benchmark evaluation in section \ref{sec:results}, we outperform the Parallel BGL by a wide
-margin. The best approach to distribute the work is the edge distribution strategy. The merging strategy used by the algorithm does not have a significant impact on
-the performance. However, the \emph{Supervertex Pointer Jumping} performs the worst. In conclusion, we can say that we
-achieved our goal and found approaches that perform better than one state of the art implementation. The Parallel BGL
-is, of course, more sophisticated and supports generic graph data structures as well as other algorithms. The results we
-found are similar to those of Chung and Condon \cite{chung1996parallel} in that supervertex pointer jumping performs
-worse than pointer jumping on structured and random graphs.
+margin. The best approach to distribute the work is the edge distribution strategy. The merging strategy used by the
+algorithm does not have a significant impact on the performance. However, the \emph{Supervertex Pointer Jumping}
+performs the worst. In conclusion, we can say that we achieved our goal and found approaches that perform better than
+one state of the art implementation. The Parallel BGL is, of course, more sophisticated and supports generic graph data
+structures as well as other algorithms. The results we found are similar to those of Chung and Condon
+\cite{chung1996parallel} in that supervertex pointer jumping performs worse than pointer jumping on structured and
+random graphs.
 
 \mypar{Future Work}
 % You can also formulate next steps if you want. Be brief. After the conclusions there are only the references.
