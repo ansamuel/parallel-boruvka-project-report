@@ -116,9 +116,11 @@ on sufficiently dense \linebreak graphs and presents an algorithm for the bulk s
 \cite{dehne1998practical}. Furthermore, a parallelization of the MST algorithm using GPUs is presented in
 \cite{de2017parallel}. Some implementations that can be found make use of wait-free Union-Find data structures
 \cite{wfuf}. Such data structures speed-up the merge step of the Vor\r{u}vka algorithm. However, they do not aid in
-distributing the work over multiple computing nodes. Our research is similar to that of Chung and Condon
-\cite{chung1996parallel}, but differs in the work distribution strategies applied. We do not, however, use
-the wait-free implementations of those data structures as described in \cite{wfuf}.
+distributing the work over multiple computing nodes.
+
+Our research is similar to that of Chung and Condon \cite{chung1996parallel}, but differs in the work distribution
+strategies applied. We do not, however, use the wait-free implementations of those data structures as described in
+\cite{wfuf}.
 
 \section{Background}
 \label{sec:background}
@@ -432,7 +434,8 @@ measurements and can be invoked by simply marking the code to be benchmarked.
 % programs you ran.
 As described in section \ref{par:kronecker_graph_generator}, all benchmarks were performed using Kronecker graphs. These
 graphs have $16$ times more edges than vertices (as per Graph500 specification \cite{graph500}). This is to ensure an
-average degree of $32$.
+average degree of $32$. The implementation \emph{Edge Distributed Pointer Jumping} resulted in bad performance  and we
+decided to not include it in our reported measurements.
 
 \mypar{Baseline Comparison}
 To compare our implementations with the baseline, we performed a strong scaling comparison using graphs with $2^{19}$
