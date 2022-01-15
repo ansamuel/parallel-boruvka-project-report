@@ -298,7 +298,7 @@ variation of this graph construction for their benchmarks \cite{graph500}.
 This section contains information about the different implementations developed, as well as other technical
 details, such as distribution strategies, limitations and the benchmarking infrastructure.
 
-\subsection{Distributing the Work}
+\mypar{Distributing the Work}
 There are many ways how a graph can be distributed among multiple computation units. The two strategies that we
 considered are distributing the edges and distributing the vertices. A combination of the two would also be conceivable,
 but was not considered in this project. As these two strategies have different parallelization capabilities, multiple
@@ -323,7 +323,7 @@ distribution strategy. Imagine a scenario, where certain vertices have a higher 
 others. In that case the computation of the minimum weight outgoing edge of each component takes longer for some
 computation units whilst others are idle. However, with this approach the merging of components can be parallelized. 
 
-\subsection{Implementations}
+\mypar{Implementations}
 \label{sec:implementations}
 For this project we developed various C++ implementations, combining different merging approaches with the two
 aforementioned distribution strategies. The following list contains all the combinations realized:
@@ -400,12 +400,6 @@ To verify the correctness of our algorithms, we perform unit tests using Catch2.
 tests with large Kronecker graphs that compare our implementations to the baseline (parallel BGL). To get assurance
 during development, we use continuous integration that executes the tests and reports potential failure.
 
-\subsection{Benchmarking Infrastructure}
-To ease the benchmarking process, we developed an infrastructure that allows us to parameterize the different
-algorithms. The results are obtained using the performance measurement tool LIKWID \cite{treibig2010likwid}. LIKWID uses
-hardware counters for its measurements and can be invoked by simply marking the code to be benchmarked. This allows us
-to benchmark parts of the algorithms and obtain detailed information to further improve certain functionality.
-
 \section{Experimental Results}
 \label{sec:exp}
 In this section we go over the benchmarking setup, as well as the results that we measured, including their
@@ -434,7 +428,10 @@ could have an unfair advantage due to less network communication.
 All benchmarks were conducted using CentOS Linux release 7.9.2009 (Core) with Linux kernel 3.10.0, the MPI
 implementation mvapich2 version 2.3.4 and Parallel BGL version 1.78.0. The code was compiled with GCC version 10.3.0
 using the compilation flags
-\lstinline[basicstyle=\ttfamily\color{black},identifierstyle=\color{black}]|-mavx -march=native -O3|.
+\lstinline[basicstyle=\ttfamily\color{black},identifierstyle=\color{black}]|-mavx -march=native -O3|. Our results are
+obtained using the performance measurement tool LIKWID \cite{treibig2010likwid}. LIKWID uses hardware counters for its
+measurements and can be invoked by simply marking the code to be benchmarked. 
+
 
 \begin{figure}
   \includegraphics[width=\columnwidth]{../benchmark-results/plots/strongscaling_s19.pdf}
