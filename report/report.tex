@@ -112,7 +112,7 @@ As the MST problem is very versatile and can be used in various scientific disci
 on parallelizing MST algorithms. One such paper \cite{chung1996parallel}, which is also the main inspiration of this
 project, evaluates how the performance of Bor\r{u}vka behaves when using different pointer jumping schemes. They also
 show that in principle a speedup proportional to the number of processors can be achieved. Other research limits itself
-on sufficiently dense \linebreak graphs and presents an algorithm for the bulk synchronous parallel (BSP) model
+on sufficiently dense graphs and presents an algorithm for the bulk synchronous parallel (BSP) model
 \cite{dehne1998practical}. Furthermore, a parallelization of the MST algorithm using GPUs is presented in
 \cite{de2017parallel}. Some implementations that can be found make use of wait-free Union Find data structures
 \cite{wfuf}. Such data structures speed-up the merge step of the Bor\r{u}vka algorithm. However, they do not aid in
@@ -373,7 +373,7 @@ generates the same random graph.
 \mypar{Communication}
 All implementations use MPI as a communication protocol. Besides send and receive routines used to distribute the graph,
 we also use scatter, gather and reduction functionalities. To minimize the communication, we first prepare data locally
-and send data in bulk. This was used to e.g. more efficiently distribute the incident edges in all vertex distributed
+and send it in bulk. This was used to e.g. more efficiently distribute the incident edges in all vertex distributed
 implementations.
 
 \mypar{Limitations}
@@ -434,8 +434,9 @@ measurements and can be invoked by simply marking the code to be benchmarked.
 % programs you ran.
 As described in section \ref{par:kronecker_graph_generator}, all benchmarks were performed using Kronecker graphs. These
 graphs have $16$ times more edges than vertices (as per Graph500 specification \cite{graph500}). This is to ensure an
-average degree of $32$. The implementation \emph{Edge Distributed Pointer Jumping} resulted in bad performance  and we
-decided to not include it in our reported measurements.
+average degree of $32$. The implementation \emph{Edge Distributed Pointer Jumping} resulted in bad performance.
+Since we are not certain which part of the algorithm causes this, we decided to not include it in our reported
+measurements.
 
 \mypar{Baseline Comparison}
 To compare our implementations with the baseline, we performed a strong scaling comparison using graphs with $2^{19}$
