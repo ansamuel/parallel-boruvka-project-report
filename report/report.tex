@@ -24,12 +24,12 @@
 
 \title{Efficient Parallelization of Bor\r{u}vka's \linebreak Minimum Spanning Tree Algorithm}
 
-\fiveauthors
-  {Samuel Anzalone \\[-0.8ex] {\small BS Computational Science} \\[-0.8ex] {\small \texttt{ansamuel@ethz.ch}}}
-  {Mike Marti \\[-0.8ex] {\small MS Computer Science} \\[-0.8ex] {\small \texttt{mikmarti@ethz.ch}}}
-  {Matteo Kamm \\[-0.8ex] {\small MS Computer Science} \\[-0.8ex] {\small \texttt{matkamm@ethz.ch}}}
-  {Hulda L.\ Hannesdóttir \\[-0.8ex] {\small MS Computer Science} \\[-0.8ex] {\small \texttt{hhannesdo@ethz.ch}}}
-  {\v{S}imon Hrabec \\[-0.8ex] {\small MS Computer Science} \\[-0.8ex] {\small \texttt{shrabec@ethz.ch}}}
+\fiveauthorsalt
+  {\normalsize Samuel Anzalone \\[-0.8ex] {\small BS Computational Science} \\[-0.8ex] {\small \texttt{ansamuel@ethz.ch}}}
+  {\normalsize Mike Marti \\[-0.8ex] {\small MS Computer Science} \\[-0.8ex] {\small \texttt{mikmarti@ethz.ch}}}
+  {\normalsize Matteo Kamm \\[-0.8ex] {\small MS Computer Science} \\[-0.8ex] {\small \texttt{matkamm@ethz.ch}}}
+  {\normalsize Hulda L.\ Hannesdóttir \\[-0.8ex] {\small MS Computer Science} \\[-0.8ex] {\small \texttt{hhannesdo@ethz.ch}}}
+  {\normalsize \v{S}imon Hrabec \\[-0.8ex] {\small MS Computer Science} \\[-0.8ex] {\small \texttt{shrabec@ethz.ch}}}
 
 \begin{document}
 
@@ -593,8 +593,7 @@ comes from the merge step. This strengthens the claim made in the previous parag
 % approach to .... Even though we only considered x, the
 % .... technique should be applicable ....)
 As is evident from the benchmark evaluation in section \ref{sec:results}, we outperform the Parallel BGL by a wide
-margin. The best approach to distribute the work is the edge distribution strategy. Intuitively, this does make sense
-since there is less data to distribute. The merging strategy used by the algorithm does not have a significant impact on
+margin. The best approach to distribute the work is the edge distribution strategy. The merging strategy used by the algorithm does not have a significant impact on
 the performance. However, the \emph{Supervertex Pointer Jumping} performs the worst. In conclusion, we can say that we
 achieved our goal and found approaches that perform better than one state of the art implementation. The Parallel BGL
 is, of course, more sophisticated and supports generic graph data structures as well as other algorithms. The results we
