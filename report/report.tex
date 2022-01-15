@@ -13,7 +13,7 @@
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{booktabs}
-
+\usepackage{enumitem}
 \usepackage{tabularx}
 
 \newcommand{\R}[0]{\mathbb{R}}
@@ -83,7 +83,7 @@ The MST problem is one of the most studied problems in combinatorial optimizatio
 problem is rather simple, its solutions are often used as part of other algorithms to compute intermediate results.
 Other scientific fields, such as epidemiology or taxonomy, apply MST algorithms as can be seen in the following list of
 example problems.
-\begin{itemize}
+\begin{itemize}[noitemsep]
   \item \textbf{Networking} MST algorithms find trees in computer networks that can be used for broadcasting without
     loops \cite{reverse_path_broadcast}.
   \item \textbf{$\frac{3}{2}$-ap\-prox\-i\-mate metric TSP} By combining algorithms that find MSTs, matchings and
@@ -331,20 +331,23 @@ computation units whilst others are idle. However, with this approach the mergin
 \label{sec:implementations}
 For this project we developed various C++ implementations, combining different merging approaches with the two
 aforementioned distribution strategies. The following list contains all the combinations realized:
-\begin{itemize}
+\begin{itemize}[noitemsep]
   \item Edge Distributed, merging via
-  \begin{itemize}
+  { \setlist{nolistsep}
+  \begin{itemize}[noitemsep]
      \item Union Find 
      \item Union Find with reduced edges
      \item Pointer Jumping
-  \end{itemize}
+  \end{itemize} }
   \item Vertex Distributed, merging via
-  \begin{itemize}
+  { \setlist{nolistsep}
+  \begin{itemize}[noitemsep]
      \item Union Find 
      \item Iterative Vertex Fixing
      \item Pointer Jumping
      \item Supervertex Pointer Jumping
   \end{itemize}
+  }
 \end{itemize}
 Clearly, this list does not contain every possible combination. Intermediate benchmarking showed that some strategies
 were not promising enough to be pursued further.
