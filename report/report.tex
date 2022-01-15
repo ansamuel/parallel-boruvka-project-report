@@ -111,20 +111,14 @@ a parallel MST implementation that performs significantly better than one state 
 As the MST problem is very versatile and can be used in various scientific disciplines, there already is some research
 on parallelizing MST algorithms. One such paper \cite{chung1996parallel}, which is also the main inspiration of this
 project, evaluates how the performance of Bor\r{u}vka behaves when using different pointer jumping schemes. They also
-show that in principle a speedup proportional to the number of processors can be achieved.
-
-Other research limits itself on sufficiently dense \linebreak graphs and presents an algorithm for the bulk synchronous
-parallel (BSP) model \cite{dehne1998practical}. Furthermore, a parallelization of the MST algorithm using GPUs is
-presented in \cite{de2017parallel}.
-
-Some implementations that can be found make use of wait-free Union-Find data structures \cite{wfuf}. Such data
-structures speed-up the merge step of the Vor\r{u}vka algorithm. However, they do not aid in distributing the work over
-multiple computing nodes.
-
-Our research is similar to that of Chung and Condon \cite{chung1996parallel}, but differs in the work distribution
-strategies applied. Moreover, we also evaluate local merging strategies using Union Find data structures additionally to
-the pointer jumping schemes. We do not, however, use the wait-free implementations of those data structures as described
-in \cite{wfuf}.
+show that in principle a speedup proportional to the number of processors can be achieved. Other research limits itself
+on sufficiently dense \linebreak graphs and presents an algorithm for the bulk synchronous parallel (BSP) model
+\cite{dehne1998practical}. Furthermore, a parallelization of the MST algorithm using GPUs is presented in
+\cite{de2017parallel}. Some implementations that can be found make use of wait-free Union-Find data structures
+\cite{wfuf}. Such data structures speed-up the merge step of the Vor\r{u}vka algorithm. However, they do not aid in
+distributing the work over multiple computing nodes. Our research is similar to that of Chung and Condon
+\cite{chung1996parallel}, but differs in the work distribution strategies applied. We do not, however, use
+the wait-free implementations of those data structures as described in \cite{wfuf}.
 
 \section{Background}
 \label{sec:background}
@@ -302,8 +296,7 @@ details, such as distribution strategies, limitations and the benchmarking infra
 There are many ways how a graph can be distributed among multiple computation units. The two strategies that we
 considered are distributing the edges and distributing the vertices. A combination of the two would also be conceivable,
 but was not considered in this project. As these two strategies have different parallelization capabilities, multiple
-implementations for both of these approaches were developed. To get a better understanding of how they operate and how
-they compare, the following two paragraphs describe them both.
+implementations for both of these approaches were developed.
 
 \mypar{Distribution by Edges}
 In this approach, the edges of the input graph are distributed evenly among computation units. An illustration of such a
@@ -360,9 +353,6 @@ This is answered in section \ref{sec:results}. In addition, the Union Find imple
 compression strategy when performing \verb|find()| operations and we merge sets by rank during \verb|union()| calls
 \cite{intro_to_algos}.
 
-Sequential versions of some merging strategies were also implemented to get a better understanding of how they operate.
-However, these sequential algorithms did not serve any additional purpose beyond that.
-
 \mypar{Baseline Implementation}
 To get an idea of how well our implementations perform, we decided to use the Parallel Boost Graph Library (BGL)
 \cite{bgl} as our baseline. We considered other baseline implementations but came to the conclusion that the Parallel
@@ -371,21 +361,18 @@ uncomparable results since we use MPI \cite{15418}.
 
 \mypar{Kronecker Graph Generator}
 \label{par:kronecker_graph_generator}
-Initially, we experimented with different kinds of graphs and implemented some generators for them, but ultimately
-decided to only use Kronecker graphs to benchmark our implementations. Self-written generators can be error-prone and it
-is difficult to efficiently generate large graphs. Therefore, we use the reference implementation of the Graph500
-specification that is available on
-GitHub\footnote{\url{https://github.com/graph500/graph500/tree/newreference/generator}}. An alternative to this is the
-Erdös-Renyi graph generator that is part of the Parallel BGL \cite{bgl}. To get reproducible benchmark results across
-all algorithm executions, we seeded the graph generator, so that it always generates the same random graph.
+Self-written generators can be error-prone and it is difficult to efficiently generate large graphs. Therefore, we use
+decided to use the reference implementation of the Graph500 specification that is available on
+GitHub\footnote{\url{https://github.com/graph500/graph500/tree/newreference/generator}} to generate Kronecker graphs. An
+alternative to this is the Erdös-Renyi graph generator that is part of the Parallel BGL \cite{bgl}. To get reproducible
+benchmark results across all algorithm executions, we seeded the graph generator, so that it always generates the same
+random graph.
 
 \mypar{Communication}
 All implementations use MPI as a communication protocol. Besides send and receive routines used to distribute the graph,
-we also use scatter, gather and reduction functionalities. To minimize the cost of communication as much as possible, we
-keep the amount of MPI subroutine calls to a minimum. We achieve this by first locally preparing the data and then
+we also use scatter, gather and reduction functionalities. We achieve this by first locally preparing the data and then
 sending everything at once. This was used to e.g. more efficiently distribute the incident edges in all vertex
-distributed implementations. Instead of sending each edge individually, only one send operation containing all edges is
-performed for each computation unit.
+distributed implementations.
 
 \mypar{Limitations}
 \label{par:limitation}
@@ -432,7 +419,6 @@ using the compilation flags
 obtained using the performance measurement tool LIKWID \cite{treibig2010likwid}. LIKWID uses hardware counters for its
 measurements and can be invoked by simply marking the code to be benchmarked. 
 
-
 \begin{figure}
   \includegraphics[width=\columnwidth]{../benchmark-results/plots/strongscaling_s19.pdf}
   \caption{Strong scaling comparison with the baseline, $2^{19}$ vertices}
@@ -446,9 +432,7 @@ measurements and can be invoked by simply marking the code to be benchmarked.
 % programs you ran.
 As described in section \ref{par:kronecker_graph_generator}, all benchmarks were performed using Kronecker graphs. These
 graphs have $16$ times more edges than vertices (as per Graph500 specification \cite{graph500}). This is to ensure an
-average degree of $32$. The implementation \emph{Edge Distributed Pointer Jumping} resulted in bad performance.
-Since we are not certain which part of the algorithm causes this, we decided to not include it in our reported
-measurements.
+average degree of $32$.
 
 \mypar{Baseline Comparison}
 To compare our implementations with the baseline, we performed a strong scaling comparison using graphs with $2^{19}$
