@@ -520,17 +520,22 @@ This section contains the results of the performed benchmarks, including an anal
   \label{fig:strongscaling-19}
 \end{figure}
 
-\begin{table*}
-  \begin{tabularx}{\linewidth}{ l | c  c  c  c  c  c  c }
-    \toprule
-    \textbf{Number of processes} & \textbf{1} & \textbf{2} & \textbf{4} & \textbf{8} & \textbf{16} & \textbf{32} &
-      \textbf{64} \\ \midrule
-    Edge Distributed Union Find w. reduced edges & 0.5050 & 0.2997 & 0.2001 & 0.1254 & 0.11 & 0.1085 & 0.1094 \\
-    Parallel Boost Graph Library & 13.0532 & 9.4513 & 5.3956 & 3.4787 & 2.6483 & 2.4329 & 2.4421 \\ \bottomrule
-  \end{tabularx}
-  \caption{Runtime results in seconds from strong scaling comparison, $2^{19}$ vertices}
-  \label{tab:strongscaling-19-table}
-\end{table*}
+\begin{table}[!t]
+	\centering
+	\begin{tabular}{l l l}
+		\toprule
+		\textbf{MPI processes} & \textbf{Best impl.} & \textbf{PBGL} \\ \midrule
+		$1$ & $0.5050$ & $13.0532$\\ 
+		$4$ & $0.2997$ & $9.4513$\\ 
+		$8$ & $0.2001$ & $5.3956$\\
+		$16$ & $0.1254$ & $3.4787$\\
+		$32$ & $0.11$ & $2.6483$\\
+		$64$ & $0.1085$ & $2.4329$\\
+		$128$ & $0.1094$ & $2.4421$\\ \bottomrule
+	\end{tabular}
+	\caption{Runtime results in seconds from strong scaling comparison, $2^{19}$ vertices}
+	\label{tab:strongscaling-19-table}
+\end{table}
 
 \mypar{Baseline Comparison}
 The results of the strong scaling comparison for the baseline comparison are presented in Fig.
