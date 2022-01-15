@@ -363,18 +363,18 @@ uncomparable results since we use MPI \cite{15418}.
 
 \mypar{Kronecker Graph Generator}
 \label{par:kronecker_graph_generator}
-Self-written generators can be error-prone and it is difficult to efficiently generate large graphs. Therefore, we use
-decided to use the reference implementation of the Graph500 specification that is available on
-GitHub\footnote{\url{https://github.com/graph500/graph500/tree/newreference/generator}} to generate Kronecker graphs. An
-alternative to this is the Erdös-Renyi graph generator that is part of the Parallel BGL \cite{bgl}. To get reproducible
-benchmark results across all algorithm executions, we seeded the graph generator, so that it always generates the same
-random graph.
+Initially, we experimented with different kinds of graphs and implemented some generators for them, but ultimately
+decided to only benchmark Kronecker graphs. Self-written generators can be error-prone and it is difficult to
+efficiently generate large graphs. Therefore, we decided to use the reference implementation of the Graph500
+specification. An alternative to this is the Erdös-Renyi graph generator that is part of the Parallel BGL \cite{bgl}. To
+get reproducible benchmark results across all algorithm executions, we seeded the graph generator, so that it always
+generates the same random graph.
 
 \mypar{Communication}
 All implementations use MPI as a communication protocol. Besides send and receive routines used to distribute the graph,
-we also use scatter, gather and reduction functionalities. We achieve this by first locally preparing the data and then
-sending everything at once. This was used to e.g. more efficiently distribute the incident edges in all vertex
-distributed implementations.
+we also use scatter, gather and reduction functionalities. To minimize the communication, we first prepare data locally
+and send data in bulk. This was used to e.g. more efficiently distribute the incident edges in all vertex distributed
+implementations.
 
 \mypar{Limitations}
 \label{par:limitation}
