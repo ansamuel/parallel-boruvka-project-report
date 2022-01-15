@@ -14,7 +14,6 @@
 \usepackage{xcolor}
 \usepackage{booktabs}
 \usepackage{enumitem}
-\usepackage{tabularx}
 
 \newcommand{\R}[0]{\mathbb{R}}
 \newcommand{\N}[0]{\mathbb{N}}
@@ -47,8 +46,8 @@ such, having implementations that can handle large inputs and compute the result
 utmost importance. In this paper, we look at a variety of work distribution and merging strategies that can be used to
 implement Bor\r{u}vka's MST algorithm. We developed some implementations using a mixture of these strategies. To measure
 and compare the performance of these implementations, we performed benchmarks on the RACKlette cluster and used the
-Parallel Boost Graph Library as a baseline. Using these strategies, we were able to develop implementations that were up
-to $31.5$ times faster compared to our baseline implementation.
+Parallel Boost Graph Library as a baseline. Using these strategies, we were able to develop implementations that are up
+to $31.5$ times faster compared to the baseline.
 \end{abstract}
 
 \section{Introduction}
@@ -192,6 +191,7 @@ corresponding set of an element and merging two sets takes $\bigoh(\alpha(n))$ t
 operations can be used to describe the connected components in the algorithm \ref{alg:boruvka}. Note that the runtime
 achieved here is not on a per-operation basis. Single operations can take longer but the data structure adjusts itself
 so that successive operations are faster.
+
 % TODO maybe remove this paragraph skip
 We use the so-called path compression strategy when performing \verb|find()| operations and we merge sets by rank during
 \verb|union()| calls \cite{intro_to_algos}.
@@ -245,13 +245,13 @@ they compare, the following two paragraphs describe them both.
 \begin{figure*}
   \begin{subfigure}{0.33\textwidth}
     \centering
-    \begin{tikzpicture}[every node/.style={circle,draw,align=center,font=\small,minimum size=1em},
+    \begin{tikzpicture}[every node/.style={circle,draw,align=center,font=\small,minimum size=.7em},
       node distance=3cm]
       \node (v1) {};
-      \node[below right=2cm and .2cm of v1] (v2) {};
-      \node[below right=.75cm and 1.5cm of v1] (v3) {};
-      \node[below right=1.25cm of v3] (v4) {};
-      \node[right=2.5cm of v1] (v5) {};
+      \node[below right=1.5cm and .1cm of v1] (v2) {};
+      \node[below right=.5cm and 1cm of v1] (v3) {};
+      \node[below right=1cm of v3] (v4) {};
+      \node[right=2cm of v1] (v5) {};
       \path[>={Stealth[black]}, every edge/.style={draw=black, thick}]
         (v1) edge (v2)
         (v1) edge (v3)
@@ -264,13 +264,13 @@ they compare, the following two paragraphs describe them both.
   \end{subfigure}
   \begin{subfigure}{0.33\textwidth}
     \centering
-    \begin{tikzpicture}[every node/.style={circle,draw,align=center,font=\small,minimum size=1em},
+    \begin{tikzpicture}[every node/.style={circle,draw,align=center,font=\small,minimum size=.7em},
       node distance=3cm]
       \node (v1) {};
-      \node[below right=2cm and .2cm of v1] (v2) {};
-      \node[below right=.75cm and 1.5cm of v1] (v3) {};
-      \node[below right=1.25cm of v3] (v4) {};
-      \node[right=2.5cm of v1] (v5) {};
+      \node[below right=1.5cm and .1cm of v1] (v2) {};
+      \node[below right=.5cm and 1cm of v1] (v3) {};
+      \node[below right=1cm of v3] (v4) {};
+      \node[right=2cm of v1] (v5) {};
       \path[>={Stealth[black]}, every edge/.style={draw=black, thick}]
         (v1) edge[cyan] (v2)
         (v1) edge[cyan] (v3)
@@ -283,13 +283,13 @@ they compare, the following two paragraphs describe them both.
   \end{subfigure}
   \begin{subfigure}{0.33\textwidth}
     \centering
-    \begin{tikzpicture}[every node/.style={circle,draw,align=center,font=\small,minimum size=1em},
+    \begin{tikzpicture}[every node/.style={circle,draw,align=center,font=\small,minimum size=.7em},
       node distance=3cm]
       \node[cyan, fill=cyan] (v1) {};
-      \node[red, fill=red, below right=2cm and .2cm of v1] (v2) {};
-      \node[cyan, fill=cyan, below right=.75cm and 1.5cm of v1] (v3) {};
-      \node[red, fill=red, below right=1.25cm of v3] (v4) {};
-      \node[cyan, fill=cyan, right=2.5cm of v1] (v5) {};
+      \node[red, fill=red, below right=1.5cm and .1cm of v1] (v2) {};
+      \node[cyan, fill=cyan, below right=.5cm and 1cm of v1] (v3) {};
+      \node[red, fill=red, below right=1cm of v3] (v4) {};
+      \node[cyan, fill=cyan, right=2cm of v1] (v5) {};
       \path[>={Stealth[black]}, every edge/.style={draw=black, thick}]
         [->] [>={Stealth[cyan]}] (v1) edge[cyan, bend right=10] (v2)
         [->] [>={Stealth[red]}] (v2) edge[red, bend right=10] (v1)
@@ -450,30 +450,16 @@ Since we are not certain which part of the algorithm causes this, we decided to 
 measurements.
 
 \mypar{Baseline Comparison}
-To compare our implementations with the baseline, we performed a strong scaling study using graphs with $2^{19}$
-vertices. The number of MPI processes in this study were the powers of $2$: $2^0, \dotsc, 2^6$. The baseline
-implementation did not allow us to go any further than that because the execution took too long. We believe this to be
-an implementation issue within the parallel BGL.
+To compare our implementations with the baseline, we performed a strong scaling comparison using graphs with $2^{19}$
+vertices. The number of MPI processes were the powers of $2$: $2^0, \dotsc, 2^6$. The baseline implementation did not
+allow us to go any further than that because the execution took too long. We believe this to be an implementation issue
+within the parallel BGL.
 
 \mypar{Implementation Comparison}
-To compare our implementations with each other, we performed a strong and weak scaling study. The strong scaling study
-was performed using graphs with $2^{20}$ vertices. The number of MPI processes were the powers of $2$: $2^0, \dotsc,
-2^9$. The weak scaling study was performed using the configurations seen in Table \ref{tab:weakscaling-table}.
-
-\begin{table}[!t]
-  \centering
-  \begin{tabular}{l l}
-    \toprule
-    \textbf{MPI nodes} & \textbf{Graph vertices} \\ \midrule
-    $1$ & $2^{18}$ \\ 
-    $4$ & $2^{19}$ \\ 
-    $16$ & $2^{20}$ \\
-    $64$ & $2^{21}$ \\
-    $256$ & $2^{22}$ \\ \bottomrule
-  \end{tabular}
-  \caption{Configuration for weak scaling comparison}
-  \label{tab:weakscaling-table}
-\end{table}
+To compare our implementations with each other, we performed a strong and weak scaling comparison. The strong scaling
+comparison was performed using graphs with $2^{20}$ vertices. The number of MPI processes were the powers of $2$: $2^0,
+\dotsc, 2^9$. The weak scaling comparison was performed using the configurations seen on the x-axis of Fig.
+\ref{fig:weakscaling}.
 
 \mypar{Detailed Runtime Analysis}
 To get a better understanding of which parts of the algorithms require the most runtime, we performed fine-grained
@@ -525,9 +511,10 @@ This section contains the results of the performed benchmarks, including an anal
 
 \begin{table}[!t]
 	\centering
+  \resizebox{0.75\columnwidth}{!}{
 	\begin{tabular}{l l l}
 		\toprule
-		\textbf{MPI processes} & \textbf{Best impl.} & \textbf{PBGL} \\ \midrule
+		\textbf{MPI processes} & \textbf{Best impl.} & \textbf{Parallel BGL} \\ \midrule
 		$1$ & $0.5050$ & $13.0532$\\ 
 		$4$ & $0.2997$ & $9.4513$\\ 
 		$8$ & $0.2001$ & $5.3956$\\
@@ -535,7 +522,7 @@ This section contains the results of the performed benchmarks, including an anal
 		$32$ & $0.11$ & $2.6483$\\
 		$64$ & $0.1085$ & $2.4329$\\
 		$128$ & $0.1094$ & $2.4421$\\ \bottomrule
-	\end{tabular}
+	\end{tabular}}
 	\caption{Runtime results in seconds from strong scaling comparison, $2^{19}$ vertices}
 	\label{tab:strongscaling-19-table}
 \end{table}
