@@ -114,8 +114,8 @@ project, evaluates how the performance of Bor\r{u}vka behaves when using differe
 show that in principle a speedup proportional to the number of processors can be achieved. Other research limits itself
 on sufficiently dense \linebreak graphs and presents an algorithm for the bulk synchronous parallel (BSP) model
 \cite{dehne1998practical}. Furthermore, a parallelization of the MST algorithm using GPUs is presented in
-\cite{de2017parallel}. Some implementations that can be found make use of wait-free Union-Find data structures
-\cite{wfuf}. Such data structures speed-up the merge step of the Vor\r{u}vka algorithm. However, they do not aid in
+\cite{de2017parallel}. Some implementations that can be found make use of wait-free Union Find data structures
+\cite{wfuf}. Such data structures speed-up the merge step of the Bor\r{u}vka algorithm. However, they do not aid in
 distributing the work over multiple computing nodes.
 
 Our research is similar to that of Chung and Condon \cite{chung1996parallel}, but differs in the work distribution
@@ -591,7 +591,7 @@ storing the actual MST and supporting all MPI configurations independent of the 
 graph properties, such as the connectivity or the average degree, different strategies could be applied at run-time.
 This would require further, more-detailed measurements. Other work could also try to benchmark different graph types,
 for instance Erdös-Renyi graphs, and figure out which graph properties influence the runtimes. Moreover, it would be
-interesting to see if a parallelized merging strategy using a wait-free Union-Find data structure \cite{wfuf} performs
+interesting to see if a parallelized merging strategy using a wait-free Union Find data structure \cite{wfuf} performs
 better than our current implementations.
 
 % \section{Further comments}
