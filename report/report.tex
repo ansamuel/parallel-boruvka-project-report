@@ -259,10 +259,6 @@ operations can be used to describe the connected components in the algorithm \re
 achieved here is not on a per-operation basis. Single operations can take longer but the data structure adjusts itself
 so that successive operations are faster.
 
-% TODO maybe remove this paragraph skip
-We use the so-called path compression strategy when performing \verb|find()| operations and we merge sets by rank during
-\verb|union()| calls \cite{intro_to_algos}.
-
 \mypar{Pointer Jumping}
 Pointer jumping \cite{jeje1992introduction} (also referred to as path doubling) is a design technique that allows an
 algorithm to follow a path using only logarithmic time with respect to the length of the longest path. It does this by
@@ -360,7 +356,9 @@ additional runtime, we have to be cautious about the impact on performance. The 
 the vertices, briefly mentioned in the pointer jumping paragraph in section \ref{sec:background}. This approach has a
 greater theoretical runtime, but uses far less communication compared to the vertex distributed pointer jumping
 implementation. The open question here is, whether the lower runtime guarantee is worth the additional communication.
-This is answered in section \ref{sec:results}.
+This is answered in section \ref{sec:results}. In addition, the Union Find implementations use the so-called path
+compression strategy when performing \verb|find()| operations and we merge sets by rank during \verb|union()| calls
+\cite{intro_to_algos}.
 
 Sequential versions of some merging strategies were also implemented to get a better understanding of how they operate.
 However, these sequential algorithms did not serve any additional purpose beyond that.
